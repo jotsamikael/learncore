@@ -1,0 +1,63 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/learncore
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database: mysql
+    database-plateform: org.hibernate.dialect.MysqlDialect
+  mail:
+    host: localhost
+    port: 1025
+    properties:
+      mail:
+        smtp:
+          auth: false
+          ssl:
+            enable: false
+          starttls:
+            enable: false
+    protocol: smtp
+
+application:
+  security:
+    jwt:
+      secret-key: 2B29B84463A7EFE461D854B6345AF2B29B84463A7EFE461D854B6345AF
+      access-token-expiration: 604800000
+      refresh-token-expiration: 604800000
+  staff:
+    default-password: "12345678"
+  seed:
+    super-admin:
+      email: jotsamikael@gmail.com
+      firstname: Super
+      lastname: Admin
+      password: "12345678"
+  mailing:
+    frontend:
+      activation-url: http://localhost:8080/activate-account
+      reset-password-url: http://localhost:8080/reset-password
+  cors:
+    origins: http://localhost:4200,http://localhost:8080,http://localhost:8088
+  file:
+    upload:
+      root-folder: LEARNCORE
+      image:
+        max-size-bytes: 5242880
+        allowed-content-types: image/jpeg,image/jpg,image/png,image/webp
+        allowed-extensions: jpeg,jpg,png,webp
+
+cloudinary:
+  cloud_name: dgdy4huuc
+  api_key: 561585431272858
+  api_secret: PB6RV-juCkykZ5m5WUkaCcxdkbE
+
+server:
+  port: 8080

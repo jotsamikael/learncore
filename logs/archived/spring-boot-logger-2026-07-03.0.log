@@ -1,0 +1,369 @@
+2026-07-03 20:40:08,524 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 9.1.0.Final
+2026-07-03 20:40:08,592 INFO o.s.b.StartupInfoLogger [main] Starting LearncoreApplication using Java 21.0.6 with PID 29944 (C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore\target\classes started by USER in C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore)
+2026-07-03 20:40:08,592 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-07-03 20:40:08,594 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-07-03 20:40:10,399 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-03 20:40:10,601 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 188 ms. Found 9 JPA repository interfaces.
+2026-07-03 20:40:12,284 INFO o.s.b.t.TomcatWebServer [main] Tomcat initialized with port 8088 (http)
+2026-07-03 20:40:12,314 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8088"]
+2026-07-03 20:40:12,318 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-07-03 20:40:12,318 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-03 20:40:12,454 INFO o.s.b.w.c.s.WebApplicationContextInitializer [main] Root WebApplicationContext: initialization completed in 3757 ms
+2026-07-03 20:40:12,900 INFO o.h.j.i.u.LogHelper [main] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-03 20:40:13,033 INFO o.h.Version [main] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-07-03 20:40:13,866 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-03 20:40:13,938 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-07-03 20:40:14,606 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4e9695cf
+2026-07-03 20:40:14,610 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-07-03 20:40:14,709 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-03 20:40:14,747 INFO o.h.e.j.e.i.JdbcEnvironmentInitiator [main] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/learncore]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.1
+	Default catalog/schema: learncore/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-03 20:40:17,004 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-03 20:40:17,148 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-03 20:40:17,292 INFO o.s.d.j.r.q.QueryEnhancerFactories [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-03 20:40:19,250 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'jwtFilter' configured for use
+2026-07-03 20:40:19,652 INFO o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer [main] Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-07-03 20:40:19,656 WARN o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-07-03 20:40:20,493 WARN o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-03 20:40:21,931 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8088"]
+2026-07-03 20:40:21,957 INFO o.s.b.t.TomcatWebServer [main] Tomcat started on port 8088 (http) with context path '/api/v1'
+2026-07-03 20:40:21,968 INFO o.s.b.StartupInfoLogger [main] Started LearncoreApplication in 14.256 seconds (process running for 14.992)
+2026-07-03 20:40:22,363 INFO c.d.l.c.DataSeeder [main] Assigned 18 permissions to role SUPER_ADMIN
+2026-07-03 20:40:22,466 INFO c.d.l.c.DataSeeder [main] Assigned 8 permissions to role PLATFORM_MANAGER
+2026-07-03 20:40:22,490 INFO c.d.l.c.DataSeeder [main] Assigned 8 permissions to role TENANT_ADMIN
+2026-07-03 20:40:22,519 INFO c.d.l.c.DataSeeder [main] Data seeding complete. Tenant 'objectif600' uuid=tn_f04a09c972de49a989362c3e0972a6e4
+2026-07-03 20:42:32,994 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-2] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-03 20:42:32,994 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-2] Initializing Servlet 'dispatcherServlet'
+2026-07-03 20:42:32,998 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-2] Completed initialization in 2 ms
+2026-07-03 20:43:46,960 INFO o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-03 20:43:46,975 INFO o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-07-03 20:43:46,985 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-03 20:43:46,989 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2026-07-03 20:43:46,997 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-07-03 20:43:49,456 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 9.1.0.Final
+2026-07-03 20:43:49,516 INFO o.s.b.StartupInfoLogger [main] Starting LearncoreApplication using Java 21.0.6 with PID 15388 (C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore\target\classes started by USER in C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore)
+2026-07-03 20:43:49,516 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-07-03 20:43:49,519 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-07-03 20:43:50,818 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-03 20:43:50,943 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 113 ms. Found 9 JPA repository interfaces.
+2026-07-03 20:43:51,989 INFO o.s.b.t.TomcatWebServer [main] Tomcat initialized with port 8088 (http)
+2026-07-03 20:43:52,007 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8088"]
+2026-07-03 20:43:52,012 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-07-03 20:43:52,012 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-03 20:43:52,083 INFO o.s.b.w.c.s.WebApplicationContextInitializer [main] Root WebApplicationContext: initialization completed in 2491 ms
+2026-07-03 20:43:52,378 INFO o.h.j.i.u.LogHelper [main] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-03 20:43:52,445 INFO o.h.Version [main] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-07-03 20:43:52,948 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-03 20:43:52,990 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-07-03 20:43:53,405 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@75e92bb7
+2026-07-03 20:43:53,408 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-07-03 20:43:53,469 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-03 20:43:53,491 INFO o.h.e.j.e.i.JdbcEnvironmentInitiator [main] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/learncore]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.1
+	Default catalog/schema: learncore/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-03 20:43:54,968 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-03 20:43:55,061 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-03 20:43:55,163 INFO o.s.d.j.r.q.QueryEnhancerFactories [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-03 20:43:56,294 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'jwtFilter' configured for use
+2026-07-03 20:43:56,534 INFO o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer [main] Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-07-03 20:43:56,534 WARN o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-07-03 20:43:57,002 WARN o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-03 20:43:58,043 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8088"]
+2026-07-03 20:43:58,078 INFO o.s.b.t.TomcatWebServer [main] Tomcat started on port 8088 (http) with context path '/api/v1'
+2026-07-03 20:43:58,100 INFO o.s.b.StartupInfoLogger [main] Started LearncoreApplication in 9.408 seconds (process running for 10.249)
+2026-07-03 20:43:58,574 INFO c.d.l.c.DataSeeder [main] Assigned 18 permissions to role SUPER_ADMIN
+2026-07-03 20:43:58,656 INFO c.d.l.c.DataSeeder [main] Assigned 8 permissions to role PLATFORM_MANAGER
+2026-07-03 20:43:58,678 INFO c.d.l.c.DataSeeder [main] Assigned 8 permissions to role TENANT_ADMIN
+2026-07-03 20:43:58,698 INFO c.d.l.c.DataSeeder [main] Data seeding complete. Tenant 'objectif600' uuid=tn_f04a09c972de49a989362c3e0972a6e4
+2026-07-03 20:45:17,989 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-03 20:45:17,989 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-1] Initializing Servlet 'dispatcherServlet'
+2026-07-03 20:45:17,989 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-1] Completed initialization in 0 ms
+2026-07-03 21:04:47,510 INFO o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-03 21:04:47,530 INFO o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-07-03 21:04:47,538 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-03 21:04:47,540 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2026-07-03 21:04:47,547 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-07-03 21:04:53,704 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 9.1.0.Final
+2026-07-03 21:04:53,754 INFO o.s.b.StartupInfoLogger [main] Starting LearncoreApplication using Java 21.0.6 with PID 15516 (C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore\target\classes started by USER in C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore)
+2026-07-03 21:04:53,755 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-07-03 21:04:53,756 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-07-03 21:04:55,116 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-03 21:04:55,238 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 111 ms. Found 9 JPA repository interfaces.
+2026-07-03 21:04:57,253 INFO o.s.b.t.TomcatWebServer [main] Tomcat initialized with port 8088 (http)
+2026-07-03 21:04:57,285 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8088"]
+2026-07-03 21:04:57,290 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-07-03 21:04:57,291 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-03 21:04:57,437 INFO o.s.b.w.c.s.WebApplicationContextInitializer [main] Root WebApplicationContext: initialization completed in 3617 ms
+2026-07-03 21:04:57,942 INFO o.h.j.i.u.LogHelper [main] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-03 21:04:58,048 INFO o.h.Version [main] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-07-03 21:04:58,934 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-03 21:04:58,992 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-07-03 21:04:59,679 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@15a8bbe5
+2026-07-03 21:04:59,685 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-07-03 21:04:59,807 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-03 21:04:59,853 INFO o.h.e.j.e.i.JdbcEnvironmentInitiator [main] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/learncore]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.1
+	Default catalog/schema: learncore/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-03 21:05:02,272 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-03 21:05:02,426 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-03 21:05:02,573 INFO o.s.d.j.r.q.QueryEnhancerFactories [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-03 21:05:04,470 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'jwtFilter' configured for use
+2026-07-03 21:05:04,985 INFO o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer [main] Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-07-03 21:05:04,985 WARN o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-07-03 21:05:05,784 WARN o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-03 21:05:07,275 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8088"]
+2026-07-03 21:05:07,314 INFO o.s.b.t.TomcatWebServer [main] Tomcat started on port 8088 (http) with context path '/api/v1'
+2026-07-03 21:05:07,329 INFO o.s.b.StartupInfoLogger [main] Started LearncoreApplication in 14.424 seconds (process running for 15.037)
+2026-07-03 21:05:07,581 INFO c.d.l.c.DataSeeder [main] Seeding permission: admin.role.delete
+2026-07-03 21:05:07,653 INFO c.d.l.c.DataSeeder [main] Seeding permission: platform.role.delete
+2026-07-03 21:05:07,697 INFO c.d.l.c.DataSeeder [main] Seeding permission: platform.role.read
+2026-07-03 21:05:07,705 INFO c.d.l.c.DataSeeder [main] Seeding permission: admin.role.read
+2026-07-03 21:05:07,834 INFO c.d.l.c.DataSeeder [main] Assigned 22 permissions to role SUPER_ADMIN
+2026-07-03 21:05:07,891 INFO c.d.l.c.DataSeeder [main] Assigned 9 permissions to role PLATFORM_MANAGER
+2026-07-03 21:05:07,910 INFO c.d.l.c.DataSeeder [main] Assigned 10 permissions to role TENANT_ADMIN
+2026-07-03 21:05:07,938 INFO c.d.l.c.DataSeeder [main] Data seeding complete. Tenant 'objectif600' uuid=tn_f04a09c972de49a989362c3e0972a6e4
+2026-07-03 21:05:48,390 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-2] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-03 21:05:48,390 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-2] Initializing Servlet 'dispatcherServlet'
+2026-07-03 21:05:48,390 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-2] Completed initialization in 0 ms
+2026-07-03 21:06:14,176 WARN o.s.d.w.c.SpringDataJackson3Configuration$PageModule$WarningLoggingModifier [http-nio-8088-exec-3] Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-07-03 21:30:37,469 ERROR o.s.a.i.SimpleAsyncUncaughtExceptionHandler [task-1] Unexpected exception occurred invoking async method: public void com.dodibo.learncore.email.EmailService.sendEmail(java.lang.String,java.lang.String,com.dodibo.learncore.email.EmailTemplateName,java.lang.String,java.lang.String,java.lang.String) throws jakarta.mail.MessagingException
+org.springframework.mail.MailSendException: Mail server connection failed. Failed messages: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect; message exceptions (1) are:
+Failed message 1: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect
+	at org.springframework.mail.javamail.JavaMailSenderImpl.doSend(JavaMailSenderImpl.java:397)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.send(JavaMailSenderImpl.java:337)
+	at org.springframework.mail.javamail.JavaMailSender.send(JavaMailSender.java:101)
+	at com.dodibo.learncore.email.EmailService.sendEmail(EmailService.java:60)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:158)
+	at org.springframework.aop.interceptor.AsyncExecutionInterceptor.lambda$invoke$0(AsyncExecutionInterceptor.java:112)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect
+	at org.eclipse.angus.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:2243)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.protocolConnect(SMTPTransport.java:729)
+	at jakarta.mail.Service.connect(Service.java:345)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.connectTransport(JavaMailSenderImpl.java:467)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.doSend(JavaMailSenderImpl.java:386)
+	... 13 common frames omitted
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.base/sun.nio.ch.Net.connect0(Native Method)
+	at java.base/sun.nio.ch.Net.connect(Net.java:589)
+	at java.base/sun.nio.ch.Net.connect(Net.java:578)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:583)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:751)
+	at java.base/java.net.Socket.connect(Socket.java:686)
+	at org.eclipse.angus.mail.util.SocketFetcher.createSocket(SocketFetcher.java:368)
+	at org.eclipse.angus.mail.util.SocketFetcher.getSocket(SocketFetcher.java:243)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:2193)
+	... 17 common frames omitted
+2026-07-03 21:31:11,732 ERROR o.s.a.i.SimpleAsyncUncaughtExceptionHandler [task-2] Unexpected exception occurred invoking async method: public void com.dodibo.learncore.email.EmailService.sendEmail(java.lang.String,java.lang.String,com.dodibo.learncore.email.EmailTemplateName,java.lang.String,java.lang.String,java.lang.String) throws jakarta.mail.MessagingException
+org.springframework.mail.MailSendException: Mail server connection failed. Failed messages: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect; message exceptions (1) are:
+Failed message 1: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect
+	at org.springframework.mail.javamail.JavaMailSenderImpl.doSend(JavaMailSenderImpl.java:397)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.send(JavaMailSenderImpl.java:337)
+	at org.springframework.mail.javamail.JavaMailSender.send(JavaMailSender.java:101)
+	at com.dodibo.learncore.email.EmailService.sendEmail(EmailService.java:60)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:158)
+	at org.springframework.aop.interceptor.AsyncExecutionInterceptor.lambda$invoke$0(AsyncExecutionInterceptor.java:112)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect
+	at org.eclipse.angus.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:2243)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.protocolConnect(SMTPTransport.java:729)
+	at jakarta.mail.Service.connect(Service.java:345)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.connectTransport(JavaMailSenderImpl.java:467)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.doSend(JavaMailSenderImpl.java:386)
+	... 13 common frames omitted
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.base/sun.nio.ch.Net.connect0(Native Method)
+	at java.base/sun.nio.ch.Net.connect(Net.java:589)
+	at java.base/sun.nio.ch.Net.connect(Net.java:578)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:583)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:751)
+	at java.base/java.net.Socket.connect(Socket.java:686)
+	at org.eclipse.angus.mail.util.SocketFetcher.createSocket(SocketFetcher.java:368)
+	at org.eclipse.angus.mail.util.SocketFetcher.getSocket(SocketFetcher.java:243)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:2193)
+	... 17 common frames omitted
+2026-07-03 21:31:39,961 ERROR o.s.a.i.SimpleAsyncUncaughtExceptionHandler [task-3] Unexpected exception occurred invoking async method: public void com.dodibo.learncore.email.EmailService.sendEmail(java.lang.String,java.lang.String,com.dodibo.learncore.email.EmailTemplateName,java.lang.String,java.lang.String,java.lang.String) throws jakarta.mail.MessagingException
+org.springframework.mail.MailSendException: Mail server connection failed. Failed messages: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect; message exceptions (1) are:
+Failed message 1: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect
+	at org.springframework.mail.javamail.JavaMailSenderImpl.doSend(JavaMailSenderImpl.java:397)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.send(JavaMailSenderImpl.java:337)
+	at org.springframework.mail.javamail.JavaMailSender.send(JavaMailSender.java:101)
+	at com.dodibo.learncore.email.EmailService.sendEmail(EmailService.java:60)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:158)
+	at org.springframework.aop.interceptor.AsyncExecutionInterceptor.lambda$invoke$0(AsyncExecutionInterceptor.java:112)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect
+	at org.eclipse.angus.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:2243)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.protocolConnect(SMTPTransport.java:729)
+	at jakarta.mail.Service.connect(Service.java:345)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.connectTransport(JavaMailSenderImpl.java:467)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.doSend(JavaMailSenderImpl.java:386)
+	... 13 common frames omitted
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.base/sun.nio.ch.Net.connect0(Native Method)
+	at java.base/sun.nio.ch.Net.connect(Net.java:589)
+	at java.base/sun.nio.ch.Net.connect(Net.java:578)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:583)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:751)
+	at java.base/java.net.Socket.connect(Socket.java:686)
+	at org.eclipse.angus.mail.util.SocketFetcher.createSocket(SocketFetcher.java:368)
+	at org.eclipse.angus.mail.util.SocketFetcher.getSocket(SocketFetcher.java:243)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:2193)
+	... 17 common frames omitted
+2026-07-03 21:32:19,754 ERROR o.s.a.i.SimpleAsyncUncaughtExceptionHandler [task-4] Unexpected exception occurred invoking async method: public void com.dodibo.learncore.email.EmailService.sendEmail(java.lang.String,java.lang.String,com.dodibo.learncore.email.EmailTemplateName,java.lang.String,java.lang.String,java.lang.String) throws jakarta.mail.MessagingException
+org.springframework.mail.MailSendException: Mail server connection failed. Failed messages: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect; message exceptions (1) are:
+Failed message 1: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect
+	at org.springframework.mail.javamail.JavaMailSenderImpl.doSend(JavaMailSenderImpl.java:397)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.send(JavaMailSenderImpl.java:337)
+	at org.springframework.mail.javamail.JavaMailSender.send(JavaMailSender.java:101)
+	at com.dodibo.learncore.email.EmailService.sendEmail(EmailService.java:60)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:158)
+	at org.springframework.aop.interceptor.AsyncExecutionInterceptor.lambda$invoke$0(AsyncExecutionInterceptor.java:112)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect
+	at org.eclipse.angus.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:2243)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.protocolConnect(SMTPTransport.java:729)
+	at jakarta.mail.Service.connect(Service.java:345)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.connectTransport(JavaMailSenderImpl.java:467)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.doSend(JavaMailSenderImpl.java:386)
+	... 13 common frames omitted
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.base/sun.nio.ch.Net.connect0(Native Method)
+	at java.base/sun.nio.ch.Net.connect(Net.java:589)
+	at java.base/sun.nio.ch.Net.connect(Net.java:578)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:583)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:751)
+	at java.base/java.net.Socket.connect(Socket.java:686)
+	at org.eclipse.angus.mail.util.SocketFetcher.createSocket(SocketFetcher.java:368)
+	at org.eclipse.angus.mail.util.SocketFetcher.getSocket(SocketFetcher.java:243)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:2193)
+	... 17 common frames omitted
+2026-07-03 21:32:59,503 ERROR o.s.a.i.SimpleAsyncUncaughtExceptionHandler [task-5] Unexpected exception occurred invoking async method: public void com.dodibo.learncore.email.EmailService.sendEmail(java.lang.String,java.lang.String,com.dodibo.learncore.email.EmailTemplateName,java.lang.String,java.lang.String,java.lang.String) throws jakarta.mail.MessagingException
+org.springframework.mail.MailSendException: Mail server connection failed. Failed messages: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect; message exceptions (1) are:
+Failed message 1: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect
+	at org.springframework.mail.javamail.JavaMailSenderImpl.doSend(JavaMailSenderImpl.java:397)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.send(JavaMailSenderImpl.java:337)
+	at org.springframework.mail.javamail.JavaMailSender.send(JavaMailSender.java:101)
+	at com.dodibo.learncore.email.EmailService.sendEmail(EmailService.java:60)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:190)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:158)
+	at org.springframework.aop.interceptor.AsyncExecutionInterceptor.lambda$invoke$0(AsyncExecutionInterceptor.java:112)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: localhost, 1025; timeout -1;
+  nested exception is:
+	java.net.ConnectException: Connection refused: connect
+	at org.eclipse.angus.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:2243)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.protocolConnect(SMTPTransport.java:729)
+	at jakarta.mail.Service.connect(Service.java:345)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.connectTransport(JavaMailSenderImpl.java:467)
+	at org.springframework.mail.javamail.JavaMailSenderImpl.doSend(JavaMailSenderImpl.java:386)
+	... 13 common frames omitted
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.base/sun.nio.ch.Net.connect0(Native Method)
+	at java.base/sun.nio.ch.Net.connect(Net.java:589)
+	at java.base/sun.nio.ch.Net.connect(Net.java:578)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:583)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:751)
+	at java.base/java.net.Socket.connect(Socket.java:686)
+	at org.eclipse.angus.mail.util.SocketFetcher.createSocket(SocketFetcher.java:368)
+	at org.eclipse.angus.mail.util.SocketFetcher.getSocket(SocketFetcher.java:243)
+	at org.eclipse.angus.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:2193)
+	... 17 common frames omitted
