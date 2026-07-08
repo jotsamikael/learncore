@@ -1,0 +1,305 @@
+2026-07-05 09:13:53,012 WARN c.z.h.p.HikariPool$HouseKeeper [HikariPool-1:housekeeper] HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=10h40m51s664ms279µs200ns).
+2026-07-05 09:33:51,858 INFO o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-05 09:33:51,875 INFO o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-07-05 09:33:51,896 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-05 09:33:51,910 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2026-07-05 09:33:51,916 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-07-05 09:34:02,412 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 9.1.0.Final
+2026-07-05 09:34:02,482 INFO o.s.b.StartupInfoLogger [main] Starting LearncoreApplication using Java 21.0.6 with PID 7828 (C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore\target\classes started by USER in C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore)
+2026-07-05 09:34:02,482 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-07-05 09:34:02,484 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-07-05 09:34:04,819 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-05 09:34:05,023 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 185 ms. Found 9 JPA repository interfaces.
+2026-07-05 09:34:06,363 INFO o.s.b.t.TomcatWebServer [main] Tomcat initialized with port 8088 (http)
+2026-07-05 09:34:06,374 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8088"]
+2026-07-05 09:34:06,374 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-07-05 09:34:06,374 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-05 09:34:06,456 INFO o.s.b.w.c.s.WebApplicationContextInitializer [main] Root WebApplicationContext: initialization completed in 3837 ms
+2026-07-05 09:34:06,761 INFO o.h.j.i.u.LogHelper [main] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-05 09:34:06,831 INFO o.h.Version [main] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-07-05 09:34:07,365 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-05 09:34:07,403 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-07-05 09:34:07,868 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7bf94e91
+2026-07-05 09:34:07,873 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-07-05 09:34:07,941 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-05 09:34:07,960 INFO o.h.e.j.e.i.JdbcEnvironmentInitiator [main] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/learncore]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.1
+	Default catalog/schema: learncore/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-05 09:34:09,706 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-05 09:34:09,860 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-05 09:34:10,107 INFO o.s.d.j.r.q.QueryEnhancerFactories [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-05 09:34:11,695 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'spaWebFilter' configured for use
+2026-07-05 09:34:11,695 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'jwtFilter' configured for use
+2026-07-05 09:34:12,057 INFO o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer [main] Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-07-05 09:34:12,067 WARN o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-07-05 09:34:12,963 WARN o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-05 09:34:13,643 INFO o.s.b.w.a.WelcomePageHandlerMapping [main] Adding welcome page: class path resource [static/index.html]
+2026-07-05 09:34:14,543 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8088"]
+2026-07-05 09:34:14,579 INFO o.s.b.t.TomcatWebServer [main] Tomcat started on port 8088 (http) with context path '/'
+2026-07-05 09:34:14,597 INFO o.s.b.StartupInfoLogger [main] Started LearncoreApplication in 13.415 seconds (process running for 14.546)
+2026-07-05 09:34:15,067 INFO c.d.l.c.DataSeeder [main] Assigned 22 permissions to role SUPER_ADMIN
+2026-07-05 09:34:15,196 INFO c.d.l.c.DataSeeder [main] Assigned 9 permissions to role PLATFORM_MANAGER
+2026-07-05 09:34:15,221 INFO c.d.l.c.DataSeeder [main] Assigned 10 permissions to role TENANT_ADMIN
+2026-07-05 09:34:15,266 INFO c.d.l.c.DataSeeder [main] Data seeding complete. Tenant 'objectif600' uuid=tn_f04a09c972de49a989362c3e0972a6e4
+2026-07-05 09:34:15,285 WARN o.s.c.e.SpringDocAppInitializer [main] SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-07-05 09:34:15,285 WARN o.s.c.e.SpringDocAppInitializer [main] SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-07-05 09:34:27,099 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-2] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-05 09:34:27,099 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-2] Initializing Servlet 'dispatcherServlet'
+2026-07-05 09:34:27,099 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-2] Completed initialization in 0 ms
+2026-07-05 09:35:15,152 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-3] A cookie header was received [product_view[is_grid]=2;] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+2026-07-05 09:51:34,330 INFO o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-05 09:51:34,355 INFO o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-07-05 09:51:34,361 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-05 09:51:34,361 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2026-07-05 09:51:34,371 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-07-05 09:51:38,686 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 9.1.0.Final
+2026-07-05 09:51:38,757 INFO o.s.b.StartupInfoLogger [main] Starting LearncoreApplication using Java 21.0.6 with PID 24696 (C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore\target\classes started by USER in C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore)
+2026-07-05 09:51:38,757 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-07-05 09:51:38,757 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-07-05 09:51:40,128 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-05 09:51:40,234 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 93 ms. Found 9 JPA repository interfaces.
+2026-07-05 09:51:41,182 INFO o.s.b.t.TomcatWebServer [main] Tomcat initialized with port 8088 (http)
+2026-07-05 09:51:41,186 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8088"]
+2026-07-05 09:51:41,198 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-07-05 09:51:41,198 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-05 09:51:41,268 INFO o.s.b.w.c.s.WebApplicationContextInitializer [main] Root WebApplicationContext: initialization completed in 2401 ms
+2026-07-05 09:51:41,504 INFO o.h.j.i.u.LogHelper [main] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-05 09:51:41,583 INFO o.h.Version [main] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-07-05 09:51:42,058 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-05 09:51:42,106 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-07-05 09:51:42,498 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5b634e24
+2026-07-05 09:51:42,504 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-07-05 09:51:42,552 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-05 09:51:42,573 INFO o.h.e.j.e.i.JdbcEnvironmentInitiator [main] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/learncore]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.1
+	Default catalog/schema: learncore/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-05 09:51:44,061 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-05 09:51:44,150 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-05 09:51:44,228 INFO o.s.d.j.r.q.QueryEnhancerFactories [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-05 09:51:45,142 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'spaWebFilter' configured for use
+2026-07-05 09:51:45,144 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'jwtFilter' configured for use
+2026-07-05 09:51:45,350 INFO o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer [main] Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-07-05 09:51:45,350 WARN o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-07-05 09:51:45,792 WARN o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-05 09:51:46,173 INFO o.s.b.w.a.WelcomePageHandlerMapping [main] Adding welcome page: class path resource [static/index.html]
+2026-07-05 09:51:46,665 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8088"]
+2026-07-05 09:51:46,725 INFO o.s.b.t.TomcatWebServer [main] Tomcat started on port 8088 (http) with context path '/'
+2026-07-05 09:51:46,729 INFO o.s.b.StartupInfoLogger [main] Started LearncoreApplication in 8.751 seconds (process running for 9.311)
+2026-07-05 09:51:46,985 INFO c.d.l.c.DataSeeder [main] Assigned 22 permissions to role SUPER_ADMIN
+2026-07-05 09:51:47,047 INFO c.d.l.c.DataSeeder [main] Assigned 9 permissions to role PLATFORM_MANAGER
+2026-07-05 09:51:47,062 INFO c.d.l.c.DataSeeder [main] Assigned 10 permissions to role TENANT_ADMIN
+2026-07-05 09:51:47,079 INFO c.d.l.c.DataSeeder [main] Data seeding complete. Tenant 'objectif600' uuid=tn_f04a09c972de49a989362c3e0972a6e4
+2026-07-05 09:51:54,142 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-1] A cookie header was received [product_view[is_grid]=2;] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+2026-07-05 09:51:54,144 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-05 09:51:54,144 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-1] Initializing Servlet 'dispatcherServlet'
+2026-07-05 09:51:54,144 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-1] Completed initialization in 0 ms
+2026-07-05 09:51:55,492 INFO o.s.a.AbstractOpenApiResource [http-nio-8088-exec-9] Init duration for springdoc-openapi is: 980 ms
+2026-07-05 10:00:51,871 WARN o.s.d.w.c.SpringDataJackson3Configuration$PageModule$WarningLoggingModifier [http-nio-8088-exec-7] Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-07-05 11:07:17,192 INFO o.s.a.AbstractOpenApiResource [http-nio-8088-exec-1] Init duration for springdoc-openapi is: 1428 ms
+2026-07-05 13:07:10,168 INFO o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-05 13:07:10,215 INFO o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-07-05 13:07:10,247 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-05 13:07:10,264 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2026-07-05 13:07:10,264 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-07-05 13:07:21,755 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 9.1.0.Final
+2026-07-05 13:07:21,828 INFO o.s.b.StartupInfoLogger [main] Starting LearncoreApplication using Java 21.0.6 with PID 24908 (C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore\target\classes started by USER in C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore)
+2026-07-05 13:07:21,829 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-07-05 13:07:21,831 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-07-05 13:07:23,409 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-05 13:07:23,541 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 116 ms. Found 9 JPA repository interfaces.
+2026-07-05 13:07:24,641 INFO o.s.b.t.TomcatWebServer [main] Tomcat initialized with port 8088 (http)
+2026-07-05 13:07:24,658 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8088"]
+2026-07-05 13:07:24,673 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-07-05 13:07:24,673 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-05 13:07:24,753 INFO o.s.b.w.c.s.WebApplicationContextInitializer [main] Root WebApplicationContext: initialization completed in 2830 ms
+2026-07-05 13:07:25,037 INFO o.h.j.i.u.LogHelper [main] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-05 13:07:25,133 INFO o.h.Version [main] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-07-05 13:07:25,783 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-05 13:07:25,845 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-07-05 13:07:26,385 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@50628080
+2026-07-05 13:07:26,385 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-07-05 13:07:26,463 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-05 13:07:26,485 INFO o.h.e.j.e.i.JdbcEnvironmentInitiator [main] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/learncore]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.1
+	Default catalog/schema: learncore/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-05 13:07:28,268 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-05 13:07:28,465 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-05 13:07:28,565 INFO o.s.d.j.r.q.QueryEnhancerFactories [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-05 13:07:29,796 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'spaWebFilter' configured for use
+2026-07-05 13:07:29,796 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'jwtFilter' configured for use
+2026-07-05 13:07:30,351 INFO o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer [main] Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-07-05 13:07:30,352 WARN o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-07-05 13:07:31,170 WARN o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-05 13:07:32,169 INFO o.s.b.w.a.WelcomePageHandlerMapping [main] Adding welcome page: class path resource [static/index.html]
+2026-07-05 13:07:33,532 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8088"]
+2026-07-05 13:07:33,583 INFO o.s.b.t.TomcatWebServer [main] Tomcat started on port 8088 (http) with context path '/'
+2026-07-05 13:07:33,608 INFO o.s.b.StartupInfoLogger [main] Started LearncoreApplication in 12.724 seconds (process running for 13.429)
+2026-07-05 13:07:34,288 INFO c.d.l.c.DataSeeder [main] Assigned 22 permissions to role SUPER_ADMIN
+2026-07-05 13:07:34,443 INFO c.d.l.c.DataSeeder [main] Assigned 9 permissions to role PLATFORM_MANAGER
+2026-07-05 13:07:34,478 INFO c.d.l.c.DataSeeder [main] Assigned 10 permissions to role TENANT_ADMIN
+2026-07-05 13:07:34,567 INFO c.d.l.c.DataSeeder [main] Data seeding complete. Tenant 'objectif600' uuid=tn_f04a09c972de49a989362c3e0972a6e4
+2026-07-05 13:08:01,571 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-1] A cookie header was received [product_view[is_grid]=2;] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+2026-07-05 13:08:01,598 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-05 13:08:01,599 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-1] Initializing Servlet 'dispatcherServlet'
+2026-07-05 13:08:01,606 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-1] Completed initialization in 7 ms
+2026-07-05 13:08:03,658 INFO o.s.a.AbstractOpenApiResource [http-nio-8088-exec-1] Init duration for springdoc-openapi is: 1881 ms
+2026-07-05 13:27:51,321 WARN o.s.d.w.c.SpringDataJackson3Configuration$PageModule$WarningLoggingModifier [http-nio-8088-exec-1] Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-07-05 15:08:26,283 WARN c.z.h.p.HikariPool$HouseKeeper [HikariPool-1:housekeeper] HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=9m58s245ms957µs300ns).
+2026-07-05 20:20:04,949 WARN c.z.h.p.HikariPool$HouseKeeper [HikariPool-1:housekeeper] HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=4m3s765ms361µs800ns).
+2026-07-05 22:55:10,932 WARN c.z.h.p.HikariPool$HouseKeeper [HikariPool-1:housekeeper] HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2h35s451ms568µs600ns).
+2026-07-05 23:21:04,741 INFO o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-05 23:21:04,761 INFO o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-07-05 23:21:04,789 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-05 23:21:04,806 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2026-07-05 23:21:04,813 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-07-05 23:21:13,528 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 9.1.0.Final
+2026-07-05 23:21:13,617 INFO o.s.b.StartupInfoLogger [main] Starting LearncoreApplication using Java 21.0.6 with PID 23372 (C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore\target\classes started by USER in C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore)
+2026-07-05 23:21:13,618 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-07-05 23:21:13,618 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-07-05 23:21:15,309 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-05 23:21:15,445 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 122 ms. Found 9 JPA repository interfaces.
+2026-07-05 23:21:16,587 INFO o.s.b.t.TomcatWebServer [main] Tomcat initialized with port 8088 (http)
+2026-07-05 23:21:16,617 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8088"]
+2026-07-05 23:21:16,617 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-07-05 23:21:16,617 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-05 23:21:16,696 INFO o.s.b.w.c.s.WebApplicationContextInitializer [main] Root WebApplicationContext: initialization completed in 2984 ms
+2026-07-05 23:21:16,999 INFO o.h.j.i.u.LogHelper [main] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-05 23:21:17,139 INFO o.h.Version [main] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-07-05 23:21:18,616 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-05 23:21:18,733 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-07-05 23:21:19,855 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@44ec4a38
+2026-07-05 23:21:19,859 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-07-05 23:21:19,951 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-05 23:21:20,010 INFO o.h.e.j.e.i.JdbcEnvironmentInitiator [main] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/learncore]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.1
+	Default catalog/schema: learncore/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-05 23:21:23,862 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-05 23:21:24,167 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-05 23:21:24,393 INFO o.s.d.j.r.q.QueryEnhancerFactories [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-05 23:21:26,599 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'spaWebFilter' configured for use
+2026-07-05 23:21:26,606 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'jwtFilter' configured for use
+2026-07-05 23:21:27,043 INFO o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer [main] Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-07-05 23:21:27,043 WARN o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-07-05 23:21:28,207 WARN o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-05 23:21:29,143 INFO o.s.b.w.a.WelcomePageHandlerMapping [main] Adding welcome page: class path resource [static/index.html]
+2026-07-05 23:21:29,748 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8088"]
+2026-07-05 23:21:29,779 INFO o.s.b.t.TomcatWebServer [main] Tomcat started on port 8088 (http) with context path '/'
+2026-07-05 23:21:29,789 INFO o.s.b.StartupInfoLogger [main] Started LearncoreApplication in 17.197 seconds (process running for 17.944)
+2026-07-05 23:21:30,116 INFO c.d.l.c.DataSeeder [main] Assigned 22 permissions to role SUPER_ADMIN
+2026-07-05 23:21:30,183 INFO c.d.l.c.DataSeeder [main] Assigned 9 permissions to role PLATFORM_MANAGER
+2026-07-05 23:21:30,200 INFO c.d.l.c.DataSeeder [main] Assigned 10 permissions to role TENANT_ADMIN
+2026-07-05 23:21:30,234 INFO c.d.l.c.DataSeeder [main] Data seeding complete. Tenant 'objectif600' uuid=tn_f04a09c972de49a989362c3e0972a6e4
+2026-07-05 23:21:35,473 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-2] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-05 23:21:35,473 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-2] Initializing Servlet 'dispatcherServlet'
+2026-07-05 23:21:35,482 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-2] Completed initialization in 9 ms
+2026-07-05 23:22:50,763 INFO o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-05 23:22:50,791 INFO o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-07-05 23:22:50,802 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-05 23:22:50,808 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2026-07-05 23:22:50,820 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-07-05 23:22:58,452 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 9.1.0.Final
+2026-07-05 23:22:58,539 INFO o.s.b.StartupInfoLogger [main] Starting LearncoreApplication using Java 21.0.6 with PID 15816 (C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore\target\classes started by USER in C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore)
+2026-07-05 23:22:58,542 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-07-05 23:22:58,542 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-07-05 23:22:59,994 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-05 23:23:00,151 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 141 ms. Found 9 JPA repository interfaces.
+2026-07-05 23:23:01,181 INFO o.s.b.t.TomcatWebServer [main] Tomcat initialized with port 8088 (http)
+2026-07-05 23:23:01,197 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8088"]
+2026-07-05 23:23:01,202 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-07-05 23:23:01,202 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-05 23:23:01,278 INFO o.s.b.w.c.s.WebApplicationContextInitializer [main] Root WebApplicationContext: initialization completed in 2637 ms
+2026-07-05 23:23:01,530 INFO o.h.j.i.u.LogHelper [main] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-05 23:23:01,609 INFO o.h.Version [main] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-07-05 23:23:02,201 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-05 23:23:02,228 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-07-05 23:23:02,706 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@642f8b7f
+2026-07-05 23:23:02,706 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-07-05 23:23:02,766 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-05 23:23:02,791 INFO o.h.e.j.e.i.JdbcEnvironmentInitiator [main] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/learncore]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.1
+	Default catalog/schema: learncore/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-05 23:23:04,326 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-05 23:23:04,515 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-05 23:23:04,711 INFO o.s.d.j.r.q.QueryEnhancerFactories [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-05 23:23:05,897 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'spaWebFilter' configured for use
+2026-07-05 23:23:05,897 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'jwtFilter' configured for use
+2026-07-05 23:23:06,106 INFO o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer [main] Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-07-05 23:23:06,109 WARN o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-07-05 23:23:06,592 WARN o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-05 23:23:07,024 INFO o.s.b.w.a.WelcomePageHandlerMapping [main] Adding welcome page: class path resource [static/index.html]
+2026-07-05 23:23:07,582 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8088"]
+2026-07-05 23:23:07,600 INFO o.s.b.t.TomcatWebServer [main] Tomcat started on port 8088 (http) with context path '/'
+2026-07-05 23:23:07,613 INFO o.s.b.StartupInfoLogger [main] Started LearncoreApplication in 10.066 seconds (process running for 10.928)
+2026-07-05 23:23:07,995 INFO c.d.l.c.DataSeeder [main] Assigned 22 permissions to role SUPER_ADMIN
+2026-07-05 23:23:08,133 INFO c.d.l.c.DataSeeder [main] Assigned 9 permissions to role PLATFORM_MANAGER
+2026-07-05 23:23:08,151 INFO c.d.l.c.DataSeeder [main] Assigned 10 permissions to role TENANT_ADMIN
+2026-07-05 23:23:08,184 INFO c.d.l.c.DataSeeder [main] Data seeding complete. Tenant 'objectif600' uuid=tn_f04a09c972de49a989362c3e0972a6e4
+2026-07-05 23:23:19,050 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-05 23:23:19,050 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-1] Initializing Servlet 'dispatcherServlet'
+2026-07-05 23:23:19,055 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-1] Completed initialization in 5 ms
+2026-07-05 23:24:07,763 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-3] A cookie header was received [product_view[is_grid]=2;] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+2026-07-05 23:24:09,630 INFO o.s.a.AbstractOpenApiResource [http-nio-8088-exec-3] Init duration for springdoc-openapi is: 1834 ms
+2026-07-05 23:31:19,203 WARN o.s.d.w.c.SpringDataJackson3Configuration$PageModule$WarningLoggingModifier [http-nio-8088-exec-10] Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-07-05 23:37:48,225 INFO o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-05 23:37:48,237 INFO o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-07-05 23:37:48,257 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-05 23:37:48,259 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2026-07-05 23:37:48,269 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.

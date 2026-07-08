@@ -26,6 +26,9 @@ public class UpdateTenantRequest {
     @Size(max = 30)
     private String phone;
 
-    @Size(max = 100)
+    @Size(max = 32)
     private String country;
+
+    @Size(max = 500)
+    private String description;
 }

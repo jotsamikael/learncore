@@ -1,9 +1,8 @@
 package com.dodibo.learncore.tenant;
 
-import com.dodibo.learncore.tenant.dto.CreateTenantRequest;
-import com.dodibo.learncore.tenant.dto.PlatformUpdateTenantRequest;
-import com.dodibo.learncore.tenant.dto.TenantResponse;
-import com.dodibo.learncore.tenant.dto.UpdateTenantRequest;
+import com.dodibo.learncore.tenant.dto.*;
+import org.jspecify.annotations.Nullable;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface TenantService {
@@ -25,4 +24,6 @@ public interface TenantService {
     TenantResponse getPublicTenantBySlug(String slug);
 
     TenantResponse changeStatus(String uuid);
+
+     Page<TenantResponse> getTenants(FindTenantsQuery query);
 }

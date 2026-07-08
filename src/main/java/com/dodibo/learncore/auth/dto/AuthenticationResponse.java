@@ -13,9 +13,9 @@ public class AuthenticationResponse {
 
     private String accessToken;
     private String refreshToken;
-
-    /** @deprecated use {@link #accessToken} */
-    private String token;
+    private String email;
+    private String firstname;
+    private String lastname;
 
     private String userUuid;
     private String tenantUuid;

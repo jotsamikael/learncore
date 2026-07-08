@@ -7,14 +7,17 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { TenantResponse } from '../../models/tenant-response';
+import { FindTenantsQuery } from '../../models/find-tenants-query';
+import { PageTenantResponse } from '../../models/page-tenant-response';
 
 export interface ListTenants$Params {
+  query: FindTenantsQuery;
 }
 
-export function listTenants(http: HttpClient, rootUrl: string, params?: ListTenants$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<TenantResponse>>> {
+export function listTenants(http: HttpClient, rootUrl: string, params: ListTenants$Params, context?: HttpContext): Observable<StrictHttpResponse<PageTenantResponse>> {
   const rb = new RequestBuilder(rootUrl, listTenants.PATH, 'get');
   if (params) {
+    rb.query('query', params.query, {});
   }
 
   return http.request(
@@ -22,7 +25,7 @@ export function listTenants(http: HttpClient, rootUrl: string, params?: ListTena
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<TenantResponse>>;
+      return r as StrictHttpResponse<PageTenantResponse>;
     })
   );
 }

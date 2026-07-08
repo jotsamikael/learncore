@@ -4,6 +4,7 @@ import { PermissionCodes } from '../../core/constants/permission-codes';
 import { PermissionGuard } from '../../core/guards/permission.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeaturePlaceholderComponent } from './feature-placeholder/feature-placeholder.component';
+import { TenantsComponent } from './tenants/tenants.component';
 
 const routes: Routes = [
   {
@@ -52,11 +53,21 @@ const routes: Routes = [
       },
       {
         path: 'roles',
-        component: FeaturePlaceholderComponent,
+        loadComponent: () =>
+          import('./roles/roles.component').then((m) => m.RolesComponent),
         data: {
           title: 'Roles',
-          permissions: [PermissionCodes.ADMIN_ROLE_READ],
-          scope: 'tenant',
+          permissions: [PermissionCodes.ADMIN_ROLE_READ, PermissionCodes.PLATFORM_ROLE_READ],
+          //scope: 'tenant',
+        },
+      },
+        {
+        path: 'tenants',
+        component: TenantsComponent,
+        data: {
+          title: 'Tenants',
+          permissions: [PermissionCodes.TENANT_READ],
+          scope: 'platform',
         },
       },
       {
@@ -97,7 +108,8 @@ const routes: Routes = [
       },
       {
         path: 'platform/roles',
-        component: FeaturePlaceholderComponent,
+        loadComponent: () =>
+          import('./roles/roles.component').then((m) => m.RolesComponent),
         data: {
           title: 'Platform Roles',
           permissions: [PermissionCodes.PLATFORM_ROLE_READ],

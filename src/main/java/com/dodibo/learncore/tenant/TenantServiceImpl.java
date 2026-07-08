@@ -6,15 +6,16 @@ import com.dodibo.learncore.exception.TenantAccessDeniedException;
 import com.dodibo.learncore.fileUpload.FilePurpose;
 import com.dodibo.learncore.fileUpload.FileUploadService;
 import com.dodibo.learncore.permission.PermissionCodes;
+import com.dodibo.learncore.role.Role;
+import com.dodibo.learncore.role.RoleSpecification;
 import com.dodibo.learncore.security.AuthorizationService;
 import com.dodibo.learncore.security.SecurityUtils;
 import com.dodibo.learncore.staff.Staff;
-import com.dodibo.learncore.tenant.dto.CreateTenantRequest;
-import com.dodibo.learncore.tenant.dto.PlatformUpdateTenantRequest;
-import com.dodibo.learncore.tenant.dto.TenantResponse;
-import com.dodibo.learncore.tenant.dto.UpdateTenantRequest;
+import com.dodibo.learncore.tenant.dto.*;
 import com.dodibo.learncore.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -30,6 +31,15 @@ public class TenantServiceImpl implements TenantService {
     private final TenantMapper tenantMapper;
     private final FileUploadService fileUploadService;
     private final AuthorizationService authorizationService;
+
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<TenantResponse> getTenants(FindTenantsQuery query) {
+        Specification<Tenant> spec = TenantSpecification.fromQuery(query);
+        return tenantRepository.findAll(spec, query.toPageable()).map(tenantMapper::toResponse);
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -77,7 +87,7 @@ public class TenantServiceImpl implements TenantService {
                 .country(trimToNull(request.getCountry()))
                 .logoUrl(logoUrl)
                 .active(true)
-                .createdAt(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
                 .build();
 
         return tenantMapper.toResponse(tenantRepository.save(tenant));
@@ -130,6 +140,8 @@ public class TenantServiceImpl implements TenantService {
         tenant.setActive(!tenant.isActive());
         return tenantMapper.toResponse(tenantRepository.save(tenant));
     }
+
+
 
     private void applyTenantProfileUpdate(Tenant tenant, UpdateTenantRequest request) {
         tenant.setName(request.getName().trim());

@@ -73,8 +73,10 @@ public class RoleServiceImpl implements RoleService {
         RoleLevel assignableLevel = permissionService.resolveAssignableLevel(SecurityUtils.getCurrentUser());
         assertRoleLevelQueryAllowed(query.getRoleLevel(), assignableLevel);
 
+        // 2. Combine user's search inputs with the visibility restrictions
         Specification<Role> spec = RoleSpecification.fromQuery(query).and(buildVisibilitySpec(assignableLevel));
 
+        // 3. Execute the final combined dynamic query using Spring Data JPA
         return roleRepository.findAll(spec, query.toPageable()).map(roleMapper::toResponse);
     }
 

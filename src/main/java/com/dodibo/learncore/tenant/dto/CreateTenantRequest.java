@@ -27,7 +27,9 @@ public class CreateTenantRequest {
     @Size(max = 150)
     private String email;
 
+
     @Size(max = 30)
+    @Pattern(regexp = "^\\+?[0-9\\s\\-\\(\\)]{7,30}$", message = "must be a valid phone number")
     private String phone;
 
     @Size(max = 100)

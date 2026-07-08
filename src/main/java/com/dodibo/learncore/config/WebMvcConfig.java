@@ -11,6 +11,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
         configurer.addPathPrefix(ApiPaths.BASE, handlerType ->
-                handlerType.isAnnotationPresent(RestController.class));
+                handlerType.isAnnotationPresent(RestController.class)
+                        && handlerType.getPackageName().startsWith("com.dodibo.learncore"));
     }
 }

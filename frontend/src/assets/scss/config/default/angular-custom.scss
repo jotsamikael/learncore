@@ -914,6 +914,48 @@ swiper>.swiper.s-wrapper .swiper-pagination .swiper-pagination-handle {
   color: var(--#{$prefix}body-color) !important;
 }
 
+// ng-select in modals (appendTo="body" — must be global)
+.ng-dropdown-panel.roles-permissions-dropdown {
+  z-index: 2000 !important;
+  border: 1px solid var(--tb-border-color, #ced4da);
+  background-color: var(--tb-secondary-bg, #fff);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  max-height: 280px;
+
+  .ng-dropdown-panel-items {
+    max-height: 260px;
+  }
+
+  .ng-option {
+    padding: 0.5rem 0.75rem;
+    color: var(--tb-body-color, #212529);
+    white-space: normal;
+
+    .text-muted {
+      color: var(--tb-secondary-color, #6c757d) !important;
+    }
+
+    &.ng-option-selected,
+    &.ng-option-selected.ng-option-marked {
+      background-color: rgba(13, 110, 253, 0.12);
+      color: var(--tb-body-color, #212529);
+    }
+
+    &.ng-option-marked {
+      background-color: var(--tb-tertiary-bg, #f8f9fa);
+    }
+  }
+}
+
+// Material overlays (mat-select, mat-menu, mat-datepicker) above Bootstrap modals (1055)
+.cdk-overlay-container {
+  z-index: 1060 !important;
+}
+
+.roles-permissions-panel {
+  max-height: 320px;
+}
+
 // ck editor
 .ck.ck-toolbar {
   background-color: var(--#{$prefix}light) !important;

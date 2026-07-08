@@ -19,8 +19,52 @@ export class GlobalFormBuilderService {
     });
   }
 
+  createRoleForm(): FormGroup {
+    return this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(1)]],
+      description: ['', [Validators.required, Validators.minLength(1)]],
+      permissionCodes: [[], Validators.required],
+    });
+  }
 
- 
+  updateRoleForm(): FormGroup {
+    return this.createRoleForm();
+  }
+
+  createTenantForm(): FormGroup {
+    return this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(1)]],
+      slug: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(80),
+          Validators.pattern(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+        ],
+      ],
+      examFocus: ['', [Validators.required, Validators.minLength(1)]],
+      countryOption: [null, Validators.required],
+      country: ['', [Validators.required]],
+      phoneLocal: ['', [Validators.required, Validators.pattern(/^[0-9]{6,15}$/)]],
+      phone: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      description: ['', [Validators.required, Validators.minLength(1)]],
+    });
+  }
+
+  updateTenantForm(): FormGroup {
+    return this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(1)]],
+      examFocus: ['', [Validators.required, Validators.minLength(1)]],
+      countryOption: [null, Validators.required],
+      country: ['', [Validators.required]],
+      phoneLocal: ['', [Validators.required, Validators.pattern(/^[0-9]{6,15}$/)]],
+      phone: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      description: ['', [Validators.required, Validators.minLength(1)]],
+    });
+  }
 
   passwordMatchValidator(form: FormGroup): null {
     const password = form.get('password')?.value;

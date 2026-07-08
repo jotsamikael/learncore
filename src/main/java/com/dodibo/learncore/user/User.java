@@ -55,8 +55,6 @@ public class User implements UserDetails, Principal {
     @JoinColumn(name = "tenant_id")
     private Tenant tenant;
 
-
-
     private String firstname;
     private String lastname;
     private String dateOfBirth;

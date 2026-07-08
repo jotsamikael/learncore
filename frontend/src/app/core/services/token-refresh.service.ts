@@ -42,7 +42,7 @@ export class TokenRefreshService {
   private mergeSession(current: UserSession, response: AuthenticationResponse): UserSession {
     return {
       ...current,
-      accessToken: response.accessToken ?? response.token ?? current.accessToken,
+      accessToken: response.accessToken ?? current.accessToken,
       refreshToken: response.refreshToken ?? current.refreshToken,
       userUuid: response.userUuid ?? current.userUuid,
       tenantUuid: response.tenantUuid ?? current.tenantUuid,

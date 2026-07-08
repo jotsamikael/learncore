@@ -4,9 +4,11 @@
 export interface TenantResponse {
   active?: boolean;
   country?: string;
+  description?: string;
   email?: string;
   examFocus?: string;
   id?: number;
+  lastModifiedDate?: string;
   logoUrl?: string;
   name?: string;
   phone?: string;

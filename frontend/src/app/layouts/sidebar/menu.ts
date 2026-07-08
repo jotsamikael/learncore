@@ -21,59 +21,43 @@ export const MENU: MenuItem[] = [
     icon: 'ri-graduation-cap-line',
     link: '/learncore/students',
     permissions: ['tenant.student.read'],
+    scope: 'tenant',
   },
   { id: 30, label: 'Administration', isTitle: true, scope: 'tenant' },
-  {
-    id: 31,
-    label: 'Staff',
-    icon: 'ri-team-line',
-    isCollapsed: true,
-    permissions: ['admin.staff.read'],
-    subItems: [
-      { id: 311, label: 'List', link: '/learncore/staff', permissions: ['admin.staff.read'] },
-      { id: 312, label: 'Invite', link: '/learncore/staff/create', permissions: ['admin.staff.create'] },
-    ],
-  },
-  {
-    id: 32,
-    label: 'Roles',
-    icon: 'ri-shield-user-line',
-    link: '/learncore/roles',
-    permissions: ['admin.role.read'],
-  },
-  {
-    id: 33,
-    label: 'Tenant settings',
-    icon: 'ri-settings-3-line',
-    link: '/learncore/settings',
-    permissions: ['admin.tenant.read'],
-  },
-  // —— Platform scope ——
-  { id: 40, label: 'Platform', isTitle: true, scope: 'platform' },
+ 
   {
     id: 41,
     label: 'Tenants',
     icon: 'ri-building-4-line',
-    isCollapsed: true,
+    link: '/learncore/tenants',
     permissions: ['tenant.read'],
-    subItems: [
-      { id: 411, label: 'All tenants', link: '/learncore/platform/tenants' },
-      { id: 412, label: 'Create tenant', link: '/learncore/platform/tenants/create', permissions: ['tenant.create'] },
-    ],
+    scope: 'platform',
   },
+  {
+    id: 41,
+    label: 'Staff',
+    icon: 'ri-user-settings-line',
+    link: '/learncore/admin/staff',
+    permissions: ['admin.staff.read'],
+    scope: 'tenant',
+  },
+  // —— Platform scope ——
+  { id: 40, label: 'Platform', isTitle: true, scope: 'platform' },
+ 
   {
     id: 42,
     label: 'Platform staff',
     icon: 'ri-user-settings-line',
     link: '/learncore/platform/staff',
     permissions: ['platform.staff.read'],
+    scope: 'platform',
   },
   {
     id: 43,
-    label: 'Platform roles',
+    label: 'Roles',
     icon: 'ri-lock-line',
-    link: '/learncore/platform/roles',
-    permissions: ['platform.role.read'],
+    link: '/learncore/roles',
+    permissions: ['platform.role.read','admin.role.read'],
   },
   { id: 90, label: 'Account', isTitle: true },
   {

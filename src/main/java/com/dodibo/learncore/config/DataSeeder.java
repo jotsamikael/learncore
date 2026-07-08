@@ -201,7 +201,7 @@ public class DataSeeder implements ApplicationRunner {
                     .name("Objectif 600")
                     .examFocus("TAGE_MAGE")
                     .active(true)
-                    .createdAt(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now())
                     .build();
             log.info("Seeding tenant: objectif600");
             return tenantRepository.save(tenant);

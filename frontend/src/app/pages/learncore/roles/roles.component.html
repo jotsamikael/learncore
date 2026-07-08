@@ -1,1 +1,541 @@
-<p>roles works!</p>
+<app-breadcrumbs [title]="pageTitle" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-bottom-dashed">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
+          <div>
+            <h5 class="card-title mb-1">{{ pageTitle }}</h5>
+            <p class="text-muted small mb-0">
+              Manage roles and their permissions. Filters, sorting, and pagination are server-side.
+            </p>
+          </div>
+
+          @if (canCreateRole) {
+            <div class="d-flex flex-wrap gap-2">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="openCreateModal(createRoleModal)"
+                [disabled]="isLoading"
+              >
+                Create Role
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="roles-toolbar mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+          <div class="d-flex flex-wrap align-items-center gap-2">
+            @if (meta; as listMeta) {
+              <span class="badge bg-primary-subtle text-primary">
+                Total roles: {{ listMeta.totalItems }}
+              </span>
+              <span class="badge bg-info-subtle text-info">
+                Page {{ listMeta.currentPage }} / {{ listMeta.totalPages || 1 }}
+              </span>
+            }
+          </div>
+
+          <div class="btn-group shadow-sm" role="group" aria-label="Table actions">
+            <div class="btn-group" ngbDropdown placement="bottom-end">
+              <button
+                type="button"
+                class="btn btn-light border py-2 px-3"
+                ngbDropdownToggle
+                [disabled]="isLoading"
+              >
+                Export
+              </button>
+              <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                <button type="button" class="dropdown-item" (click)="exportExcel()" [disabled]="!data.length">
+                  Excel
+                </button>
+                <button type="button" class="dropdown-item" (click)="exportCsv()" [disabled]="!data.length">
+                  CSV
+                </button>
+                <button type="button" class="dropdown-item" (click)="exportPdf()" [disabled]="!data.length">
+                  PDF
+                </button>
+                <button type="button" class="dropdown-item" (click)="printTable()" [disabled]="!data.length">
+                  Print
+                </button>
+              </div>
+            </div>
+
+            <div class="btn-group" ngbDropdown placement="bottom-end">
+              <button
+                type="button"
+                class="btn btn-light border py-2 px-3"
+                ngbDropdownToggle
+                [disabled]="isLoading"
+              >
+                Bulk Actions
+              </button>
+              <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                <button type="button" class="dropdown-item" (click)="clearFilters()">
+                  Clear filters
+                </button>
+                <div class="dropdown-divider"></div>
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="exportSelectedCsv()"
+                  [disabled]="selection.isEmpty()"
+                >
+                  Export selected (CSV)
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-light border py-2 px-2 d-inline-flex align-items-center justify-content-center"
+              (click)="refresh()"
+              [disabled]="isLoading"
+              title="Refresh"
+              aria-label="Refresh"
+            >
+              <mat-icon class="roles-toolbar-refresh-icon">refresh</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="row g-3 roles-filters mb-3">
+          <div class="col-md-4 col-lg-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Role name</mat-label>
+              <input matInput [formControl]="nameFilter" placeholder="Search by name" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4 col-lg-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Description</mat-label>
+              <input matInput [formControl]="descriptionFilter" placeholder="Search description" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4 col-lg-2">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Level</mat-label>
+              <mat-select [formControl]="levelFilter">
+                @for (opt of levelOptions; track opt.value) {
+                  <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        @if (loadError) {
+          <div class="alert alert-danger py-2 mb-3">{{ loadError }}</div>
+        }
+
+        <div class="position-relative roles-table-shell">
+          @if (isLoading) {
+            <div class="roles-table-overlay d-flex align-items-center justify-content-center">
+              <mat-progress-spinner mode="indeterminate" diameter="42"></mat-progress-spinner>
+            </div>
+          }
+
+          <div class="table-responsive mat-elevation-z1 rounded">
+            <mat-table
+              [dataSource]="data"
+              matSort
+              matSortActive="lastModifiedDate"
+              matSortDirection="desc"
+              matSortDisableClear
+              class="w-100 roles-table"
+            >
+              <ng-container matColumnDef="select">
+                <mat-header-cell *matHeaderCellDef class="roles-col-select">
+                  <mat-checkbox
+                    (change)="masterToggle()"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                    [disabled]="!data.length"
+                    aria-label="Select all rows on this page"
+                  ></mat-checkbox>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" class="roles-col-select">
+                  <mat-checkbox
+                    (click)="$event.stopPropagation()"
+                    (change)="toggleRow(row)"
+                    [checked]="selection.isSelected(row)"
+                    [attr.aria-label]="'Select row ' + row.uuid"
+                  ></mat-checkbox>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.name || '—' }}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="description">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="text-truncate" [matTooltip]="row.description">
+                  {{ row.description || '—' }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="level">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Level</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  <span class="badge bg-secondary-subtle text-secondary">{{ row.level || '—' }}</span>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="tenantUuid">
+                <mat-header-cell *matHeaderCellDef>Tenant</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  @if (row.tenantUuid) {
+                    <span class="font-monospace small" [matTooltip]="row.tenantUuid">
+                      {{ shortUuid(row.tenantUuid) }}
+                    </span>
+                  } @else {
+                    —
+                  }
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="permissions">
+                <mat-header-cell *matHeaderCellDef>Permissions</mat-header-cell>
+                <mat-cell *matCellDef="let row" [matTooltip]="(row.permissionCodes || []).join(', ')">
+                  {{ permissionSummary(row.permissionCodes) }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="lastModifiedDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Last modified</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ formatMedium(row.lastModifiedDate) }}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef class="actions-col">Actions</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="actions-col">
+                  <button
+                    mat-icon-button
+                    [matMenuTriggerFor]="actionsMenu"
+                    [matMenuTriggerData]="{ row: row }"
+                    matTooltip="Actions"
+                    type="button"
+                  >
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+            </mat-table>
+          </div>
+        </div>
+
+        @if (!isLoading && !loadError && data.length === 0) {
+          <div class="text-center text-muted py-4">No roles found for the current filters.</div>
+        }
+
+        <div class="roles-pagination-bar d-flex flex-wrap align-items-end justify-content-between gap-3">
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="text-muted small text-nowrap">Rows per page</span>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="roles-page-size-field">
+              <mat-select
+                [value]="pageSize"
+                [disabled]="isLoading"
+                panelClass="roles-page-size-panel"
+                (selectionChange)="onPageSizeChange($event.value)"
+              >
+                @for (opt of pageSizeOptions; track opt) {
+                  <mat-option [value]="opt">{{ opt }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <mat-paginator
+            class="roles-paginator flex-grow-1"
+            [hidePageSize]="true"
+            [length]="meta?.totalItems ?? 0"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            (page)="onPaginatorPage($event)"
+          ></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-menu #actionsMenu="matMenu">
+  <ng-template matMenuContent let-row="row">
+    <button mat-menu-item type="button" (click)="onView(row)">
+      <mat-icon>visibility</mat-icon>
+      <span>View</span>
+    </button>
+    @if (canCreateRole) {
+      <button mat-menu-item type="button" (click)="onEdit(row)">
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+      </button>
+    }
+    @if (canDeleteRole) {
+      <button mat-menu-item type="button" class="text-danger" (click)="onDeleteRole(row)">
+        <mat-icon class="text-danger">delete_outline</mat-icon>
+        <span>Delete</span>
+      </button>
+    }
+  </ng-template>
+</mat-menu>
+
+<ng-template #createRoleModal let-modal>
+  <div class="modal-header border-bottom-0 pb-0">
+    <h5 class="modal-title">Create Role</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+      [disabled]="createSubmitting"
+    ></button>
+  </div>
+  <form [formGroup]="createForm" (ngSubmit)="submitCreate(modal)">
+    <div class="modal-body">
+      @if (createFormError) {
+        <div class="alert alert-danger py-2 small mb-3">{{ createFormError }}</div>
+      }
+
+      <div class="mb-3">
+        <label class="form-label" for="roleName">Name <span class="text-danger">*</span></label>
+        <input
+          id="roleName"
+          type="text"
+          class="form-control"
+          formControlName="name"
+          autocomplete="off"
+          [class.is-invalid]="createFormSubmitted && !!cf['name'].errors"
+        />
+        @if (createFormSubmitted && cf['name'].errors?.['required']) {
+          <div class="invalid-feedback d-block">Name is required.</div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="roleDescription">Description <span class="text-danger">*</span></label>
+        <textarea
+          id="roleDescription"
+          class="form-control"
+          rows="3"
+          formControlName="description"
+          [class.is-invalid]="createFormSubmitted && !!cf['description'].errors"
+        ></textarea>
+        @if (createFormSubmitted && cf['description'].errors?.['required']) {
+          <div class="invalid-feedback d-block">Description is required.</div>
+        }
+      </div>
+
+      <ng-container
+        *ngTemplateOutlet="
+          permissionsPicker;
+          context: {
+            form: createForm,
+            readOnly: false,
+            showErrors: createFormSubmitted,
+            disableRemove: createSubmitting
+          }
+        "
+      ></ng-container>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()" [disabled]="createSubmitting">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="createSubmitting">
+        @if (createSubmitting) {
+          <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        }
+        Create
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #roleDetailModal let-modal>
+  <div class="modal-header align-items-center flex-wrap gap-2 border-bottom">
+    <h5 class="modal-title text-truncate mb-0 flex-grow-1">
+      {{ detailReadOnly ? 'Role details' : 'Edit role' }}
+    </h5>
+    <div class="d-flex align-items-center gap-1 flex-shrink-0">
+      <button
+        mat-icon-button
+        type="button"
+        (click)="printRoleDetail()"
+        matTooltip="Print"
+        [disabled]="detailSaving || !detailSnapshot"
+        aria-label="Print"
+      >
+        <mat-icon>print</mat-icon>
+      </button>
+      @if (canCreateRole) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="toggleDetailEditMode()"
+          [matTooltip]="detailReadOnly ? 'Edit' : 'View'"
+          [disabled]="detailSaving || !detailSnapshot"
+          [attr.aria-label]="detailReadOnly ? 'Switch to edit' : 'Switch to view'"
+        >
+          <mat-icon>{{ detailReadOnly ? 'edit' : 'visibility' }}</mat-icon>
+        </button>
+      }
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss()"
+        [disabled]="detailSaving"
+      ></button>
+    </div>
+  </div>
+
+  @if (detailError && !detailSnapshot) {
+    <div class="modal-body">
+      <div class="alert alert-danger mb-0">{{ detailError }}</div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="modal.dismiss()">Close</button>
+    </div>
+  } @else if (detailSnapshot) {
+    <form [formGroup]="detailForm" (ngSubmit)="submitDetailUpdate(modal)">
+      <div class="modal-body">
+        @if (detailError) {
+          <div class="alert alert-danger py-2 small mb-3">{{ detailError }}</div>
+        }
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label text-muted small mb-1">UUID</label>
+            <div class="font-monospace small">{{ detailSnapshot.uuid }}</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted small mb-1">Level</label>
+            <div>{{ detailSnapshot.level || '—' }}</div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="detailRoleName">Name <span class="text-danger">*</span></label>
+          <input
+            id="detailRoleName"
+            type="text"
+            class="form-control"
+            formControlName="name"
+            [class.is-invalid]="detailFormSubmitted && !!df['name'].errors"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="detailRoleDescription">Description <span class="text-danger">*</span></label>
+          <textarea
+            id="detailRoleDescription"
+            class="form-control"
+            rows="3"
+            formControlName="description"
+            [class.is-invalid]="detailFormSubmitted && !!df['description'].errors"
+          ></textarea>
+        </div>
+
+        <ng-container
+          *ngTemplateOutlet="
+            permissionsPicker;
+            context: {
+              form: detailForm,
+              readOnly: detailReadOnly,
+              showErrors: detailFormSubmitted,
+              disableRemove: detailSaving || detailReadOnly
+            }
+          "
+        ></ng-container>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.dismiss()" [disabled]="detailSaving">
+          {{ detailReadOnly ? 'Close' : 'Cancel' }}
+        </button>
+        @if (!detailReadOnly) {
+          <button type="submit" class="btn btn-primary" [disabled]="detailSaving">
+            @if (detailSaving) {
+              <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+            }
+            Save changes
+          </button>
+        }
+      </div>
+    </form>
+  }
+</ng-template>
+
+<ng-template
+  #permissionsPicker
+  let-form="form"
+  let-readOnly="readOnly"
+  let-showErrors="showErrors"
+  let-disableRemove="disableRemove"
+>
+  <div class="mb-0 roles-permissions-field">
+    <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+      <mat-label>Permissions</mat-label>
+
+      @if (getPermissionCodes(form).length) {
+        <mat-chip-set class="roles-permission-chips" aria-label="Selected permissions">
+          @for (code of getPermissionCodes(form); track code) {
+            <mat-chip-row
+              (removed)="removePermissionCode(form, code)"
+              [disabled]="disableRemove"
+              [matTooltip]="code"
+            >
+              {{ code }}
+              @if (!disableRemove) {
+                <button matChipRemove [attr.aria-label]="'Remove ' + code">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              }
+            </mat-chip-row>
+          }
+        </mat-chip-set>
+      }
+
+      <mat-select
+        [formControl]="permissionCodesControl(form)"
+        multiple
+        panelClass="roles-permissions-panel"
+        [disabled]="permissionsLoading || readOnly"
+      >
+        <mat-select-trigger>
+          @if (!getPermissionCodes(form).length) {
+            <span class="text-muted">Select permissions...</span>
+          }
+        </mat-select-trigger>
+        @for (perm of assignablePermissions; track perm.code) {
+          <mat-option [value]="perm.code">
+            <span class="permission-option-code">{{ perm.code }}</span>
+            @if (perm.description) {
+              <span class="permission-option-desc">{{ perm.description }}</span>
+            }
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (permissionsLoading) {
+      <div class="text-muted small">Loading permissions...</div>
+    }
+    @if (showErrors && form.get('permissionCodes')?.errors?.['required']) {
+      <div class="text-danger small mt-1">Select at least one permission.</div>
+    }
+  </div>
+</ng-template>

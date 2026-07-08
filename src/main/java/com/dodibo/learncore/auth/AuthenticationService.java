@@ -238,7 +238,7 @@ public class AuthenticationService {
         String accessToken = jwtService.generateAccessToken(user);
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
-                .token(accessToken)
+                .email(user.getEmail())
                 .refreshToken(refreshTokenValue)
                 .tenantUuid(user.getTenant() != null ? user.getTenant().getUuid() : null)
                 .userUuid(user.getUuid())
@@ -339,7 +339,9 @@ public class AuthenticationService {
 
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
-                .token(accessToken)
+                .email(user.getEmail())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
                 .refreshToken(refreshTokenValue)
                 .tenantUuid(user.getTenant() != null ? user.getTenant().getUuid() : null)
                 .userUuid(user.getUuid())

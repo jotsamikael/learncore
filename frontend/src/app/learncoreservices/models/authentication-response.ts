@@ -3,9 +3,11 @@
 
 export interface AuthenticationResponse {
   accessToken?: string;
+  email?: string;
+  firstname?: string;
+  lastname?: string;
   refreshToken?: string;
   roles?: Array<string>;
   tenantUuid?: string;
-  /** @deprecated */token?: string;
   userUuid?: string;
 }

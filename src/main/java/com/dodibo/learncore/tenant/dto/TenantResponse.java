@@ -3,6 +3,8 @@ package com.dodibo.learncore.tenant.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 public class TenantResponse {
@@ -15,5 +17,7 @@ public class TenantResponse {
     private String email;
     private String phone;
     private String country;
+    private String description;
+    LocalDateTime lastModifiedDate;
     private boolean active;
 }

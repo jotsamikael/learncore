@@ -1,0 +1,5 @@
+export const RoleNames = {
+  SUPER_ADMIN: 'SUPER_ADMIN',
+  PLATFORM_MANAGER: 'PLATFORM_MANAGER',
+  TENANT_ADMIN: 'TENANT_ADMIN',
+} as const;

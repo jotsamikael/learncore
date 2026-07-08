@@ -6,6 +6,7 @@ import { ApiConfiguration } from '../../learncoreservices/api-configuration';
 import { logout } from '../../learncoreservices/fn/authentication/logout';
 import { refresh } from '../../learncoreservices/fn/authentication/refresh';
 import { staffLogin } from '../../learncoreservices/fn/authentication/staff-login';
+import { superAdminLogin } from '../../learncoreservices/fn/authentication/super-admin-login';
 import { getOwnTenant } from '../../learncoreservices/fn/tenant-admin-settings/get-own-tenant';
 import { viewPermissions } from '../../learncoreservices/fn/user-profile/view-permissions';
 import { AuthenticationResponse } from '../../learncoreservices/models/authentication-response';
@@ -27,6 +28,15 @@ export class LearncoreApiService {
 
   staffLogin(params: StaffLoginParams): Observable<AuthenticationResponse> {
     return staffLogin(this.http, this.apiConfig.rootUrl, {
+      body: {
+        email: params.email,
+        password: params.password,
+      },
+    }).pipe(map(response => response.body));
+  }
+
+  superAdminLogin(params: StaffLoginParams): Observable<AuthenticationResponse> {
+    return superAdminLogin(this.http, this.apiConfig.rootUrl, {
       body: {
         email: params.email,
         password: params.password,

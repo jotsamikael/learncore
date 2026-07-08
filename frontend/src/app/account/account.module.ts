@@ -16,11 +16,13 @@ import { SigninModule } from "./auth/signin/signin.module";
 import { SignupModule } from "./auth/signup/signup.module";
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
+import { SuperadminloginComponent } from './superadminlogin/superadminlogin.component';
 
 @NgModule({
   declarations: [
     RegisterComponent,
     LoginComponent,
+    SuperadminloginComponent,
     ToastsContainer
   ],
   imports: [

@@ -3,6 +3,7 @@
 
 export interface UpdateTenantRequest {
   country?: string;
+  description?: string;
   email?: string;
   examFocus?: string;
   logoUrl?: string;

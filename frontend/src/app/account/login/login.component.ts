@@ -6,6 +6,7 @@ import { AuthenticationService } from '../../core/services/auth.service';
 import { LearncoreAuthService } from '../../core/services/learncore-auth.service';
 import { SessionService } from '../../core/services/session.service';
 import { GlobalFormBuilderService } from '../../core/services/globalFormBuilder.service';
+import { getApiErrorMessage } from '../../core/utils/api-error.utils';
 import { ToastService } from './toast-service';
 
 @Component({
@@ -83,7 +84,7 @@ export class LoginComponent implements OnInit {
       },
       error: (err) => {
         this.loading = false;
-        this.error = err?.error?.message ?? 'Invalid email or password';
+        this.error = getApiErrorMessage(err, 'Invalid email or password');
       },
     });
   }

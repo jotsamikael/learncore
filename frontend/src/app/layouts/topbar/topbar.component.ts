@@ -55,8 +55,11 @@ export class TopbarComponent implements OnInit {
   ngOnInit(): void {
     if (environment.defaultauth === 'learncore') {
       this.userData = this.session.getSession();
+      console.log(this.userData)
     } else {
       this.userData = this.TokenStorageService.getUser();
+      console.log(this.userData)
+
     }
     this.element = document.documentElement;
 

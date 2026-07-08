@@ -21,7 +21,7 @@
       "description": "Local ENV."
     },
     {
-      "url": "https://something:8088/api/v1",
+      "url": "http://localhost:8080/api/v1",
       "description": "Prod ENV."
     }
   ],
@@ -95,16 +95,23 @@
           "Platform Tenants"
         ],
         "operationId": "listTenants",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FindTenantsQuery"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TenantResponse"
-                  }
+                  "$ref": "#/components/schemas/PageTenantResponse"
                 }
               }
             }
@@ -1284,7 +1291,8 @@
           "phone": {
             "type": "string",
             "maxLength": 30,
-            "minLength": 0
+            "minLength": 0,
+            "pattern": "^\\+?[0-9\\s\\-\\(\\)]{7,30}$"
           },
           "country": {
             "type": "string",
@@ -1327,6 +1335,13 @@
           },
           "country": {
             "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "lastModifiedDate": {
+            "type": "string",
+            "format": "date-time"
           },
           "active": {
             "type": "boolean"
@@ -1467,9 +1482,14 @@
           "refreshToken": {
             "type": "string"
           },
-          "token": {
-            "type": "string",
-            "deprecated": true
+          "email": {
+            "type": "string"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
           },
           "userUuid": {
             "type": "string"
@@ -1730,7 +1750,12 @@
           },
           "country": {
             "type": "string",
-            "maxLength": 100,
+            "maxLength": 32,
+            "minLength": 0
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500,
             "minLength": 0
           },
           "active": {
@@ -1796,7 +1821,12 @@
           },
           "country": {
             "type": "string",
-            "maxLength": 100,
+            "maxLength": 32,
+            "minLength": 0
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500,
             "minLength": 0
           }
         },
@@ -1917,12 +1947,12 @@
           "last": {
             "type": "boolean"
           },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
           "numberOfElements": {
             "type": "integer",
             "format": "int32"
-          },
-          "pageable": {
-            "$ref": "#/components/schemas/PageableObject"
           },
           "empty": {
             "type": "boolean"
@@ -1939,18 +1969,18 @@
           "sort": {
             "$ref": "#/components/schemas/SortObject"
           },
-          "unpaged": {
-            "type": "boolean"
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
           },
           "pageNumber": {
             "type": "integer",
             "format": "int32"
           },
-          "pageSize": {
-            "type": "integer",
-            "format": "int32"
-          },
           "paged": {
+            "type": "boolean"
+          },
+          "unpaged": {
             "type": "boolean"
           }
         }
@@ -1961,10 +1991,94 @@
           "empty": {
             "type": "boolean"
           },
-          "unsorted": {
+          "sorted": {
             "type": "boolean"
           },
-          "sorted": {
+          "unsorted": {
+            "type": "boolean"
+          }
+        }
+      },
+      "FindTenantsQuery": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sortBy": {
+            "type": "string"
+          },
+          "sortDirection": {
+            "type": "string",
+            "enum": [
+              "ASC",
+              "DESC"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "examFocus": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "PageTenantResponse": {
+        "type": "object",
+        "properties": {
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TenantResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "empty": {
             "type": "boolean"
           }
         }
@@ -2098,12 +2212,12 @@
           "last": {
             "type": "boolean"
           },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
           "numberOfElements": {
             "type": "integer",
             "format": "int32"
-          },
-          "pageable": {
-            "$ref": "#/components/schemas/PageableObject"
           },
           "empty": {
             "type": "boolean"

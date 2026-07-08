@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { AuthenticationResponse } from '../../learncoreservices/models/authentication-response';
+import { RoleNames } from '../constants/role-names';
 import { UserSession } from '../models/user-session.model';
 import { LearncoreApiService, StaffLoginParams } from './learncore-api.service';
 import { SessionService } from './session.service';
@@ -16,6 +17,27 @@ export class LearncoreAuthService {
     private readonly session: SessionService,
     private readonly tokenRefresh: TokenRefreshService
   ) {}
+
+  superAdminLogin(request: StaffLoginParams): Observable<UserSession> {
+    const credentials = {
+      email: request.email.trim().toLowerCase(),
+      password: request.password,
+    };
+    return this.api.superAdminLogin(credentials).pipe(
+      tap(response => this.session.saveSession(this.buildSession(response))),
+      switchMap(() => this.loadPermissions()),
+      switchMap(() => {
+        const session = this.session.getSession();
+        if (!session?.roles?.includes(RoleNames.SUPER_ADMIN)) {
+          this.session.clearSession();
+          return throwError(() => ({
+            error: { error: 'This account is not authorized for super admin access.' },
+          }));
+        }
+        return of(session);
+      })
+    );
+  }
 
   staffLogin(request: StaffLoginParams): Observable<UserSession> {
     const credentials = {
@@ -87,7 +109,10 @@ export class LearncoreAuthService {
 
   private buildSession(response: AuthenticationResponse): UserSession {
     return {
-      accessToken: response.accessToken ?? response.token ?? '',
+      firstname: response.firstname ?? '',
+      lastname: response.lastname ?? '',
+      email: response.email ?? '',
+      accessToken: response.accessToken ?? '',
       refreshToken: response.refreshToken ?? '',
       userUuid: response.userUuid ?? '',
       tenantUuid: response.tenantUuid ?? null,

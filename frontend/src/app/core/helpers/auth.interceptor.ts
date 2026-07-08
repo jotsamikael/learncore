@@ -9,6 +9,7 @@ import { Observable, catchError, switchMap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { IS_RETRY_AFTER_REFRESH } from './http-context.tokens';
+import { isPublicAuthUrl } from './public-auth-urls';
 import { SessionService } from '../services/session.service';
 import { TokenRefreshService } from '../services/token-refresh.service';
 
@@ -74,24 +75,10 @@ export class AuthInterceptor implements HttpInterceptor {
     if (!url.includes(environment.apiUrl)) {
       return environment.defaultauth === 'learncore';
     }
-    return !this.isPublicAuthUrl(url);
+    return !isPublicAuthUrl(url);
   }
 
   private shouldSkipRefresh(url: string): boolean {
-    return this.isPublicAuthUrl(url) || url.includes('/auth/refresh');
-  }
-
-  private isPublicAuthUrl(url: string): boolean {
-    return [
-      '/auth/login',
-      '/auth/staff/login',
-      '/auth/superadmin/login',
-      '/auth/register',
-      '/auth/refresh',
-      '/auth/forgot-password',
-      '/auth/reset-password',
-      '/auth/activate-account',
-      '/auth/resend-activation',
-    ].some(path => url.includes(path));
+    return isPublicAuthUrl(url) || url.includes('/auth/refresh');
   }
 }

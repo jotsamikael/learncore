@@ -15,6 +15,7 @@ public class TenantMapper {
                 .examFocus(tenant.getExamFocus())
                 .logoUrl(tenant.getLogoUrl())
                 .email(tenant.getEmail())
+                .lastModifiedDate(tenant.getLastModifiedDate())
                 .phone(tenant.getPhone())
                 .country(tenant.getCountry())
                 .active(tenant.isActive())

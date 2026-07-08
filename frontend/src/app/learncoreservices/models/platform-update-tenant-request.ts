@@ -4,6 +4,7 @@
 export interface PlatformUpdateTenantRequest {
   active?: boolean;
   country?: string;
+  description?: string;
   email?: string;
   examFocus?: string;
   logoUrl?: string;
