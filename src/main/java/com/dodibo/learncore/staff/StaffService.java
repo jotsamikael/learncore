@@ -1,6 +1,7 @@
 package com.dodibo.learncore.staff;
 
 import com.dodibo.learncore.staff.dto.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -10,9 +11,9 @@ public interface StaffService {
 
     StaffResponse createTenantStaff(CreateTenantStaffRequest request);
 
-    List<StaffResponse> listPlatformStaff();
+    Page<StaffResponse> listPlatformStaff(FindStaffQuery query);
 
-    List<StaffResponse> listTenantStaff(String tenantUuid);
+    Page<StaffResponse> listTenantStaff(String tenantUuid, FindStaffQuery query);
 
     TenantStaffDetailsResponse getTenantStaffDetails(String tenantStaffUuid);
 

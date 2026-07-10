@@ -5,6 +5,8 @@ import { PermissionGuard } from '../../core/guards/permission.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeaturePlaceholderComponent } from './feature-placeholder/feature-placeholder.component';
 import { TenantsComponent } from './tenants/tenants.component';
+import { PlatformStaffComponent } from './platform-staff/platform-staff.component';
+import { TenantStaffComponent } from './tenant-staff/tenant-staff.component';
 
 const routes: Routes = [
   {
@@ -35,22 +37,14 @@ const routes: Routes = [
       },
       {
         path: 'staff',
-        component: FeaturePlaceholderComponent,
+        component: TenantStaffComponent,
         data: {
           title: 'Staff',
           permissions: [PermissionCodes.ADMIN_STAFF_READ],
           scope: 'tenant',
         },
       },
-      {
-        path: 'staff/create',
-        component: FeaturePlaceholderComponent,
-        data: {
-          title: 'Invite Staff',
-          permissions: [PermissionCodes.ADMIN_STAFF_CREATE],
-          scope: 'tenant',
-        },
-      },
+      
       {
         path: 'roles',
         loadComponent: () =>
@@ -80,26 +74,8 @@ const routes: Routes = [
         },
       },
       {
-        path: 'platform/tenants',
-        component: FeaturePlaceholderComponent,
-        data: {
-          title: 'Tenants',
-          permissions: [PermissionCodes.TENANT_READ],
-          scope: 'platform',
-        },
-      },
-      {
-        path: 'platform/tenants/create',
-        component: FeaturePlaceholderComponent,
-        data: {
-          title: 'Create Tenant',
-          permissions: [PermissionCodes.TENANT_CREATE],
-          scope: 'platform',
-        },
-      },
-      {
         path: 'platform/staff',
-        component: FeaturePlaceholderComponent,
+        component: PlatformStaffComponent,
         data: {
           title: 'Platform Staff',
           permissions: [PermissionCodes.PLATFORM_STAFF_READ],

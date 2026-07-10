@@ -1,0 +1,398 @@
+<app-breadcrumbs [title]="pageTitle" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header border-bottom-dashed">
+        <div class="d-flex flex-wrap justify-content-between align-items-end gap-3">
+          <div>
+            <h5 class="card-title mb-1">{{ pageTitle }}</h5>
+            <p class="text-muted small mb-0">
+              Manage internal tenant workflow personnel, positions, and operational states.
+            </p>
+          </div>
+
+          @if (canCreateStaff) {
+            <div class="d-flex flex-wrap gap-2">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="openCreateModal(createStaffModal)"
+                [disabled]="isLoading"
+              >
+                Create Tenant Staff
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="staff-toolbar mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+          <div class="d-flex flex-wrap align-items-center gap-2">
+            @if (meta; as listMeta) {
+              <span class="badge bg-primary-subtle text-primary">
+                Total tenant staff: {{ listMeta.totalItems }}
+              </span>
+              <span class="badge bg-info-subtle text-info">
+                Page {{ listMeta.currentPage }} / {{ listMeta.totalPages || 1 }}
+              </span>
+            }
+          </div>
+
+          <div class="btn-group shadow-sm" role="group" aria-label="Table actions">
+            <div class="btn-group" ngbDropdown placement="bottom-end">
+              <button
+                type="button"
+                class="btn btn-light border py-2 px-3"
+                ngbDropdownToggle
+                [disabled]="isLoading"
+              >
+                Export
+              </button>
+              <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                <button type="button" class="dropdown-item" (click)="exportExcel()" [disabled]="!data.length">
+                  Excel
+                </button>
+                <button type="button" class="dropdown-item" (click)="exportCsv()" [disabled]="!data.length">
+                  CSV
+                </button>
+                <button type="button" class="dropdown-item" (click)="exportPdf()" [disabled]="!data.length">
+                  PDF
+                </button>
+                <button type="button" class="dropdown-item" (click)="printTable()" [disabled]="!data.length">
+                  Print
+                </button>
+              </div>
+            </div>
+
+            <div class="btn-group" ngbDropdown placement="bottom-end">
+              <button
+                type="button"
+                class="btn btn-light border py-2 px-3"
+                ngbDropdownToggle
+                [disabled]="isLoading"
+              >
+                Bulk Actions
+              </button>
+              <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                <button type="button" class="dropdown-item" (click)="clearFilters()">
+                  Clear filters
+                </button>
+                <div class="dropdown-divider"></div>
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="exportSelectedCsv()"
+                  [disabled]="selection.isEmpty()"
+                >
+                  Export selected (CSV)
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-light border py-2 px-2 d-inline-flex align-items-center justify-content-center"
+              (click)="refresh()"
+              [disabled]="isLoading"
+              title="Refresh"
+              aria-label="Refresh"
+            >
+              <mat-icon class="staff-toolbar-refresh-icon">refresh</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="row g-3 staff-filters mb-3">
+          <div class="col-md-3 col-lg-2">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>First name</mat-label>
+              <input matInput [formControl]="firstnameFilter" placeholder="First name" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-3 col-lg-2">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Last name</mat-label>
+              <input matInput [formControl]="lastnameFilter" placeholder="Last name" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4 col-lg-3">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Email</mat-label>
+              <input matInput [formControl]="emailFilter" placeholder="Search email" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-2 col-lg-2">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Position</mat-label>
+              <input matInput [formControl]="positionFilter" placeholder="Job title" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        @if (loadError) {
+          <div class="alert alert-danger py-2 mb-3">{{ loadError }}</div>
+        }
+
+        <div class="position-relative staff-table-shell">
+          @if (isLoading) {
+            <div class="roles-table-overlay d-flex align-items-center justify-content-center">
+              <mat-progress-spinner mode="indeterminate" diameter="42"></mat-progress-spinner>
+            </div>
+          }
+
+          <div class="table-responsive mat-elevation-z1 rounded">
+            <mat-table
+              [dataSource]="data"
+              matSort
+              matSortActive="lastname"
+              matSortDirection="asc"
+              matSortDisableClear
+              class="w-100 staff-table"
+            >
+              <ng-container matColumnDef="select">
+                <mat-header-cell *matHeaderCellDef class="roles-col-select">
+                  <mat-checkbox
+                    (change)="masterToggle()"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                    [disabled]="!data.length"
+                    aria-label="Select all rows"
+                  ></mat-checkbox>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" class="roles-col-select">
+                  <mat-checkbox
+                    (click)="$event.stopPropagation()"
+                    (change)="toggleRow(row)"
+                    [checked]="selection.isSelected(row)"
+                  ></mat-checkbox>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="firstname">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>First Name</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.firstname || '—' }}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="lastname">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.lastname || '—' }}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="email">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="text-truncate" [matTooltip]="row.email">
+                  {{ row.email || '—' }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="positionName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Position</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  <span class="badge bg-secondary-subtle text-secondary">{{ row.positionName || '—' }}</span>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  <span [class]="row.accountLocked ? 'badge bg-danger-subtle text-danger' : 'badge bg-success-subtle text-success'">
+                    {{ row.accountLocked ? 'Suspended' : 'Active' }}
+                  </span>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef class="actions-col">Actions</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="actions-col">
+                  <button
+                    mat-icon-button
+                    [matMenuTriggerFor]="actionsMenu"
+                    [matMenuTriggerData]="{ row: row }"
+                    matTooltip="Actions"
+                    type="button"
+                  >
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+            </mat-table>
+          </div>
+        </div>
+
+        @if (!isLoading && !loadError && data.length === 0) {
+          <div class="text-center text-muted py-4">No tenant staff entries match current query terms.</div>
+        }
+
+        <div class="roles-pagination-bar d-flex flex-wrap align-items-end justify-content-between gap-3">
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="text-muted small text-nowrap">Rows per page</span>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="roles-page-size-field">
+              <mat-select
+                [value]="pageSize"
+                [disabled]="isLoading"
+                (selectionChange)="onPageSizeChange($event.value)"
+              >
+                @for (opt of pageSizeOptions; track opt) {
+                  <mat-option [value]="opt">{{ opt }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <mat-paginator
+            class="roles-paginator flex-grow-1"
+            [hidePageSize]="true"
+            [length]="meta?.totalItems ?? 0"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            (page)="onPaginatorPage($event)"
+          ></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-menu #actionsMenu="matMenu">
+  <ng-template matMenuContent let-row="row">
+    <button mat-menu-item type="button" (click)="onView(row)">
+      <mat-icon>visibility</mat-icon>
+      <span>View Profile</span>
+    </button>
+    @if (canUpdateStaff) {
+      <button mat-menu-item type="button" (click)="onEdit(row)">
+        <mat-icon>edit</mat-icon>
+        <span>Edit Account</span>
+      </button>
+      <button mat-menu-item type="button" (click)="onToggleStatus(row)">
+        <mat-icon>{{ row.accountLocked ? 'check_circle_outline' : 'block' }}</mat-icon>
+        <span>{{ row.accountLocked ? 'Activate Staff' : 'Suspend Staff' }}</span>
+      </button>
+    }
+  </ng-template>
+</mat-menu>
+
+<!-- Create Tenant Staff Modal -->
+<ng-template #createStaffModal let-modal>
+  <div class="modal-header border-bottom-0 pb-0">
+    <h5 class="modal-title">Create Tenant Staff Entry</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()" [disabled]="createSubmitting"></button>
+  </div>
+  <form [formGroup]="createForm" (ngSubmit)="submitCreate(modal)">
+    <div class="modal-body">
+      @if (createFormError) {
+        <div class="alert alert-danger py-2 small mb-3">{{ createFormError }}</div>
+      }
+      
+      @if (isPlatformRoute) {
+        <div class="mb-3">
+          <label class="form-label" for="tUuid">Target Tenant Scope UUID <span class="text-danger">*</span></label>
+          <input id="tUuid" type="text" class="form-control font-monospace" formControlName="tenantUuid" [class.is-invalid]="createFormSubmitted && !!sf['tenantUuid'].errors" />
+        </div>
+      }
+
+      <div class="row g-2">
+        <div class="col-md-6 mb-2">
+          <label class="form-label" for="fName">First Name <span class="text-danger">*</span></label>
+          <input id="fName" type="text" class="form-control" formControlName="firstname" [class.is-invalid]="createFormSubmitted && sf['firstname'].errors" />
+        </div>
+        <div class="col-md-6 mb-2">
+          <label class="form-label" for="lName">Last Name <span class="text-danger">*</span></label>
+          <input id="lName" type="text" class="form-control" formControlName="lastname" [class.is-invalid]="createFormSubmitted && sf['lastname'].errors" />
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="emailAddr">Email Address <span class="text-danger">*</span></label>
+        <input id="emailAddr" type="email" class="form-control" formControlName="email" [class.is-invalid]="createFormSubmitted && sf['email'].errors" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="posTitle">Assigned Position <span class="text-danger">*</span></label>
+        <input id="posTitle" type="text" class="form-control" formControlName="positionName" [class.is-invalid]="createFormSubmitted && sf['positionName'].errors" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()" [disabled]="createSubmitting">Cancel</button>
+      <button type="submit" class="btn btn-primary" [disabled]="createSubmitting">
+        @if (createSubmitting) { <span class="spinner-border spinner-border-sm me-1"></span> } Create Staff
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- View/Edit Modal Shell -->
+<ng-template #staffDetailModal let-modal>
+  <div class="modal-header align-items-center flex-wrap gap-2 border-bottom">
+    <h5 class="modal-title text-truncate mb-0 flex-grow-1">
+      {{ detailReadOnly ? 'Tenant Staff Profile' : 'Modify Core Profile' }}
+    </h5>
+    <div class="d-flex align-items-center gap-1 flex-shrink-0">
+      @if (canUpdateStaff) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="toggleDetailEditMode()"
+          [disabled]="detailSaving || !detailSnapshot"
+        >
+          <mat-icon>{{ detailReadOnly ? 'edit' : 'visibility' }}</mat-icon>
+        </button>
+      }
+      <button type="button" class="btn-close" (click)="modal.dismiss()" [disabled]="detailSaving"></button>
+    </div>
+  </div>
+
+  @if (detailSnapshot) {
+    <form [formGroup]="detailForm" (ngSubmit)="submitDetailUpdate(modal)">
+      <div class="modal-body">
+        @if (detailError) {
+          <div class="alert alert-danger py-2 small mb-3">{{ detailError }}</div>
+        }
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="text-muted small mb-1 d-block">Staff Identifier (UUID)</label>
+            <div class="font-monospace small text-select-all">{{ detailSnapshot.uuid }}</div>
+          </div>
+          <div class="col-md-6">
+            <label class="text-muted small mb-1 d-block">Tenant Owner Scope</label>
+            <div class="font-monospace small">{{ shortUuid(detailSnapshot.tenantUuid) }}</div>
+          </div>
+        </div>
+
+        <div class="row g-2 mb-3">
+          <div class="col-md-6">
+            <label class="form-label" for="dfFirstname">First Name <span class="text-danger">*</span></label>
+            <input id="dfFirstname" type="text" class="form-control" formControlName="firstname" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="dfLastname">Last Name <span class="text-danger">*</span></label>
+            <input id="dfLastname" type="text" class="form-control" formControlName="lastname" />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="dfPosition">Designated Position / Department Title <span class="text-danger">*</span></label>
+          <input id="dfPosition" type="text" class="form-control" formControlName="positionName" />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="modal.dismiss()" [disabled]="detailSaving">
+          {{ detailReadOnly ? 'Close' : 'Cancel' }}
+        </button>
+        @if (!detailReadOnly) {
+          <button type="submit" class="btn btn-primary" [disabled]="detailSaving">
+            @if (detailSaving) { <span class="spinner-border spinner-border-sm me-1"></span> } Save Changes
+          </button>
+        }
+      </div>
+    </form>
+  }
+</ng-template>

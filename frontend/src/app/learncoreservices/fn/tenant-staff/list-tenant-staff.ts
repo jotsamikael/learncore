@@ -7,16 +7,19 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { StaffResponse } from '../../models/staff-response';
+import { FindStaffQuery } from '../../models/find-staff-query';
+import { PageStaffResponse } from '../../models/page-staff-response';
 
 export interface ListTenantStaff$Params {
   tenantUuid?: string;
+  query: FindStaffQuery;
 }
 
-export function listTenantStaff(http: HttpClient, rootUrl: string, params?: ListTenantStaff$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<StaffResponse>>> {
+export function listTenantStaff(http: HttpClient, rootUrl: string, params: ListTenantStaff$Params, context?: HttpContext): Observable<StrictHttpResponse<PageStaffResponse>> {
   const rb = new RequestBuilder(rootUrl, listTenantStaff.PATH, 'get');
   if (params) {
     rb.query('tenantUuid', params.tenantUuid, {});
+    rb.query('query', params.query, {});
   }
 
   return http.request(
@@ -24,7 +27,7 @@ export function listTenantStaff(http: HttpClient, rootUrl: string, params?: List
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<StaffResponse>>;
+      return r as StrictHttpResponse<PageStaffResponse>;
     })
   );
 }

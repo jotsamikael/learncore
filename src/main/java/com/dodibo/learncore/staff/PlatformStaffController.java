@@ -4,6 +4,7 @@ import com.dodibo.learncore.staff.dto.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,8 @@ public class PlatformStaffController {
 
     @GetMapping
     @PreAuthorize("@authz.can('platform.staff.read')")
-    public List<StaffResponse> listPlatformStaff() {
-        return staffService.listPlatformStaff();
+    public Page<StaffResponse> listPlatformStaff(@ModelAttribute FindStaffQuery query) {
+        return staffService.listPlatformStaff(query);
     }
 
     @GetMapping("/{uuid}")
@@ -44,6 +45,8 @@ public class PlatformStaffController {
         request.setRoles(List.of("TENANT_ADMIN"));
         return staffService.createTenantStaff(request);
     }
+
+
 
 
     @PatchMapping("/{uuid}")

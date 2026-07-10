@@ -102,8 +102,7 @@ public class AuthenticationService {
                 .dateOfBirth(request.getDateOfBirth() != null ? request.getDateOfBirth().toString() : null)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .tenant(tenant)
-                .accountLocked(false)
-                .enabled(false)
+                .accountLocked(true)
                 .roles(List.of(studentRole))
                 .createdDate(LocalDateTime.now())
                 .build();
@@ -129,7 +128,7 @@ public class AuthenticationService {
         User user = userRepository.findById(savedToken.getUser().getId())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        user.setEnabled(true);
+        user.setAccountLocked(false);
         userRepository.save(user);
         savedToken.setValidatedAt(LocalDateTime.now());
         tokenRepository.save(savedToken);

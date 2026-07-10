@@ -37,7 +37,7 @@ export const MENU: MenuItem[] = [
     id: 41,
     label: 'Staff',
     icon: 'ri-user-settings-line',
-    link: '/learncore/admin/staff',
+    link: '/learncore/staff',
     permissions: ['admin.staff.read'],
     scope: 'tenant',
   },

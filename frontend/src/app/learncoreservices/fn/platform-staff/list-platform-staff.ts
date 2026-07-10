@@ -7,14 +7,17 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { StaffResponse } from '../../models/staff-response';
+import { FindStaffQuery } from '../../models/find-staff-query';
+import { PageStaffResponse } from '../../models/page-staff-response';
 
 export interface ListPlatformStaff$Params {
+  query: FindStaffQuery;
 }
 
-export function listPlatformStaff(http: HttpClient, rootUrl: string, params?: ListPlatformStaff$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<StaffResponse>>> {
+export function listPlatformStaff(http: HttpClient, rootUrl: string, params: ListPlatformStaff$Params, context?: HttpContext): Observable<StrictHttpResponse<PageStaffResponse>> {
   const rb = new RequestBuilder(rootUrl, listPlatformStaff.PATH, 'get');
   if (params) {
+    rb.query('query', params.query, {});
   }
 
   return http.request(
@@ -22,7 +25,7 @@ export function listPlatformStaff(http: HttpClient, rootUrl: string, params?: Li
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<StaffResponse>>;
+      return r as StrictHttpResponse<PageStaffResponse>;
     })
   );
 }

@@ -1,9 +1,11 @@
 package com.dodibo.learncore.staff;
 
 import com.dodibo.learncore.staff.dto.*;
+import com.dodibo.learncore.tenant.dto.FindTenantsQuery;
 import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +23,8 @@ public class AdminStaffController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@authz.can('admin.staff.read')")
-    public List<StaffResponse> listTenantStaff(@RequestParam(required = false) String tenantUuid) {
-        return staffService.listTenantStaff(tenantUuid);
+    public Page<StaffResponse> listTenantStaff(@RequestParam(required = false) String tenantUuid, @ModelAttribute FindStaffQuery query) {
+        return staffService.listTenantStaff(tenantUuid,query);
     }
 
     @GetMapping("/{uuid}")

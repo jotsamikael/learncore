@@ -26,6 +26,8 @@ public class StaffMapper {
                 .lastname(staff.getLastname())
                 .email(staff.getEmail())
                 .positionName(staff.getPositionName())
+                .accountLocked(staff.isAccountLocked())
+                .lastModifiedDate(staff.getLastModifiedDate())
                 .tenantUuid(tenantUuid)
                 .roles(toRoleNames(staff))
                 .platformStaff(staff.isPlatformStaff())

@@ -19,6 +19,8 @@ import com.dodibo.learncore.user.User;
 import com.dodibo.learncore.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,7 +71,6 @@ public class StaffServiceImpl implements StaffService {
                 .positionName(request.getPositionName())
                 .roles(roles)
                 .tenant(null)
-                .enabled(true)
                 .accountLocked(false)
                 .createdDate(LocalDateTime.now())
                 .build();
@@ -99,7 +100,6 @@ public class StaffServiceImpl implements StaffService {
                 .positionName(request.getPositionName())
                 .roles(roles)
                 .tenant(tenant)
-                .enabled(true)
                 .accountLocked(false)
                 .createdDate(LocalDateTime.now())
                 .build();
@@ -107,22 +107,27 @@ public class StaffServiceImpl implements StaffService {
         return staffMapper.toResponse(staffRepository.save(staff), tenant.getUuid());
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<StaffResponse> listPlatformStaff() {
-        return userRepository.findPlatformStaff().stream()
-                .map(staff -> staffMapper.toResponse(staff, null))
-                .toList();
-    }
+
+@Override
+@Transactional(readOnly = true)
+public Page<StaffResponse> listPlatformStaff(FindStaffQuery query) {
+    Specification<Staff> spec = StaffSpecification.fromQuery(query, null);
+
+    return staffRepository
+            .findAll(spec, query.toPageable())
+            .map(staff -> staffMapper.toResponse(staff, null));
+}
 
     @Override
     @Transactional(readOnly = true)
-    public List<StaffResponse> listTenantStaff(String tenantUuid) {
+    public Page<StaffResponse> listTenantStaff(String tenantUuid, FindStaffQuery query) {
         User creator = SecurityUtils.getCurrentUser();
         Tenant tenant = resolveTargetTenant(creator, tenantUuid);
-        return userRepository.findStaffByTenantId(tenant.getId()).stream()
-                .map(staff -> staffMapper.toResponse(staff, tenant.getUuid()))
-                .toList();
+
+        Specification<Staff> spec = StaffSpecification.fromQuery(query, tenant.getId());
+        return staffRepository
+                .findAll(spec, query.toPageable())
+                .map(staff -> staffMapper.toResponse(staff, tenant.getUuid()));
     }
 
     @Override

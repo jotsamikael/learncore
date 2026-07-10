@@ -77,12 +77,10 @@ public class User implements UserDetails, Principal {
 
     private boolean accountLocked;
 
-    private boolean enabled;
 
     private String avatarUrl;
 
 
-    private boolean isActive = true;
     private boolean isDeleted = false;
 
     @CreatedDate
@@ -152,10 +150,7 @@ public class User implements UserDetails, Principal {
         return true;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
+
 
     @Override
     public String getName() {

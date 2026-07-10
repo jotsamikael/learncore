@@ -224,7 +224,6 @@ public class DataSeeder implements ApplicationRunner {
                 .positionName("Platform Owner")
                 .roles(List.of(superAdminRole))
                 .tenant(null)
-                .enabled(true)
                 .accountLocked(false)
                 .createdDate(LocalDateTime.now())
                 .build();
