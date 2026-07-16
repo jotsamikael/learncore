@@ -7,6 +7,8 @@ import { FeaturePlaceholderComponent } from './feature-placeholder/feature-place
 import { TenantsComponent } from './tenants/tenants.component';
 import { PlatformStaffComponent } from './platform-staff/platform-staff.component';
 import { TenantStaffComponent } from './tenant-staff/tenant-staff.component';
+import { StudentsComponent } from './students/students.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   {
@@ -28,7 +30,7 @@ const routes: Routes = [
       },
       {
         path: 'students',
-        component: FeaturePlaceholderComponent,
+        component: StudentsComponent,
         data: {
           title: 'Students',
           permissions: [PermissionCodes.TENANT_STUDENT_READ],
@@ -94,7 +96,7 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        component: FeaturePlaceholderComponent,
+        component: ProfileComponent,
         data: {
           title: 'Profile',
         },

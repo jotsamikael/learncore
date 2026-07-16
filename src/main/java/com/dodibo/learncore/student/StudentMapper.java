@@ -20,7 +20,9 @@ public class StudentMapper {
                 .lastname(student.getLastname())
                 .xp(student.getXp())
                 .level(student.getLevel())
-                .tenantUuid(student.getTenant() != null ? student.getTenant().getUuid() : null)
+                .lastModifiedDate(student.getLastModifiedDate())
+                .accountLocked(student.isAccountLocked())
+                .enabled(student.isEnabled())
                 .build();
     }
 
@@ -35,6 +37,9 @@ public class StudentMapper {
                 .lastname(student.getLastname())
                 .email(student.getEmail())
                 .username(student.getUsername())
+                .lastModifiedDate(student.getLastModifiedDate())
+                .accountLocked(student.isAccountLocked())
+                .enabled(student.isEnabled())
                 .tenantUuid(student.getTenant() != null ? student.getTenant().getUuid() : null)
                 .profilePictureUrl(student.getAvatarUrl())
                 .xp(student.getXp())

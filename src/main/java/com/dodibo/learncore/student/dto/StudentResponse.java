@@ -3,6 +3,7 @@ package com.dodibo.learncore.student.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -16,5 +17,8 @@ public class StudentResponse {
     private String lastname;
     private Integer xp;
     private Integer level;
-    private String tenantUuid;
+    private LocalDateTime lastModifiedDate;
+    private boolean accountLocked;
+    private boolean enabled;
+
 }

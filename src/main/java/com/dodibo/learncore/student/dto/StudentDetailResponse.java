@@ -22,5 +22,7 @@ public class StudentDetailResponse {
     private String referCode;
     private String subscriptionType;
     private boolean enabled;
+    private boolean accountLocked;
     private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
 }

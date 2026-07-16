@@ -1,0 +1,182 @@
+<app-breadcrumbs title="Profile" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+@if (loadError) {
+  <div class="alert alert-danger">{{ loadError }}</div>
+}
+
+@if (isLoading) {
+  <div class="profile-page text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="text-muted mt-2 mb-0">Loading profile…</p>
+  </div>
+} @else if (profile) {
+  <div class="profile-page">
+    <div class="profile-cover position-relative mx-n4 mt-n4">
+      <img src="assets/images/profile-bg.jpg" class="profile-cover__img" alt="" />
+      <div class="profile-cover__overlay"></div>
+    </div>
+
+    <div class="profile-identity card border-0 shadow-none">
+      <div class="card-body pt-0">
+        <div class="d-flex flex-wrap align-items-end gap-3 profile-identity__row">
+          <button
+            type="button"
+            class="profile-avatar"
+            (click)="openAvatarPicker()"
+            aria-label="Change profile photo"
+          >
+            <img [src]="avatarSrc" alt="Profile avatar" class="profile-avatar__img" />
+            <span class="profile-avatar__overlay">
+              <i class="ri-camera-fill"></i>
+              <span>Change</span>
+            </span>
+          </button>
+          <input
+            #avatarInput
+            type="file"
+            class="d-none"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            (change)="onAvatarSelected($event)"
+          />
+
+          <div class="profile-identity__meta pb-2 flex-grow-1 min-width-0">
+            <h4 class="profile-identity__name mb-1 text-truncate">{{ displayName }}</h4>
+            @if (profile.email) {
+              <p class="text-muted mb-0 text-truncate">{{ profile.email }}</p>
+            }
+            @if (profile.roles?.length) {
+              <div class="d-flex flex-wrap gap-1 mt-2">
+                @for (role of profile.roles; track role) {
+                  <span class="badge bg-primary-subtle text-primary">{{ role }}</span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        @if (avatarError) {
+          <div class="text-danger small mt-2">{{ avatarError }}</div>
+        }
+      </div>
+    </div>
+
+    <div class="card profile-card">
+      <div class="card-header border-bottom-0 pb-0">
+        <ul
+          ngbNav
+          #profileNav="ngbNav"
+          [(activeId)]="activeTab"
+          class="nav nav-tabs-custom profile-tabs border-bottom-0"
+        >
+          <li [ngbNavItem]="1">
+            <a ngbNavLink>Overview</a>
+            <ng-template ngbNavContent>
+              <form class="profile-form pt-3" [formGroup]="profileForm" (ngSubmit)="submitProfile()">
+                @if (saveError) {
+                  <div class="alert alert-danger py-2 small">{{ saveError }}</div>
+                }
+                @if (saveSuccess) {
+                  <div class="alert alert-success py-2 small">{{ saveSuccess }}</div>
+                }
+
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label" for="profileFirstname">First name</label>
+                    <input
+                      id="profileFirstname"
+                      type="text"
+                      class="form-control profile-input"
+                      formControlName="firstname"
+                      autocomplete="given-name"
+                      [class.is-invalid]="formSubmitted && !!f['firstname'].errors"
+                    />
+                    @if (formSubmitted && f['firstname'].errors?.['required']) {
+                      <div class="invalid-feedback d-block">First name is required.</div>
+                    }
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="profileLastname">Last name</label>
+                    <input
+                      id="profileLastname"
+                      type="text"
+                      class="form-control profile-input"
+                      formControlName="lastname"
+                      autocomplete="family-name"
+                      [class.is-invalid]="formSubmitted && !!f['lastname'].errors"
+                    />
+                    @if (formSubmitted && f['lastname'].errors?.['required']) {
+                      <div class="invalid-feedback d-block">Last name is required.</div>
+                    }
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label" for="profileUsername">Username</label>
+                    <div class="profile-input-wrap">
+                      <input
+                        id="profileUsername"
+                        type="text"
+                        class="form-control profile-input pe-5"
+                        formControlName="username"
+                        autocomplete="username"
+                        maxlength="50"
+                        [class.is-invalid]="formSubmitted && !!f['username'].errors"
+                      />
+                      <span class="profile-counter">{{ usernameLength }} / {{ usernameMax }}</span>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label" for="profileEmail">Email</label>
+                    <input
+                      id="profileEmail"
+                      type="email"
+                      class="form-control profile-input"
+                      formControlName="email"
+                      autocomplete="email"
+                    />
+                    <div class="form-text">Email is managed by your account administrator.</div>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label" for="profilePhone">Phone</label>
+                    <input
+                      id="profilePhone"
+                      type="tel"
+                      class="form-control profile-input"
+                      formControlName="phone"
+                      autocomplete="tel"
+                      placeholder="+237 6XX XXX XXX"
+                      [class.is-invalid]="formSubmitted && !!f['phone'].errors"
+                    />
+                    @if (formSubmitted && f['phone'].errors?.['pattern']) {
+                      <div class="invalid-feedback d-block">Enter a valid phone number.</div>
+                    }
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <button type="submit" class="btn btn-primary profile-submit px-4" [disabled]="isSaving">
+                    @if (isSaving) {
+                      <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                    }
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="2">
+            <a ngbNavLink>Security</a>
+            <ng-template ngbNavContent>
+              <div class="pt-3 text-muted">
+                <p class="mb-2">Password and security settings will appear here.</p>
+                <p class="small mb-0">Use the account change-password flow to update your credentials.</p>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="profileNav" class="profile-tab-body"></div>
+      </div>
+    </div>
+  </div>
+}

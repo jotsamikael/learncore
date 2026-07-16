@@ -31,7 +31,6 @@ public class StudentRegistrationRequest {
     @NotNull(message = "Date of birth is mandatory")
     private LocalDate dateOfBirth;
 
-
     @NotEmpty(message = "email is mandatory")
     @NotNull(message = "email can not be blank")
     @Email(message = "email is not formatted")

@@ -36,13 +36,17 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserProfileResponse getMyProfile() {
-        return userMapper.toProfileResponse(SecurityUtils.getCurrentUser());
+        Long userId = SecurityUtils.getCurrentUser().getId();
+        User user = userRepository.findByIdWithTenant(userId)
+                .orElseThrow(() -> new OperationNotPermittedException("User not found"));
+        return userMapper.toProfileResponse(user);
     }
 
     @Override
     @Transactional
     public UserProfileResponse updateMyProfile(UpdateProfileRequest request, MultipartFile avatar) {
-        User user = userRepository.findById(SecurityUtils.getCurrentUser().getId())
+        Long userId = SecurityUtils.getCurrentUser().getId();
+        User user = userRepository.findByIdWithTenant(userId)
                 .orElseThrow(() -> new OperationNotPermittedException("User not found"));
 
         boolean hasTextUpdate = hasProfileTextUpdate(request);
@@ -57,9 +61,6 @@ public class UserServiceImpl implements UserService {
         }
         if (StringUtils.hasText(request.getLastname())) {
             user.setLastname(request.getLastname().trim());
-        }
-        if (request.getDateOfBirth() != null) {
-            user.setDateOfBirth(request.getDateOfBirth().trim());
         }
 
         if (user instanceof Student student && StringUtils.hasText(request.getUsername())) {
@@ -81,7 +82,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<PermissionResponse> viewPermissions() {
-        User user = userRepository.findById(SecurityUtils.getCurrentUser().getId())
+        Long userId = SecurityUtils.getCurrentUser().getId();
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new OperationNotPermittedException("User not found"));
 
         if (user.getRoles() == null || user.getRoles().isEmpty()) {
@@ -106,7 +108,6 @@ public class UserServiceImpl implements UserService {
     private boolean hasProfileTextUpdate(UpdateProfileRequest request) {
         return StringUtils.hasText(request.getFirstname())
                 || StringUtils.hasText(request.getLastname())
-                || request.getDateOfBirth() != null
                 || StringUtils.hasText(request.getUsername());
     }
 }
