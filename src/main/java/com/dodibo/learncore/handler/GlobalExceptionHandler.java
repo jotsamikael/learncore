@@ -23,6 +23,18 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handleException(ResourceAlreadyExistsException exp){
+        return ResponseEntity.status(BAD_REQUEST)
+                .body(ExceptionResponse.builder()
+                        .businessErrorCode(RESOURCE_ALREADY_EXISTS.getCode())
+                        .businessErrorDescription(RESOURCE_ALREADY_EXISTS.getDescription())
+                        .error(exp.getMessage())
+                        .build()
+
+                );
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleException(MethodArgumentNotValidException exp) {
         Set<String> errors = new HashSet<>();

@@ -44,6 +44,10 @@ public final class PermissionCodes {
     public static final String TENANT_STUDENT_READ = "tenant.student.read";
     public static final String TENANT_STUDENT_UPDATE= "tenant.student.update";
 
+    //language perimissions
+    public static final String TENANT_LANGUAGE_READ = "tenant.language.read";
+    public static final String TENANT_LANGUAGE_CREATE = "tenant.language.create";
+
 
 
 
@@ -69,7 +73,9 @@ public final class PermissionCodes {
             ADMIN_ROLE_READ,
             ADMIN_ROLE_DELETE,
             TENANT_STUDENT_READ,
-            TENANT_STUDENT_UPDATE
+            TENANT_STUDENT_UPDATE,
+            TENANT_LANGUAGE_READ,
+            TENANT_LANGUAGE_CREATE
     );
 
     public static final Set<String> ALL = Set.of( //The ALL is a constant that represents the set of all permissions.
@@ -94,7 +100,9 @@ public final class PermissionCodes {
             ADMIN_ROLE_READ,
             ADMIN_ROLE_DELETE,
             TENANT_STUDENT_READ,
-            TENANT_STUDENT_UPDATE
+            TENANT_STUDENT_UPDATE,
+            TENANT_LANGUAGE_READ,
+            TENANT_LANGUAGE_CREATE
     );
 
     public static RoleLevel levelOf(String code) { //The levelOf method is a static method that returns the role level of a given permission code.

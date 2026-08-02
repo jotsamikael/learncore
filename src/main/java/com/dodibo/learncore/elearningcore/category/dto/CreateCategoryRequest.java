@@ -1,0 +1,19 @@
+package com.dodibo.learncore.elearningcore.category.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record CreateCategoryRequest(
+        @NotNull()
+        @NotBlank()
+        String name,
+
+        @NotNull()
+        @NotBlank()
+        String slug,
+
+        @NotNull()
+        @NotBlank()
+        String description
+) {
+}

@@ -109,7 +109,9 @@ public class DataSeeder implements ApplicationRunner {
                 Map.entry(PermissionCodes.TENANT_STUDENT_READ,
                         new PermissionSeed("List tenant students", RoleLevel.TENANT)),
                 Map.entry(PermissionCodes.TENANT_STUDENT_UPDATE,
-                        new PermissionSeed("Manage tenant students", RoleLevel.TENANT))
+                        new PermissionSeed("Manage tenant students", RoleLevel.TENANT)),
+                Map.entry(PermissionCodes.TENANT_LANGUAGE_READ, new PermissionSeed("List tenant languages", RoleLevel.TENANT)),
+                Map.entry(PermissionCodes.TENANT_LANGUAGE_CREATE, new PermissionSeed("Create languages", RoleLevel.TENANT))
         );
 
         permissions.forEach((code, seed) -> permissionRepository.findByCode(code).map(existing -> {
@@ -178,7 +180,9 @@ public class DataSeeder implements ApplicationRunner {
                 PermissionCodes.ADMIN_ROLE_READ,
                 PermissionCodes.ADMIN_ROLE_DELETE,
                 PermissionCodes.TENANT_STUDENT_READ,
-                PermissionCodes.TENANT_STUDENT_UPDATE
+                PermissionCodes.TENANT_STUDENT_UPDATE,
+                PermissionCodes.TENANT_LANGUAGE_READ,
+                PermissionCodes.TENANT_LANGUAGE_CREATE
         ));
     }
 

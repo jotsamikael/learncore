@@ -14,7 +14,11 @@ public enum BusinessErrorCode {
 
     FILE_TOO_LARGE(305, HttpStatus.BAD_REQUEST, "File exceeds maximum allowed size"),
     INVALID_FILE_TYPE(306, HttpStatus.BAD_REQUEST, "Unsupported file type"),
-    FILE_UPLOAD_FAILED(500, HttpStatus.INTERNAL_SERVER_ERROR, "File upload failed");
+    FILE_UPLOAD_FAILED(500, HttpStatus.INTERNAL_SERVER_ERROR, "File upload failed"),
+
+    RESOURCE_ALREADY_EXISTS(411, HttpStatus.BAD_REQUEST, "Resource already exist");
+
+
 
     @Getter
     private final int code;
