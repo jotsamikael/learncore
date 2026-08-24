@@ -1,21 +1,18 @@
 package com.dodibo.learncore.elearningcore.language;
 
+import com.dodibo.learncore.common.tenant.TenantStaffResolver;
 import com.dodibo.learncore.elearningcore.language.dto.CreateLanguageRequest;
 import com.dodibo.learncore.elearningcore.language.dto.FindLanguageQuery;
 import com.dodibo.learncore.elearningcore.language.dto.LanguageResponse;
-import com.dodibo.learncore.exception.OperationNotPermittedException;
-import com.dodibo.learncore.exception.ResourceNotFoundException;
+import com.dodibo.learncore.elearningcore.language.dto.UpdateLanguageRequest;
 import com.dodibo.learncore.exception.ResourceAlreadyExistsException;
-import com.dodibo.learncore.security.SecurityUtils;
-import com.dodibo.learncore.staff.Staff;
-import com.dodibo.learncore.staff.StaffSpecification;
+import com.dodibo.learncore.exception.ResourceNotFoundException;
 import com.dodibo.learncore.tenant.Tenant;
-import com.dodibo.learncore.tenant.TenantRepository;
-import com.dodibo.learncore.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,38 +20,59 @@ public class LanguageServiceImpl implements LanguageService {
 
     private final LanguageRepository languageRepository;
     private final LanguageMapper languageMapper;
-    private final TenantRepository tenantRepository;
+    private final TenantStaffResolver tenantStaffResolver;
 
     @Override
+    @Transactional
     public LanguageResponse createLanguage(CreateLanguageRequest createLanguageRequest) {
-        //get tenant id
-        Tenant tenant = resolveCallerTenant();
-        //check if a language with this code already exist for this tennant
-        if(languageRepository.findByCodeAndTenantId(createLanguageRequest.code(), tenant.getId()).isPresent()) {
-            throw new ResourceAlreadyExistsException("Language with code " + createLanguageRequest.code() + " already exists");
+        Tenant tenant = tenantStaffResolver.requireCallerTenant();
+        if (languageRepository.findByCodeAndTenantId(createLanguageRequest.code(), tenant.getId()).isPresent()) {
+            throw new ResourceAlreadyExistsException(
+                    "Language with code " + createLanguageRequest.code() + " already exists");
         }
-        return languageMapper.toResponse(languageRepository.save(languageMapper.toEntity(createLanguageRequest, tenant.getId())));
+        Language language = languageMapper.toEntity(createLanguageRequest, tenant.getId());
+        return languageMapper.toResponse(languageRepository.save(language));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<LanguageResponse> getLanguages(FindLanguageQuery query) {
-        //get tenant id
-        Tenant tenant = resolveCallerTenant();
-
+        Tenant tenant = tenantStaffResolver.requireCallerTenant();
         Specification<Language> spec = LanguageSpecification.fromQuery(query, tenant.getId());
         return languageRepository.findAll(spec, query.toPageable())
                 .map(languageMapper::toResponse);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public LanguageResponse getLanguage(String uuid) {
+        return languageMapper.toResponse(requireLanguage(uuid));
+    }
 
-
-    //Get Tennant from current User
-    private Tenant resolveCallerTenant() {
-        User user = SecurityUtils.getCurrentUser();
-        if (!(user instanceof Staff staff) || !staff.isTenantStaff()) {
-            throw new OperationNotPermittedException("Only tenant staff can manage categories");
+    @Override
+    @Transactional
+    public LanguageResponse updateLanguage(String uuid, UpdateLanguageRequest request) {
+        Tenant tenant = tenantStaffResolver.requireCallerTenant();
+        Language language = requireLanguage(uuid);
+        if (languageRepository.findByCodeAndTenantIdAndUuidNot(request.code(), tenant.getId(), uuid).isPresent()) {
+            throw new ResourceAlreadyExistsException("Language with code " + request.code() + " already exists");
         }
-        return tenantRepository.findById(staff.getTenantId())
-                .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
+        language.setName(request.name());
+        language.setCode(request.code());
+        return languageMapper.toResponse(languageRepository.save(language));
+    }
+
+    @Override
+    @Transactional
+    public void deleteLanguage(String uuid) {
+        Language language = requireLanguage(uuid);
+        language.setDeleted(true);
+        languageRepository.save(language);
+    }
+
+    private Language requireLanguage(String uuid) {
+        Tenant tenant = tenantStaffResolver.requireCallerTenant();
+        return languageRepository.findByUuidAndTenantIdAndIsDeletedFalse(uuid, tenant.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Language not found: " + uuid));
     }
 }

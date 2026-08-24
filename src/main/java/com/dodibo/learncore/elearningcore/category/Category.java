@@ -28,7 +28,7 @@ public class Category extends BaseEntity {
     @Column(nullable = false, length = 150)
     private String slug;
 
-    @ManyToOne(fetch = FetchType.LAZY) //Many categories can be linked to a category
+    @ManyToOne(fetch = FetchType.EAGER) //Many categories can be linked to a category
     @JoinColumn(name = "parent_id")
     private Category parent;
 
@@ -37,5 +37,11 @@ public class Category extends BaseEntity {
     private Language language;
 
     private String description;
+
+    private String imageUrl;
+
+    @OneToMany(mappedBy = "parent")
+    @Builder.Default
+    private java.util.List<Category> children = new java.util.ArrayList<>();
 
 }

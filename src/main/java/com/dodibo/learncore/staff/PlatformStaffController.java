@@ -1,5 +1,6 @@
 package com.dodibo.learncore.staff;
 
+import org.springdoc.core.annotations.ParameterObject;
 import com.dodibo.learncore.staff.dto.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ public class PlatformStaffController {
 
     @GetMapping
     @PreAuthorize("@authz.can('platform.staff.read')")
-    public Page<StaffResponse> listPlatformStaff(@ModelAttribute FindStaffQuery query) {
+    public Page<StaffResponse> listPlatformStaff(@ParameterObject FindStaffQuery query) {
         return staffService.listPlatformStaff(query);
     }
 

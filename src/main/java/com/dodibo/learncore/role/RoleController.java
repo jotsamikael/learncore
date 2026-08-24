@@ -1,5 +1,6 @@
 package com.dodibo.learncore.role;
 
+import org.springdoc.core.annotations.ParameterObject;
 import com.dodibo.learncore.role.dto.CreateRoleRequest;
 import com.dodibo.learncore.role.dto.FindRolesQuery;
 import com.dodibo.learncore.role.dto.RoleResponse;
@@ -23,7 +24,7 @@ public class RoleController {
 
     @GetMapping
     @PreAuthorize("@authz.can('platform.role.read') or @authz.can('admin.role.read')")
-    public ResponseEntity<Page<RoleResponse>> getRoles(@ModelAttribute FindRolesQuery query) {
+    public ResponseEntity<Page<RoleResponse>> getRoles(@ParameterObject FindRolesQuery query) {
         return ResponseEntity.ok(roleService.getRoles(query));
     }
 

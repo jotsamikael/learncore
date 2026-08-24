@@ -1,5 +1,6 @@
 package com.dodibo.learncore.tenant;
 
+import org.springdoc.core.annotations.ParameterObject;
 import com.dodibo.learncore.tenant.dto.CreateTenantRequest;
 import com.dodibo.learncore.tenant.dto.FindTenantsQuery;
 import com.dodibo.learncore.tenant.dto.PlatformUpdateTenantRequest;
@@ -28,7 +29,7 @@ public class PlatformTenantController {
 
     @GetMapping
     @PreAuthorize("@authz.can('tenant.read')")
-    public ResponseEntity<Page<TenantResponse>> listTenants(@ModelAttribute FindTenantsQuery query) {
+    public ResponseEntity<Page<TenantResponse>> listTenants(@ParameterObject FindTenantsQuery query) {
         return ResponseEntity.ok(tenantService.getTenants(query));
     }
 

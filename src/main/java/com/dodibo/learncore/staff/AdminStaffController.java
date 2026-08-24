@@ -1,5 +1,6 @@
 package com.dodibo.learncore.staff;
 
+import org.springdoc.core.annotations.ParameterObject;
 import com.dodibo.learncore.staff.dto.*;
 import com.dodibo.learncore.tenant.dto.FindTenantsQuery;
 import jakarta.validation.Valid;
@@ -23,7 +24,7 @@ public class AdminStaffController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@authz.can('admin.staff.read')")
-    public Page<StaffResponse> listTenantStaff(@RequestParam(required = false) String tenantUuid, @ModelAttribute FindStaffQuery query) {
+    public Page<StaffResponse> listTenantStaff(@RequestParam(required = false) String tenantUuid, @ParameterObject FindStaffQuery query) {
         return staffService.listTenantStaff(tenantUuid,query);
     }
 

@@ -1,17 +1,27 @@
 package com.dodibo.learncore.elearningcore.category;
 
 import com.dodibo.learncore.elearningcore.category.dto.FindCategoriesQuery;
-import com.dodibo.learncore.elearningcore.language.Language;
-import com.dodibo.learncore.elearningcore.language.dto.FindLanguageQuery;
 import org.springframework.data.jpa.domain.Specification;
 
-public class CategorySpecification {
+public final class CategorySpecification {
 
-    public static Specification<Category> fromQuery(FindCategoriesQuery query) {
-        return Specification.where(hasName(query.getName()))
+    private CategorySpecification() {
+    }
+
+    public static Specification<Category> fromQuery(FindCategoriesQuery query, Long tenantId) {
+        return Specification.where(belongsToTenant(tenantId))
+                .and(notDeleted())
+                .and(hasName(query.getName()))
                 .and(hasDescription(query.getDescription()));
     }
 
+    private static Specification<Category> belongsToTenant(Long tenantId) {
+        return (root, cq, cb) -> cb.equal(root.get("tenantId"), tenantId);
+    }
+
+    private static Specification<Category> notDeleted() {
+        return (root, cq, cb) -> cb.isFalse(root.get("isDeleted"));
+    }
 
     private static Specification<Category> hasName(String name) {
         return (root, cq, cb) -> name == null || name.isBlank()

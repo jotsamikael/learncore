@@ -12,6 +12,7 @@ public class LanguageMapper {
             return null;
         }
         return new LanguageResponse(
+                language.getUuid(),
                 language.getName(),
                 language.getCode()
         );

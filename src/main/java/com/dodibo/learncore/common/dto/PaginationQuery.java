@@ -1,9 +1,11 @@
 package com.dodibo.learncore.common.dto;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+@ParameterObject
 public abstract class PaginationQuery {
 
     private int page = 0;

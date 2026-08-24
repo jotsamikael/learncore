@@ -1,5 +1,6 @@
 package com.dodibo.learncore.student;
 
+import org.springdoc.core.annotations.ParameterObject;
 import com.dodibo.learncore.student.dto.FindStudentsQuery;
 import com.dodibo.learncore.student.dto.StudentDetailResponse;
 import com.dodibo.learncore.student.dto.StudentResponse;
@@ -22,7 +23,7 @@ public class StudentController {
 
     @GetMapping
     @PreAuthorize("@authz.can('tenant.student.read')")
-    public ResponseEntity<Page<StudentResponse>> getStudents(@ModelAttribute FindStudentsQuery query) {
+    public ResponseEntity<Page<StudentResponse>> getStudents(@ParameterObject FindStudentsQuery query) {
         return ResponseEntity.ok(studentService.getStudents(query));
     }
 

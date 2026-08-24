@@ -14,6 +14,10 @@ public record CreateCategoryRequest(
 
         @NotNull()
         @NotBlank()
-        String description
+        String description,
+
+        String parentUuid,
+
+        String languageUuid
 ) {
 }

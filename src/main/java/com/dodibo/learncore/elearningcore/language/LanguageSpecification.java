@@ -1,8 +1,6 @@
 package com.dodibo.learncore.elearningcore.language;
 
 import com.dodibo.learncore.elearningcore.language.dto.FindLanguageQuery;
-import com.dodibo.learncore.student.Student;
-import com.dodibo.learncore.student.dto.FindStudentsQuery;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -13,14 +11,17 @@ public final class LanguageSpecification {
     public static Specification<Language> fromQuery(FindLanguageQuery query, Long tenantId) {
         return Specification
                 .where(belongsToTenant(tenantId))
+                .and(notDeleted())
                 .and(hasName(query.getName()))
                 .and(hasCode(query.getCode()));
     }
 
     private static Specification<Language> belongsToTenant(Long tenantId) {
-        return (root, cq, cb) -> tenantId == null
-                ? cb.isNull(root.get("tenantId"))
-                : cb.equal(root.get("tenantId"), tenantId);
+        return (root, cq, cb) -> cb.equal(root.get("tenantId"), tenantId);
+    }
+
+    private static Specification<Language> notDeleted() {
+        return (root, cq, cb) -> cb.isFalse(root.get("isDeleted"));
     }
 
     private static Specification<Language> hasName(String name) {
