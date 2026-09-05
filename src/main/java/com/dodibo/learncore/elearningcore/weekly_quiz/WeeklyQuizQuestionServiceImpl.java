@@ -1,6 +1,7 @@
 package com.dodibo.learncore.elearningcore.weekly_quiz;
 
 import com.dodibo.learncore.common.tenant.TenantStaffResolver;
+import com.dodibo.learncore.elearningcore.common.DisplayOrderHelper;
 import com.dodibo.learncore.elearningcore.question.Question;
 import com.dodibo.learncore.elearningcore.question.QuestionRepository;
 import com.dodibo.learncore.elearningcore.weekly_quiz.dto.AssignWeeklyQuizQuestionRequest;
@@ -35,10 +36,17 @@ public class WeeklyQuizQuestionServiceImpl implements WeeklyQuizQuestionService 
         if (weeklyQuizQuestionRepository.findByWeeklyQuiz_IdAndQuestion_Id(weeklyQuiz.getId(), question.getId()).isPresent()) {
             throw new ResourceAlreadyExistsException("Question is already assigned to this weekly quiz");
         }
+
+        long currentCount = weeklyQuizQuestionRepository.countByWeeklyQuiz_Id(weeklyQuiz.getId());
+        int displayOrder = DisplayOrderHelper.resolveOrderForCreate(request.displayOrder(), currentCount);
+        if (displayOrder <= currentCount) {
+            weeklyQuizQuestionRepository.incrementOrdersFrom(weeklyQuiz.getId(), displayOrder);
+        }
+
         WeeklyQuizQuestion assignment = WeeklyQuizQuestion.builder()
                 .weeklyQuiz(weeklyQuiz)
                 .question(question)
-                .displayOrder(request.displayOrder())
+                .displayOrder(displayOrder)
                 .build();
         return weeklyQuizQuestionMapper.toResponse(weeklyQuizQuestionRepository.save(assignment));
     }
@@ -57,7 +65,24 @@ public class WeeklyQuizQuestionServiceImpl implements WeeklyQuizQuestionService 
     public WeeklyQuizQuestionResponse updateAssignment(Long id, UpdateWeeklyQuizQuestionRequest request) {
         Tenant tenant = tenantStaffResolver.requireCallerTenant();
         WeeklyQuizQuestion assignment = requireAssignment(id, tenant.getId());
-        assignment.setDisplayOrder(request.displayOrder());
+        Long weeklyQuizId = assignment.getWeeklyQuiz().getId();
+        long currentCount = weeklyQuizQuestionRepository.countByWeeklyQuiz_Id(weeklyQuizId);
+        int newOrder = DisplayOrderHelper.requireOrderForUpdate(request.displayOrder(), currentCount);
+        Integer oldOrder = assignment.getDisplayOrder();
+
+        if (oldOrder == null) {
+            if (newOrder <= currentCount) {
+                weeklyQuizQuestionRepository.incrementOrdersFrom(weeklyQuizId, newOrder);
+            }
+        } else if (!oldOrder.equals(newOrder)) {
+            if (newOrder < oldOrder) {
+                weeklyQuizQuestionRepository.shiftOrdersUp(weeklyQuizId, newOrder, oldOrder, id);
+            } else {
+                weeklyQuizQuestionRepository.shiftOrdersDown(weeklyQuizId, oldOrder, newOrder, id);
+            }
+        }
+
+        assignment.setDisplayOrder(newOrder);
         return weeklyQuizQuestionMapper.toResponse(weeklyQuizQuestionRepository.save(assignment));
     }
 
@@ -66,7 +91,12 @@ public class WeeklyQuizQuestionServiceImpl implements WeeklyQuizQuestionService 
     public void removeAssignment(Long id) {
         Tenant tenant = tenantStaffResolver.requireCallerTenant();
         WeeklyQuizQuestion assignment = requireAssignment(id, tenant.getId());
+        Long weeklyQuizId = assignment.getWeeklyQuiz().getId();
+        Integer deletedOrder = assignment.getDisplayOrder();
         weeklyQuizQuestionRepository.delete(assignment);
+        if (deletedOrder != null) {
+            weeklyQuizQuestionRepository.decrementOrdersAbove(weeklyQuizId, deletedOrder);
+        }
     }
 
     private WeeklyQuizQuestion requireAssignment(Long id, Long tenantId) {

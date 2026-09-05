@@ -9,7 +9,10 @@ import { PlatformStaffComponent } from './platform-staff/platform-staff.componen
 import { TenantStaffComponent } from './tenant-staff/tenant-staff.component';
 import { StudentsComponent } from './students/students.component';
 import { ProfileComponent } from './profile/profile.component';
-
+import { QuestionComponent } from './question/question.component';
+import { ImportQuestionComponent } from './import-question/import-question.component';
+import { QuestionReportComponent } from './question-report/question-report.component';
+import { CategoryComponent } from './category/category.component';
 const routes: Routes = [
   {
     path: '',
@@ -26,6 +29,42 @@ const routes: Routes = [
         data: {
           title: 'Dashboard',
           breadcrumb: 'Dashboard',
+        },
+      },
+      {
+        path: 'categories',
+        component: CategoryComponent,
+        data: {
+          title: 'Categories',
+          permissions: [PermissionCodes.TENANT_CATEGORY_READ],
+          scope: 'tenant',
+        },
+      },
+      {
+        path: 'questions',
+        component: QuestionComponent,
+        data: {
+          title: 'Questions',
+          permissions: [PermissionCodes.TENANT_QUESTION_READ],
+          scope: 'tenant',
+        },
+      },
+      {
+        path: 'import-questions',
+        component: ImportQuestionComponent,
+        data: {
+          title: 'Import Questions',
+          permissions: [PermissionCodes.TENANT_QUESTION_CREATE],
+          scope: 'tenant',
+        },
+      },
+      {
+        path: 'question-report',
+        component: QuestionReportComponent,
+        data: {
+          title: 'Question Report',
+          permissions: [PermissionCodes.TENANT_QUESTION_READ],
+          scope: 'tenant',
         },
       },
       {

@@ -1,4 +1,4 @@
-package com.dodibo.learncore.elearningcore.question;
+package com.dodibo.learncore.elearningcore.question.enums;
 
 public enum GradingStrategy {
     /**
@@ -22,7 +22,7 @@ public enum GradingStrategy {
     SEMANTIC_SIMILARITY,
 
     /**
-     * Future GenAI based grading.
+     * Future GenAI based grading. e.g Qwen3 1.7B
      */
     AI
 }

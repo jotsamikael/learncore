@@ -1,6 +1,9 @@
 package com.dodibo.learncore.elearningcore.daily_quiz.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 public record UpdateDailyQuizQuestionRequest(
-        Integer displayOrder
+        @NotNull @Min(1) Integer displayOrder
 ) {
 }

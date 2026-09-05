@@ -6,7 +6,10 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "weekly_quiz_questions")
+@Table(
+        name = "weekly_quiz_questions",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"weekly_quiz_id", "display_order"})
+)
 @Getter
 @Setter
 @Builder
@@ -26,6 +29,6 @@ public class WeeklyQuizQuestion {
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
-    @Column(name = "display_order")
+    @Column(name = "display_order", nullable = false)
     private Integer displayOrder;
 }

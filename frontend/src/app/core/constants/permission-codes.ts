@@ -19,6 +19,14 @@ export const PermissionCodes = {
   ADMIN_ROLE_DELETE: 'admin.role.delete',
   TENANT_STUDENT_READ: 'tenant.student.read',
   TENANT_STUDENT_UPDATE: 'tenant.student.update',
+  TENANT_CATEGORY_READ: 'tenant.category.read',
+  TENANT_CATEGORY_CREATE: 'tenant.category.create',
+  TENANT_CATEGORY_UPDATE: 'tenant.category.update',
+  TENANT_CATEGORY_DELETE: 'tenant.category.delete',
+  TENANT_QUESTION_READ: 'tenant.question.read',
+  TENANT_QUESTION_CREATE: 'tenant.question.create',
+  TENANT_QUESTION_UPDATE: 'tenant.question.update',
+  TENANT_QUESTION_DELETE: 'tenant.question.delete',
 } as const;
 
 export type PermissionCode = typeof PermissionCodes[keyof typeof PermissionCodes];

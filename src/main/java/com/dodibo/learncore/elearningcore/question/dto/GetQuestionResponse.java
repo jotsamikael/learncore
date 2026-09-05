@@ -11,6 +11,7 @@ public record GetQuestionResponse(
         String explanation,
         String imageUrl,
         String categoryUuid,
-        String categoryName
+        String categoryName,
+        WrittenAnswerConfigResponse writtenAnswerConfig
 ) {
 }

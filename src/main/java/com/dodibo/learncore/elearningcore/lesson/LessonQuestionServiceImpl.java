@@ -1,6 +1,7 @@
 package com.dodibo.learncore.elearningcore.lesson;
 
 import com.dodibo.learncore.common.tenant.TenantStaffResolver;
+import com.dodibo.learncore.elearningcore.common.DisplayOrderHelper;
 import com.dodibo.learncore.elearningcore.lesson.dto.AssignLessonQuestionRequest;
 import com.dodibo.learncore.elearningcore.lesson.dto.FindLessonQuestionQuery;
 import com.dodibo.learncore.elearningcore.lesson.dto.LessonQuestionResponse;
@@ -35,10 +36,17 @@ public class LessonQuestionServiceImpl implements LessonQuestionService {
         if (lessonQuestionRepository.findByLesson_IdAndQuestion_Id(lesson.getId(), question.getId()).isPresent()) {
             throw new ResourceAlreadyExistsException("Question is already assigned to this lesson");
         }
+
+        long currentCount = lessonQuestionRepository.countByLesson_Id(lesson.getId());
+        int displayOrder = DisplayOrderHelper.resolveOrderForCreate(request.displayOrder(), currentCount);
+        if (displayOrder <= currentCount) {
+            lessonQuestionRepository.incrementOrdersFrom(lesson.getId(), displayOrder);
+        }
+
         LessonQuestion assignment = LessonQuestion.builder()
                 .lesson(lesson)
                 .question(question)
-                .displayOrder(request.displayOrder())
+                .displayOrder(displayOrder)
                 .build();
         return lessonQuestionMapper.toResponse(lessonQuestionRepository.save(assignment));
     }
@@ -57,7 +65,24 @@ public class LessonQuestionServiceImpl implements LessonQuestionService {
     public LessonQuestionResponse updateAssignment(Long id, UpdateLessonQuestionRequest request) {
         Tenant tenant = tenantStaffResolver.requireCallerTenant();
         LessonQuestion assignment = requireAssignment(id, tenant.getId());
-        assignment.setDisplayOrder(request.displayOrder());
+        Long lessonId = assignment.getLesson().getId();
+        long currentCount = lessonQuestionRepository.countByLesson_Id(lessonId);
+        int newOrder = DisplayOrderHelper.requireOrderForUpdate(request.displayOrder(), currentCount);
+        Integer oldOrder = assignment.getDisplayOrder();
+
+        if (oldOrder == null) {
+            if (newOrder <= currentCount) {
+                lessonQuestionRepository.incrementOrdersFrom(lessonId, newOrder);
+            }
+        } else if (!oldOrder.equals(newOrder)) {
+            if (newOrder < oldOrder) {
+                lessonQuestionRepository.shiftOrdersUp(lessonId, newOrder, oldOrder, id);
+            } else {
+                lessonQuestionRepository.shiftOrdersDown(lessonId, oldOrder, newOrder, id);
+            }
+        }
+
+        assignment.setDisplayOrder(newOrder);
         return lessonQuestionMapper.toResponse(lessonQuestionRepository.save(assignment));
     }
 
@@ -66,7 +91,12 @@ public class LessonQuestionServiceImpl implements LessonQuestionService {
     public void removeAssignment(Long id) {
         Tenant tenant = tenantStaffResolver.requireCallerTenant();
         LessonQuestion assignment = requireAssignment(id, tenant.getId());
+        Long lessonId = assignment.getLesson().getId();
+        Integer deletedOrder = assignment.getDisplayOrder();
         lessonQuestionRepository.delete(assignment);
+        if (deletedOrder != null) {
+            lessonQuestionRepository.decrementOrdersAbove(lessonId, deletedOrder);
+        }
     }
 
     private LessonQuestion requireAssignment(Long id, Long tenantId) {

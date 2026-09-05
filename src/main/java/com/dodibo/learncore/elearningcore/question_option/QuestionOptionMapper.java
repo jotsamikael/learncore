@@ -23,7 +23,7 @@ public class QuestionOptionMapper {
         );
     }
 
-    public QuestionOption toEntity(CreateQuestionOptionRequest request, Question question) {
+    public QuestionOption toEntity(CreateQuestionOptionRequest request, Question question, String imageUrl) {
         if (request == null) {
             return null;
         }
@@ -31,13 +31,12 @@ public class QuestionOptionMapper {
                 .question(question)
                 .optionText(request.optionText())
                 .correct(request.correct())
-                .imageUrl(request.imageUrl())
+                .imageUrl(imageUrl)
                 .build();
     }
 
     public void applyUpdate(QuestionOption option, UpdateQuestionOptionRequest request) {
         option.setOptionText(request.optionText());
         option.setCorrect(request.correct());
-        option.setImageUrl(request.imageUrl());
     }
 }

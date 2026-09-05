@@ -29,7 +29,7 @@ public class Question extends BaseEntity {
     @Column(nullable = false, length = 30)
     private QuestionType questionType;
 
-    @Column(nullable = false, length = 512)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String questionText;
 
     @Column(length = 512)
@@ -44,4 +44,13 @@ public class Question extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+
+    @OneToOne(
+            mappedBy = "question",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private WrittenAnswerConfig writtenAnswerConfig;
 }

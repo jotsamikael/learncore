@@ -1,6 +1,7 @@
 package com.dodibo.learncore.elearningcore.daily_quiz;
 
 import com.dodibo.learncore.common.tenant.TenantStaffResolver;
+import com.dodibo.learncore.elearningcore.common.DisplayOrderHelper;
 import com.dodibo.learncore.elearningcore.daily_quiz.dto.AssignDailyQuizQuestionRequest;
 import com.dodibo.learncore.elearningcore.daily_quiz.dto.DailyQuizQuestionResponse;
 import com.dodibo.learncore.elearningcore.daily_quiz.dto.FindDailyQuizQuestionQuery;
@@ -35,10 +36,17 @@ public class DailyQuizQuestionServiceImpl implements DailyQuizQuestionService {
         if (dailyQuizQuestionRepository.findByDailyQuiz_IdAndQuestion_Id(dailyQuiz.getId(), question.getId()).isPresent()) {
             throw new ResourceAlreadyExistsException("Question is already assigned to this daily quiz");
         }
+
+        long currentCount = dailyQuizQuestionRepository.countByDailyQuiz_Id(dailyQuiz.getId());
+        int displayOrder = DisplayOrderHelper.resolveOrderForCreate(request.displayOrder(), currentCount);
+        if (displayOrder <= currentCount) {
+            dailyQuizQuestionRepository.incrementOrdersFrom(dailyQuiz.getId(), displayOrder);
+        }
+
         DailyQuizQuestion assignment = DailyQuizQuestion.builder()
                 .dailyQuiz(dailyQuiz)
                 .question(question)
-                .displayOrder(request.displayOrder())
+                .displayOrder(displayOrder)
                 .build();
         return dailyQuizQuestionMapper.toResponse(dailyQuizQuestionRepository.save(assignment));
     }
@@ -57,7 +65,24 @@ public class DailyQuizQuestionServiceImpl implements DailyQuizQuestionService {
     public DailyQuizQuestionResponse updateAssignment(Long id, UpdateDailyQuizQuestionRequest request) {
         Tenant tenant = tenantStaffResolver.requireCallerTenant();
         DailyQuizQuestion assignment = requireAssignment(id, tenant.getId());
-        assignment.setDisplayOrder(request.displayOrder());
+        Long dailyQuizId = assignment.getDailyQuiz().getId();
+        long currentCount = dailyQuizQuestionRepository.countByDailyQuiz_Id(dailyQuizId);
+        int newOrder = DisplayOrderHelper.requireOrderForUpdate(request.displayOrder(), currentCount);
+        Integer oldOrder = assignment.getDisplayOrder();
+
+        if (oldOrder == null) {
+            if (newOrder <= currentCount) {
+                dailyQuizQuestionRepository.incrementOrdersFrom(dailyQuizId, newOrder);
+            }
+        } else if (!oldOrder.equals(newOrder)) {
+            if (newOrder < oldOrder) {
+                dailyQuizQuestionRepository.shiftOrdersUp(dailyQuizId, newOrder, oldOrder, id);
+            } else {
+                dailyQuizQuestionRepository.shiftOrdersDown(dailyQuizId, oldOrder, newOrder, id);
+            }
+        }
+
+        assignment.setDisplayOrder(newOrder);
         return dailyQuizQuestionMapper.toResponse(dailyQuizQuestionRepository.save(assignment));
     }
 
@@ -66,7 +91,12 @@ public class DailyQuizQuestionServiceImpl implements DailyQuizQuestionService {
     public void removeAssignment(Long id) {
         Tenant tenant = tenantStaffResolver.requireCallerTenant();
         DailyQuizQuestion assignment = requireAssignment(id, tenant.getId());
+        Long dailyQuizId = assignment.getDailyQuiz().getId();
+        Integer deletedOrder = assignment.getDisplayOrder();
         dailyQuizQuestionRepository.delete(assignment);
+        if (deletedOrder != null) {
+            dailyQuizQuestionRepository.decrementOrdersAbove(dailyQuizId, deletedOrder);
+        }
     }
 
     private DailyQuizQuestion requireAssignment(Long id, Long tenantId) {

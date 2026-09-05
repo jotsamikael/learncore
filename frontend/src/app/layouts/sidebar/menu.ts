@@ -14,6 +14,40 @@ export const MENU: MenuItem[] = [
     link: '/learncore/dashboard',
   },
   // —— Tenant scope ——
+  {
+    id: 97,
+    label: 'Quiz zone',
+    icon: 'ri-pencil-ruler-2-line',
+    isCollapsed: true,
+    subItems: [
+      {
+        id: 98,
+        label: 'Categories',
+        link: '/learncore/categories',
+        parentId: 97
+      },
+      {
+        id: 99,
+        label: 'Questions',
+        link: '/learncore/questions',
+        parentId: 97
+      },
+   
+      {
+        id: 107,
+        label: 'Import questions',
+        link: '/learncore/import-questions',
+        parentId: 97
+      },
+      {
+        id: 107,
+        label: 'Question Report',
+        link: '/learncore/question-report',
+        parentId: 97
+      }
+    
+    ]
+  },
   { id: 20, label: 'Learning', isTitle: true, scope: 'tenant' },
   {
     id: 21,
