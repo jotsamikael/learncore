@@ -8,6 +8,7 @@ import { UserProfileResponse } from '../../learncoreservices/models/user-profile
 export interface UpdateProfilePayload extends UpdateProfileRequest {
   email?: string;
   phone?: string;
+  dateOfBirth?: string;
 }
 
 @Injectable({ providedIn: 'root' })

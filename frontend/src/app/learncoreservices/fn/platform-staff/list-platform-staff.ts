@@ -7,17 +7,30 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { FindStaffQuery } from '../../models/find-staff-query';
 import { PageStaffResponse } from '../../models/page-staff-response';
 
 export interface ListPlatformStaff$Params {
-  query: FindStaffQuery;
+  firstname?: string;
+  email?: string;
+  lastname?: string;
+  positionName?: string;
+  page?: number;
+  size?: number;
+  sortBy?: string;
+  sortDirection?: 'ASC' | 'DESC';
 }
 
-export function listPlatformStaff(http: HttpClient, rootUrl: string, params: ListPlatformStaff$Params, context?: HttpContext): Observable<StrictHttpResponse<PageStaffResponse>> {
+export function listPlatformStaff(http: HttpClient, rootUrl: string, params?: ListPlatformStaff$Params, context?: HttpContext): Observable<StrictHttpResponse<PageStaffResponse>> {
   const rb = new RequestBuilder(rootUrl, listPlatformStaff.PATH, 'get');
   if (params) {
-    rb.query('query', params.query, {});
+    rb.query('firstname', params.firstname, {});
+    rb.query('email', params.email, {});
+    rb.query('lastname', params.lastname, {});
+    rb.query('positionName', params.positionName, {});
+    rb.query('page', params.page, {});
+    rb.query('size', params.size, {});
+    rb.query('sortBy', params.sortBy, {});
+    rb.query('sortDirection', params.sortDirection, {});
   }
 
   return http.request(

@@ -21,6 +21,12 @@ export const MENU: MenuItem[] = [
     isCollapsed: true,
     subItems: [
       {
+        id: 96,
+        label: 'Languages',
+        link: '/learncore/languages',
+        parentId: 97
+      },
+      {
         id: 98,
         label: 'Categories',
         link: '/learncore/categories',

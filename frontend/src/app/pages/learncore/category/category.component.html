@@ -1,1 +1,1386 @@
-<p>category works!</p>
+<app-breadcrumbs
+  [title]="pageTitle"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+
+      <!-- ========================================================= -->
+      <!-- Header -->
+      <!-- ========================================================= -->
+
+      <div class="card-header border-bottom-dashed">
+        <div
+          class="d-flex flex-wrap justify-content-between align-items-end gap-3"
+        >
+          <div>
+            <h5 class="card-title mb-1">
+              {{ pageTitle }}
+            </h5>
+
+            <p class="text-muted small mb-0">
+              Manage question categories and
+              subcategories. Filters, sorting and
+              pagination are server-side.
+            </p>
+          </div>
+
+          @if (canCreateCategory) {
+            <div class="d-flex flex-wrap gap-2">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="openCreateModal(createCategoryModal)"
+                [disabled]="isLoading"
+              >
+                Create Category
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- Body -->
+      <!-- ========================================================= -->
+
+      <div class="card-body">
+
+        <!-- Toolbar -->
+
+        <div
+          class="roles-toolbar mb-3 d-flex flex-wrap
+                 align-items-center justify-content-between gap-2"
+        >
+          <div class="d-flex flex-wrap align-items-center gap-2">
+
+            @if (meta; as listMeta) {
+              <span
+                class="badge bg-primary-subtle text-primary"
+              >
+                Total categories:
+                {{ listMeta.totalItems }}
+              </span>
+
+              <span
+                class="badge bg-info-subtle text-info"
+              >
+                Page
+                {{ listMeta.currentPage }}
+                /
+                {{ listMeta.totalPages || 1 }}
+              </span>
+            }
+
+          </div>
+
+          <div
+            class="btn-group shadow-sm"
+            role="group"
+            aria-label="Table actions"
+          >
+
+            <!-- Export -->
+
+            <div
+              class="btn-group"
+              ngbDropdown
+              placement="bottom-end"
+            >
+              <button
+                type="button"
+                class="btn btn-light border py-2 px-3"
+                ngbDropdownToggle
+                [disabled]="isLoading"
+              >
+                Export
+              </button>
+
+              <div
+                class="dropdown-menu dropdown-menu-end"
+                ngbDropdownMenu
+              >
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="exportExcel()"
+                  [disabled]="!data.length"
+                >
+                  Excel
+                </button>
+
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="exportCsv()"
+                  [disabled]="!data.length"
+                >
+                  CSV
+                </button>
+
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="exportPdf()"
+                  [disabled]="!data.length"
+                >
+                  PDF
+                </button>
+
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="printTable()"
+                  [disabled]="!data.length"
+                >
+                  Print
+                </button>
+              </div>
+            </div>
+
+            <!-- Bulk actions -->
+
+            <div
+              class="btn-group"
+              ngbDropdown
+              placement="bottom-end"
+            >
+              <button
+                type="button"
+                class="btn btn-light border py-2 px-3"
+                ngbDropdownToggle
+                [disabled]="isLoading"
+              >
+                Bulk Actions
+              </button>
+
+              <div
+                class="dropdown-menu dropdown-menu-end"
+                ngbDropdownMenu
+              >
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="clearFilters()"
+                >
+                  Clear filters
+                </button>
+
+                <div class="dropdown-divider"></div>
+
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="exportSelectedCsv()"
+                  [disabled]="selection.isEmpty()"
+                >
+                  Export selected (CSV)
+                </button>
+              </div>
+            </div>
+
+            <!-- Refresh -->
+
+            <button
+              type="button"
+              class="btn btn-light border py-2 px-2
+                     d-inline-flex align-items-center
+                     justify-content-center"
+              (click)="refresh()"
+              [disabled]="isLoading"
+              title="Refresh"
+              aria-label="Refresh"
+            >
+              <mat-icon>
+                refresh
+              </mat-icon>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- Filters -->
+        <!-- ========================================================= -->
+
+        <div class="row g-3 roles-filters mb-3">
+
+          <div class="col-md-6 col-lg-3">
+            <mat-form-field
+              appearance="outline"
+              class="w-100"
+            >
+              <mat-label>
+                Category name
+              </mat-label>
+
+              <input
+                matInput
+                [formControl]="nameFilter"
+                placeholder="Search by name"
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-6 col-lg-4">
+            <mat-form-field
+              appearance="outline"
+              class="w-100"
+            >
+              <mat-label>
+                Description
+              </mat-label>
+
+              <input
+                matInput
+                [formControl]="descriptionFilter"
+                placeholder="Search description"
+              />
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <!-- Errors -->
+
+        @if (loadError) {
+          <div class="alert alert-danger py-2 mb-3">
+            {{ loadError }}
+          </div>
+        }
+
+        <!-- ========================================================= -->
+        <!-- Table -->
+        <!-- ========================================================= -->
+
+        <div class="position-relative roles-table-shell">
+
+          @if (isLoading) {
+            <div
+              class="roles-table-overlay
+                     d-flex align-items-center
+                     justify-content-center"
+            >
+              <mat-progress-spinner
+                mode="indeterminate"
+                diameter="42"
+              ></mat-progress-spinner>
+            </div>
+          }
+
+          <div
+            class="table-responsive
+                   mat-elevation-z1 rounded"
+          >
+
+            <mat-table
+              [dataSource]="data"
+              matSort
+              matSortActive="name"
+              matSortDirection="asc"
+              matSortDisableClear
+              class="w-100 roles-table"
+            >
+
+              <!-- Select -->
+
+              <ng-container matColumnDef="select">
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                  class="roles-col-select"
+                >
+                  <mat-checkbox
+                    (change)="masterToggle()"
+                    [checked]="
+                      selection.hasValue() &&
+                      isAllSelected()
+                    "
+                    [indeterminate]="
+                      selection.hasValue() &&
+                      !isAllSelected()
+                    "
+                    [disabled]="!data.length"
+                    aria-label="Select all rows on this page"
+                  ></mat-checkbox>
+                </mat-header-cell>
+
+                <mat-cell
+                  *matCellDef="let row"
+                  class="roles-col-select"
+                >
+                  <mat-checkbox
+                    (click)="$event.stopPropagation()"
+                    (change)="toggleRow(row)"
+                    [checked]="selection.isSelected(row)"
+                    [attr.aria-label]="
+                      'Select category ' + row.uuid
+                    "
+                  ></mat-checkbox>
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- Image -->
+
+              <ng-container matColumnDef="image">
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                >
+                  Image
+                </mat-header-cell>
+
+                <mat-cell
+                  *matCellDef="let row"
+                >
+                  @if (row.imageUrl) {
+                    <img
+                      [src]="row.imageUrl"
+                      [alt]="row.name || 'Category'"
+                      width="44"
+                      height="44"
+                      class="rounded object-fit-cover border"
+                    />
+                  } @else {
+                    <div
+                      class="rounded border bg-light
+                             d-flex align-items-center
+                             justify-content-center"
+                      style="width:44px;height:44px"
+                    >
+                      <mat-icon class="text-muted">
+                        image
+                      </mat-icon>
+                    </div>
+                  }
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- Name -->
+
+              <ng-container matColumnDef="name">
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  Name
+                </mat-header-cell>
+
+                <mat-cell
+                  *matCellDef="let row"
+                >
+                  <div>
+                    <div class="fw-medium">
+                      {{ row.name || '—' }}
+                    </div>
+
+                    @if (row.uuid) {
+                      <div
+                        class="small text-muted font-monospace"
+                        [matTooltip]="row.uuid"
+                      >
+                        {{ shortUuid(row.uuid) }}
+                      </div>
+                    }
+                  </div>
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- Slug -->
+
+              <ng-container matColumnDef="slug">
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  Slug
+                </mat-header-cell>
+
+                <mat-cell
+                  *matCellDef="let row"
+                >
+                  <span class="font-monospace small">
+                    {{ row.slug || '—' }}
+                  </span>
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- Parent -->
+
+              <ng-container matColumnDef="parent">
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                >
+                  Parent
+                </mat-header-cell>
+
+                <mat-cell
+                  *matCellDef="let row"
+                >
+                  @if (row.parentUuid) {
+                    <span
+                      class="badge bg-secondary-subtle
+                             text-secondary"
+                    >
+                      {{ row.parentName || 'Parent category' }}
+                    </span>
+                  } @else {
+                    <span
+                      class="badge bg-light text-muted"
+                    >
+                      Root
+                    </span>
+                  }
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- Language -->
+
+              <ng-container matColumnDef="language">
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                >
+                  Language
+                </mat-header-cell>
+
+                <mat-cell
+                  *matCellDef="let row"
+                >
+                  {{ languageLabel(row) }}
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- Description -->
+
+              <ng-container matColumnDef="description">
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  Description
+                </mat-header-cell>
+
+                <mat-cell
+                  *matCellDef="let row"
+                  class="text-truncate"
+                  [matTooltip]="row.description"
+                >
+                  {{ row.description || '—' }}
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- Actions -->
+
+              <ng-container matColumnDef="actions">
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                  class="actions-col"
+                >
+                  Actions
+                </mat-header-cell>
+
+                <mat-cell
+                  *matCellDef="let row"
+                  class="actions-col"
+                >
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [matMenuTriggerFor]="actionsMenu"
+                    [matMenuTriggerData]="{
+                      row: row
+                    }"
+                    matTooltip="Actions"
+                  >
+                    <mat-icon>
+                      more_vert
+                    </mat-icon>
+                  </button>
+                </mat-cell>
+
+              </ng-container>
+
+              <mat-header-row
+                *matHeaderRowDef="displayedColumns"
+              ></mat-header-row>
+
+              <mat-row
+                *matRowDef="
+                  let row;
+                  columns: displayedColumns
+                "
+              ></mat-row>
+
+            </mat-table>
+
+          </div>
+        </div>
+
+        <!-- Empty -->
+
+        @if (
+          !isLoading &&
+          !loadError &&
+          data.length === 0
+        ) {
+          <div
+            class="text-center text-muted py-4"
+          >
+            No categories found for the
+            current filters.
+          </div>
+        }
+
+        <!-- ========================================================= -->
+        <!-- Pagination -->
+        <!-- ========================================================= -->
+
+        <div
+          class="roles-pagination-bar
+                 d-flex flex-wrap
+                 align-items-end
+                 justify-content-between
+                 gap-3"
+        >
+
+          <div
+            class="d-flex align-items-center
+                   gap-2 flex-wrap"
+          >
+            <span
+              class="text-muted small text-nowrap"
+            >
+              Rows per page
+            </span>
+
+            <mat-form-field
+              appearance="outline"
+              subscriptSizing="dynamic"
+              class="roles-page-size-field"
+            >
+              <mat-select
+                [value]="pageSize"
+                [disabled]="isLoading"
+                (selectionChange)="
+                  onPageSizeChange(
+                    $event.value
+                  )
+                "
+              >
+                @for (
+                  option of pageSizeOptions;
+                  track option
+                ) {
+                  <mat-option
+                    [value]="option"
+                  >
+                    {{ option }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <mat-paginator
+            class="roles-paginator flex-grow-1"
+            [hidePageSize]="true"
+            [length]="meta?.totalItems ?? 0"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            (page)="onPaginatorPage($event)"
+          ></mat-paginator>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================================== -->
+<!-- Row actions -->
+<!-- =============================================================== -->
+
+<mat-menu #actionsMenu="matMenu">
+  <ng-template
+    matMenuContent
+    let-row="row"
+  >
+
+    <button
+      mat-menu-item
+      type="button"
+      (click)="onView(row)"
+    >
+      <mat-icon>
+        visibility
+      </mat-icon>
+
+      <span>
+        View
+      </span>
+    </button>
+
+    @if (canUpdateCategory) {
+      <button
+        mat-menu-item
+        type="button"
+        (click)="onEdit(row)"
+      >
+        <mat-icon>
+          edit
+        </mat-icon>
+
+        <span>
+          Edit
+        </span>
+      </button>
+    }
+
+    @if (canDeleteCategory) {
+      <button
+        mat-menu-item
+        type="button"
+        class="text-danger"
+        (click)="onDeleteCategory(row)"
+      >
+        <mat-icon class="text-danger">
+          delete_outline
+        </mat-icon>
+
+        <span>
+          Delete
+        </span>
+      </button>
+    }
+
+  </ng-template>
+</mat-menu>
+
+<!-- =============================================================== -->
+<!-- Create category -->
+<!-- =============================================================== -->
+
+<ng-template
+  #createCategoryModal
+  let-modal
+>
+
+  <div
+    class="modal-header
+           border-bottom-0 pb-0"
+  >
+    <h5 class="modal-title">
+      Create Category
+    </h5>
+
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+      [disabled]="createSubmitting"
+    ></button>
+  </div>
+
+  <form
+    [formGroup]="createForm"
+    (ngSubmit)="submitCreate(modal)"
+  >
+
+    <div class="modal-body">
+
+      @if (createFormError) {
+        <div
+          class="alert alert-danger
+                 py-2 small mb-3"
+        >
+          {{ createFormError }}
+        </div>
+      }
+
+      <!-- Name -->
+
+      <div class="mb-3">
+        <label
+          class="form-label"
+          for="categoryName"
+        >
+          Name
+          <span class="text-danger">
+            *
+          </span>
+        </label>
+
+        <input
+          id="categoryName"
+          type="text"
+          class="form-control"
+          formControlName="name"
+          autocomplete="off"
+          [class.is-invalid]="
+            createFormSubmitted &&
+            !!cf['name'].errors
+          "
+        />
+
+        @if (
+          createFormSubmitted &&
+          cf['name'].errors?.['required']
+        ) {
+          <div
+            class="invalid-feedback d-block"
+          >
+            Name is required.
+          </div>
+        }
+      </div>
+
+      <!-- Slug -->
+
+      <div class="mb-3">
+        <label
+          class="form-label"
+          for="categorySlug"
+        >
+          Slug
+          <span class="text-danger">
+            *
+          </span>
+        </label>
+
+        <input
+          id="categorySlug"
+          type="text"
+          class="form-control"
+          formControlName="slug"
+          placeholder="e.g. problem-solving"
+          autocomplete="off"
+          [class.is-invalid]="
+            createFormSubmitted &&
+            !!cf['slug'].errors
+          "
+        />
+
+        @if (
+          createFormSubmitted &&
+          cf['slug'].errors?.['required']
+        ) {
+          <div class="invalid-feedback d-block">
+            Slug is required.
+          </div>
+        }
+
+        @if (
+          createFormSubmitted &&
+          cf['slug'].errors?.['pattern']
+        ) {
+          <div class="invalid-feedback d-block">
+            Use lowercase letters, numbers
+            and hyphens only.
+          </div>
+        }
+      </div>
+
+      <!-- Description -->
+
+      <div class="mb-3">
+        <label
+          class="form-label"
+          for="categoryDescription"
+        >
+          Description
+          <span class="text-danger">
+            *
+          </span>
+        </label>
+
+        <textarea
+          id="categoryDescription"
+          class="form-control"
+          rows="3"
+          formControlName="description"
+          [class.is-invalid]="
+            createFormSubmitted &&
+            !!cf['description'].errors
+          "
+        ></textarea>
+
+        @if (
+          createFormSubmitted &&
+          cf['description'].errors?.['required']
+        ) {
+          <div class="invalid-feedback d-block">
+            Description is required.
+          </div>
+        }
+      </div>
+
+      <!-- Parent -->
+
+      <div class="mb-3">
+
+        <mat-form-field
+          appearance="outline"
+          class="w-100"
+        >
+
+          <mat-label>
+            Parent category
+          </mat-label>
+
+          <mat-select
+            formControlName="parentUuid"
+            [disabled]="parentCategoriesLoading"
+          >
+
+            <mat-option [value]="null">
+              None — root category
+            </mat-option>
+
+            @for (
+              category of parentCategories;
+              track category.uuid
+            ) {
+              <mat-option
+                [value]="category.uuid"
+              >
+                {{ category.name }}
+              </mat-option>
+            }
+
+          </mat-select>
+
+        </mat-form-field>
+
+      </div>
+
+      <!-- Language -->
+
+      <div class="mb-3">
+        <label
+          class="form-label"
+          for="categoryLanguage"
+        >
+          Language UUID
+        </label>
+
+        <input
+          id="categoryLanguage"
+          type="text"
+          class="form-control"
+          formControlName="languageUuid"
+          placeholder="Optional"
+        />
+
+        <div
+          class="form-text"
+        >
+          Replace this field with a language
+          selector once LanguagesApiService is
+          connected.
+        </div>
+      </div>
+
+      <!-- Image -->
+
+      <div class="mb-0">
+
+        <label class="form-label">
+          Category image
+        </label>
+
+        <input
+          type="file"
+          class="form-control"
+          accept="image/*"
+          (change)="onCreateImageSelected($event)"
+        />
+
+        @if (createImagePreview) {
+
+          <div
+            class="mt-3 d-flex
+                   align-items-start gap-3"
+          >
+            <img
+              [src]="createImagePreview"
+              alt="Category preview"
+              width="100"
+              height="100"
+              class="rounded border object-fit-cover"
+            />
+
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-danger"
+              (click)="removeCreateImage()"
+            >
+              Remove
+            </button>
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="modal.dismiss()"
+        [disabled]="createSubmitting"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="createSubmitting"
+      >
+
+        @if (createSubmitting) {
+          <span
+            class="spinner-border
+                   spinner-border-sm me-1"
+          ></span>
+        }
+
+        Create
+
+      </button>
+
+    </div>
+
+  </form>
+
+</ng-template>
+
+<!-- =============================================================== -->
+<!-- Details / Edit -->
+<!-- =============================================================== -->
+
+<ng-template
+  #categoryDetailModal
+  let-modal
+>
+
+  <div
+    class="modal-header
+           align-items-center
+           flex-wrap gap-2
+           border-bottom"
+  >
+
+    <h5
+      class="modal-title
+             text-truncate
+             mb-0 flex-grow-1"
+    >
+      {{
+        detailReadOnly
+          ? 'Category details'
+          : 'Edit category'
+      }}
+    </h5>
+
+    <div
+      class="d-flex align-items-center
+             gap-1 flex-shrink-0"
+    >
+
+      <button
+        mat-icon-button
+        type="button"
+        (click)="printCategoryDetail()"
+        matTooltip="Print"
+        [disabled]="
+          detailSaving ||
+          !detailSnapshot
+        "
+      >
+        <mat-icon>
+          print
+        </mat-icon>
+      </button>
+
+      @if (canUpdateCategory) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="toggleDetailEditMode()"
+          [matTooltip]="
+            detailReadOnly
+              ? 'Edit'
+              : 'View'
+          "
+          [disabled]="
+            detailSaving ||
+            !detailSnapshot
+          "
+        >
+          <mat-icon>
+            {{
+              detailReadOnly
+                ? 'edit'
+                : 'visibility'
+            }}
+          </mat-icon>
+        </button>
+      }
+
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss()"
+        [disabled]="detailSaving"
+      ></button>
+
+    </div>
+
+  </div>
+
+  @if (
+    detailError &&
+    !detailSnapshot
+  ) {
+
+    <div class="modal-body">
+      <div class="alert alert-danger mb-0">
+        {{ detailError }}
+      </div>
+    </div>
+
+  } @else if (detailSnapshot) {
+
+    <form
+      [formGroup]="detailForm"
+      (ngSubmit)="submitDetailUpdate(modal)"
+    >
+
+      <div class="modal-body">
+
+        @if (detailError) {
+          <div
+            class="alert alert-danger
+                   py-2 small mb-3"
+          >
+            {{ detailError }}
+          </div>
+        }
+
+        <!-- Image -->
+
+        <div
+          class="text-center mb-4"
+        >
+
+          @if (detailImagePreview) {
+
+            <img
+              [src]="detailImagePreview"
+              [alt]="detailSnapshot.name || 'Category'"
+              width="140"
+              height="140"
+              class="rounded border object-fit-cover"
+            />
+
+          } @else {
+
+            <div
+              class="rounded border bg-light
+                     d-inline-flex
+                     align-items-center
+                     justify-content-center"
+              style="width:140px;height:140px"
+            >
+              <mat-icon
+                class="text-muted"
+                style="font-size:48px;width:48px;height:48px"
+              >
+                image
+              </mat-icon>
+            </div>
+
+          }
+
+        </div>
+
+        <div class="row g-3 mb-3">
+
+          <div class="col-md-6">
+            <label
+              class="form-label
+                     text-muted
+                     small mb-1"
+            >
+              UUID
+            </label>
+
+            <div
+              class="font-monospace small"
+            >
+              {{ detailSnapshot.uuid }}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label
+              class="form-label
+                     text-muted
+                     small mb-1"
+            >
+              Language
+            </label>
+
+            <div>
+              {{
+                detailSnapshot.languageCode ||
+                '—'
+              }}
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Name -->
+
+        <div class="mb-3">
+          <label
+            class="form-label"
+            for="detailCategoryName"
+          >
+            Name
+            <span class="text-danger">
+              *
+            </span>
+          </label>
+
+          <input
+            id="detailCategoryName"
+            type="text"
+            class="form-control"
+            formControlName="name"
+            [class.is-invalid]="
+              detailFormSubmitted &&
+              !!df['name'].errors
+            "
+          />
+        </div>
+
+        <!-- Slug -->
+
+        <div class="mb-3">
+          <label
+            class="form-label"
+            for="detailCategorySlug"
+          >
+            Slug
+            <span class="text-danger">
+              *
+            </span>
+          </label>
+
+          <input
+            id="detailCategorySlug"
+            type="text"
+            class="form-control"
+            formControlName="slug"
+            [class.is-invalid]="
+              detailFormSubmitted &&
+              !!df['slug'].errors
+            "
+          />
+        </div>
+
+        <!-- Description -->
+
+        <div class="mb-3">
+          <label
+            class="form-label"
+            for="detailCategoryDescription"
+          >
+            Description
+          </label>
+
+          <textarea
+            id="detailCategoryDescription"
+            class="form-control"
+            rows="4"
+            formControlName="description"
+          ></textarea>
+        </div>
+
+        <!-- Parent -->
+
+        <div class="mb-3">
+
+          <mat-form-field
+            appearance="outline"
+            class="w-100"
+          >
+
+            <mat-label>
+              Parent category
+            </mat-label>
+
+            <mat-select
+              formControlName="parentUuid"
+            >
+
+              <mat-option [value]="null">
+                None — root category
+              </mat-option>
+
+              @for (
+                category of parentCategories;
+                track category.uuid
+              ) {
+
+                @if (
+                  category.uuid !==
+                  detailCategoryUuid
+                ) {
+                  <mat-option
+                    [value]="category.uuid"
+                  >
+                    {{ category.name }}
+                  </mat-option>
+                }
+
+              }
+
+            </mat-select>
+
+          </mat-form-field>
+
+        </div>
+
+        <!-- Language -->
+
+        <div class="mb-3">
+
+          <label
+            class="form-label"
+            for="detailCategoryLanguage"
+          >
+            Language UUID
+          </label>
+
+          <input
+            id="detailCategoryLanguage"
+            type="text"
+            class="form-control"
+            formControlName="languageUuid"
+          />
+
+        </div>
+
+        <!-- New image -->
+
+        @if (!detailReadOnly) {
+
+          <div class="mb-0">
+
+            <label class="form-label">
+              Replace image
+            </label>
+
+            <input
+              type="file"
+              class="form-control"
+              accept="image/*"
+              (change)="
+                onDetailImageSelected(
+                  $event
+                )
+              "
+            />
+
+            @if (detailImage) {
+
+              <button
+                type="button"
+                class="btn btn-sm
+                       btn-outline-secondary
+                       mt-2"
+                (click)="
+                  removeDetailSelectedImage()
+                "
+              >
+                Cancel selected image
+              </button>
+
+            }
+
+          </div>
+
+        }
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="modal.dismiss()"
+          [disabled]="detailSaving"
+        >
+          {{
+            detailReadOnly
+              ? 'Close'
+              : 'Cancel'
+          }}
+        </button>
+
+        @if (!detailReadOnly) {
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="detailSaving"
+          >
+
+            @if (detailSaving) {
+              <span
+                class="spinner-border
+                       spinner-border-sm
+                       me-1"
+              ></span>
+            }
+
+            Save changes
+
+          </button>
+
+        }
+
+      </div>
+
+    </form>
+
+  }
+
+</ng-template>

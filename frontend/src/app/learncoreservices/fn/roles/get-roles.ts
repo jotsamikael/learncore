@@ -7,17 +7,28 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { FindRolesQuery } from '../../models/find-roles-query';
 import { PageRoleResponse } from '../../models/page-role-response';
 
 export interface GetRoles$Params {
-  query: FindRolesQuery;
+  name?: string;
+  description?: string;
+  roleLevel?: string;
+  page?: number;
+  size?: number;
+  sortBy?: string;
+  sortDirection?: 'ASC' | 'DESC';
 }
 
-export function getRoles(http: HttpClient, rootUrl: string, params: GetRoles$Params, context?: HttpContext): Observable<StrictHttpResponse<PageRoleResponse>> {
+export function getRoles(http: HttpClient, rootUrl: string, params?: GetRoles$Params, context?: HttpContext): Observable<StrictHttpResponse<PageRoleResponse>> {
   const rb = new RequestBuilder(rootUrl, getRoles.PATH, 'get');
   if (params) {
-    rb.query('query', params.query, {});
+    rb.query('name', params.name, {});
+    rb.query('description', params.description, {});
+    rb.query('roleLevel', params.roleLevel, {});
+    rb.query('page', params.page, {});
+    rb.query('size', params.size, {});
+    rb.query('sortBy', params.sortBy, {});
+    rb.query('sortDirection', params.sortDirection, {});
   }
 
   return http.request(

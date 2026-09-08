@@ -7,17 +7,32 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { FindTenantsQuery } from '../../models/find-tenants-query';
 import { PageTenantResponse } from '../../models/page-tenant-response';
 
 export interface ListTenants$Params {
-  query: FindTenantsQuery;
+  name?: string;
+  phone?: string;
+  examFocus?: string;
+  country?: string;
+  description?: string;
+  page?: number;
+  size?: number;
+  sortBy?: string;
+  sortDirection?: 'ASC' | 'DESC';
 }
 
-export function listTenants(http: HttpClient, rootUrl: string, params: ListTenants$Params, context?: HttpContext): Observable<StrictHttpResponse<PageTenantResponse>> {
+export function listTenants(http: HttpClient, rootUrl: string, params?: ListTenants$Params, context?: HttpContext): Observable<StrictHttpResponse<PageTenantResponse>> {
   const rb = new RequestBuilder(rootUrl, listTenants.PATH, 'get');
   if (params) {
-    rb.query('query', params.query, {});
+    rb.query('name', params.name, {});
+    rb.query('phone', params.phone, {});
+    rb.query('examFocus', params.examFocus, {});
+    rb.query('country', params.country, {});
+    rb.query('description', params.description, {});
+    rb.query('page', params.page, {});
+    rb.query('size', params.size, {});
+    rb.query('sortBy', params.sortBy, {});
+    rb.query('sortDirection', params.sortDirection, {});
   }
 
   return http.request(

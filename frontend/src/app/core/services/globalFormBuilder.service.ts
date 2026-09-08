@@ -86,4 +86,29 @@ export class GlobalFormBuilderService {
 
     return null;
   }
+
+  createCategoryForm(): FormGroup {
+    return this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(1)]],
+      slug: ['', [Validators.required, Validators.pattern(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)]],
+      description: ['', [Validators.required, Validators.minLength(1)]],
+      parentUuid: [null],
+      languageUuid: [null],
+    });
+  }
+  
+  updateCategoryForm(): FormGroup {
+    return this.createCategoryForm();
+  }
+
+  createLanguageForm(): FormGroup {
+    return this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(1)]],
+      code: ['', [Validators.required, Validators.minLength(1)]],
+    });
+  }
+  
+  updateLanguageForm(): FormGroup {
+    return this.createLanguageForm();
+  }
 }

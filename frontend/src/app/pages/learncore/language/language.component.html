@@ -1,1 +1,1186 @@
-<p>language works!</p>
+<app-breadcrumbs
+  [title]="pageTitle"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+
+      <!-- Header -->
+
+      <div class="card-header border-bottom-dashed">
+        <div
+          class="d-flex flex-wrap justify-content-between align-items-end gap-3"
+        >
+
+          <div>
+            <h5 class="card-title mb-1">
+              {{ pageTitle }}
+            </h5>
+
+            <p class="text-muted small mb-0">
+              Manage the languages available
+              throughout the LearnCore platform.
+              Filters, sorting and pagination
+              are server-side.
+            </p>
+          </div>
+
+          @if (canCreateLanguage) {
+            <div class="d-flex flex-wrap gap-2">
+
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="
+                  openCreateModal(
+                    createLanguageModal
+                  )
+                "
+                [disabled]="isLoading"
+              >
+                Create Language
+              </button>
+
+            </div>
+          }
+
+        </div>
+      </div>
+
+      <!-- Body -->
+
+      <div class="card-body">
+
+        <!-- Toolbar -->
+
+        <div
+          class="roles-toolbar mb-3
+                 d-flex flex-wrap
+                 align-items-center
+                 justify-content-between
+                 gap-2"
+        >
+
+          <div
+            class="d-flex flex-wrap
+                   align-items-center gap-2"
+          >
+
+            @if (meta; as listMeta) {
+
+              <span
+                class="badge bg-primary-subtle
+                       text-primary"
+              >
+                Total languages:
+                {{ listMeta.totalItems }}
+              </span>
+
+              <span
+                class="badge bg-info-subtle
+                       text-info"
+              >
+                Page
+                {{ listMeta.currentPage }}
+                /
+                {{ listMeta.totalPages || 1 }}
+              </span>
+
+            }
+
+          </div>
+
+          <div
+            class="btn-group shadow-sm"
+            role="group"
+            aria-label="Table actions"
+          >
+
+            <!-- Export -->
+
+            <div
+              class="btn-group"
+              ngbDropdown
+              placement="bottom-end"
+            >
+
+              <button
+                type="button"
+                class="btn btn-light
+                       border py-2 px-3"
+                ngbDropdownToggle
+                [disabled]="isLoading"
+              >
+                Export
+              </button>
+
+              <div
+                class="dropdown-menu
+                       dropdown-menu-end"
+                ngbDropdownMenu
+              >
+
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="exportExcel()"
+                  [disabled]="!data.length"
+                >
+                  Excel
+                </button>
+
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="exportCsv()"
+                  [disabled]="!data.length"
+                >
+                  CSV
+                </button>
+
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="exportPdf()"
+                  [disabled]="!data.length"
+                >
+                  PDF
+                </button>
+
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="printTable()"
+                  [disabled]="!data.length"
+                >
+                  Print
+                </button>
+
+              </div>
+            </div>
+
+            <!-- Bulk -->
+
+            <div
+              class="btn-group"
+              ngbDropdown
+              placement="bottom-end"
+            >
+
+              <button
+                type="button"
+                class="btn btn-light
+                       border py-2 px-3"
+                ngbDropdownToggle
+                [disabled]="isLoading"
+              >
+                Bulk Actions
+              </button>
+
+              <div
+                class="dropdown-menu
+                       dropdown-menu-end"
+                ngbDropdownMenu
+              >
+
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="clearFilters()"
+                >
+                  Clear filters
+                </button>
+
+                <div class="dropdown-divider">
+                </div>
+
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="exportSelectedCsv()"
+                  [disabled]="selection.isEmpty()"
+                >
+                  Export selected (CSV)
+                </button>
+
+              </div>
+            </div>
+
+            <!-- Refresh -->
+
+            <button
+              type="button"
+              class="btn btn-light
+                     border py-2 px-2
+                     d-inline-flex
+                     align-items-center
+                     justify-content-center"
+              (click)="refresh()"
+              [disabled]="isLoading"
+              matTooltip="Refresh"
+              aria-label="Refresh"
+            >
+              <mat-icon>
+                refresh
+              </mat-icon>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- Filters -->
+
+        <div
+          class="row g-3 roles-filters mb-3"
+        >
+
+          <div
+            class="col-md-6 col-lg-3"
+          >
+
+            <mat-form-field
+              appearance="outline"
+              class="w-100"
+            >
+
+              <mat-label>
+                Language name
+              </mat-label>
+
+              <input
+                matInput
+                [formControl]="nameFilter"
+                placeholder="Search by name"
+              />
+
+            </mat-form-field>
+
+          </div>
+
+          <div
+            class="col-md-6 col-lg-3"
+          >
+
+            <mat-form-field
+              appearance="outline"
+              class="w-100"
+            >
+
+              <mat-label>
+                Language code
+              </mat-label>
+
+              <input
+                matInput
+                [formControl]="codeFilter"
+                placeholder="e.g. en"
+              />
+
+            </mat-form-field>
+
+          </div>
+
+        </div>
+
+        <!-- Error -->
+
+        @if (loadError) {
+
+          <div
+            class="alert alert-danger
+                   py-2 mb-3"
+          >
+            {{ loadError }}
+          </div>
+
+        }
+
+        <!-- Table -->
+
+        <div
+          class="position-relative
+                 roles-table-shell"
+        >
+
+          @if (isLoading) {
+
+            <div
+              class="roles-table-overlay
+                     d-flex
+                     align-items-center
+                     justify-content-center"
+            >
+
+              <mat-progress-spinner
+                mode="indeterminate"
+                diameter="42"
+              >
+              </mat-progress-spinner>
+
+            </div>
+
+          }
+
+          <div
+            class="table-responsive
+                   mat-elevation-z1
+                   rounded"
+          >
+
+            <mat-table
+              [dataSource]="data"
+              matSort
+              matSortActive="name"
+              matSortDirection="asc"
+              matSortDisableClear
+              class="w-100 roles-table"
+            >
+
+              <!-- Selection -->
+
+              <ng-container
+                matColumnDef="select"
+              >
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                  class="roles-col-select"
+                >
+
+                  <mat-checkbox
+                    (change)="masterToggle()"
+                    [checked]="
+                      selection.hasValue() &&
+                      isAllSelected()
+                    "
+                    [indeterminate]="
+                      selection.hasValue() &&
+                      !isAllSelected()
+                    "
+                    [disabled]="!data.length"
+                  >
+                  </mat-checkbox>
+
+                </mat-header-cell>
+
+                <mat-cell
+                  *matCellDef="let row"
+                  class="roles-col-select"
+                >
+
+                  <mat-checkbox
+                    (click)="
+                      $event.stopPropagation()
+                    "
+                    (change)="toggleRow(row)"
+                    [checked]="
+                      selection.isSelected(row)
+                    "
+                  >
+                  </mat-checkbox>
+
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- Name -->
+
+              <ng-container
+                matColumnDef="name"
+              >
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  Name
+                </mat-header-cell>
+
+                <mat-cell
+                  *matCellDef="let row"
+                >
+
+                  <span class="fw-medium">
+                    {{ row.name || '—' }}
+                  </span>
+
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- Code -->
+
+              <ng-container
+                matColumnDef="code"
+              >
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                >
+                  Code
+                </mat-header-cell>
+
+                <mat-cell
+                  *matCellDef="let row"
+                >
+
+                  @if (row.code) {
+
+                    <span
+                      class="badge
+                             bg-secondary-subtle
+                             text-secondary
+                             text-uppercase"
+                    >
+                      {{ row.code }}
+                    </span>
+
+                  } @else {
+                    —
+                  }
+
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- UUID -->
+
+              <ng-container
+                matColumnDef="uuid"
+              >
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                >
+                  UUID
+                </mat-header-cell>
+
+                <mat-cell
+                  *matCellDef="let row"
+                >
+
+                  @if (row.uuid) {
+
+                    <span
+                      class="font-monospace
+                             small"
+                      [matTooltip]="row.uuid"
+                    >
+                      {{
+                        shortUuid(
+                          row.uuid
+                        )
+                      }}
+                    </span>
+
+                  } @else {
+                    —
+                  }
+
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- Actions -->
+
+              <ng-container
+                matColumnDef="actions"
+              >
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                  class="actions-col"
+                >
+                  Actions
+                </mat-header-cell>
+
+                <mat-cell
+                  *matCellDef="let row"
+                  class="actions-col"
+                >
+
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [matMenuTriggerFor]="
+                      actionsMenu
+                    "
+                    [matMenuTriggerData]="{
+                      row: row
+                    }"
+                    matTooltip="Actions"
+                  >
+                    <mat-icon>
+                      more_vert
+                    </mat-icon>
+                  </button>
+
+                </mat-cell>
+
+              </ng-container>
+
+              <mat-header-row
+                *matHeaderRowDef="
+                  displayedColumns
+                "
+              >
+              </mat-header-row>
+
+              <mat-row
+                *matRowDef="
+                  let row;
+                  columns:
+                    displayedColumns
+                "
+              >
+              </mat-row>
+
+            </mat-table>
+
+          </div>
+        </div>
+
+        <!-- Empty -->
+
+        @if (
+          !isLoading &&
+          !loadError &&
+          data.length === 0
+        ) {
+
+          <div
+            class="text-center
+                   text-muted py-4"
+          >
+            No languages found for
+            the current filters.
+          </div>
+
+        }
+
+        <!-- Pagination -->
+
+        <div
+          class="roles-pagination-bar
+                 d-flex flex-wrap
+                 align-items-end
+                 justify-content-between
+                 gap-3"
+        >
+
+          <div
+            class="d-flex
+                   align-items-center
+                   gap-2 flex-wrap"
+          >
+
+            <span
+              class="text-muted
+                     small text-nowrap"
+            >
+              Rows per page
+            </span>
+
+            <mat-form-field
+              appearance="outline"
+              subscriptSizing="dynamic"
+              class="roles-page-size-field"
+            >
+
+              <mat-select
+                [value]="pageSize"
+                [disabled]="isLoading"
+                (selectionChange)="
+                  onPageSizeChange(
+                    $event.value
+                  )
+                "
+              >
+
+                @for (
+                  option of pageSizeOptions;
+                  track option
+                ) {
+
+                  <mat-option
+                    [value]="option"
+                  >
+                    {{ option }}
+                  </mat-option>
+
+                }
+
+              </mat-select>
+
+            </mat-form-field>
+
+          </div>
+
+          <mat-paginator
+            class="roles-paginator
+                   flex-grow-1"
+            [hidePageSize]="true"
+            [length]="
+              meta?.totalItems ?? 0
+            "
+            [pageSize]="pageSize"
+            [pageSizeOptions]="
+              pageSizeOptions
+            "
+            [showFirstLastButtons]="true"
+            (page)="
+              onPaginatorPage($event)
+            "
+          >
+          </mat-paginator>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================= -->
+<!-- Actions menu -->
+<!-- ============================================================= -->
+
+<mat-menu #actionsMenu="matMenu">
+
+  <ng-template
+    matMenuContent
+    let-row="row"
+  >
+
+    <button
+      mat-menu-item
+      type="button"
+      (click)="onView(row)"
+    >
+      <mat-icon>
+        visibility
+      </mat-icon>
+
+      <span>
+        View
+      </span>
+    </button>
+
+    @if (canUpdateLanguage) {
+
+      <button
+        mat-menu-item
+        type="button"
+        (click)="onEdit(row)"
+      >
+        <mat-icon>
+          edit
+        </mat-icon>
+
+        <span>
+          Edit
+        </span>
+      </button>
+
+    }
+
+    @if (canDeleteLanguage) {
+
+      <button
+        mat-menu-item
+        type="button"
+        class="text-danger"
+        (click)="
+          onDeleteLanguage(row)
+        "
+      >
+
+        <mat-icon
+          class="text-danger"
+        >
+          delete_outline
+        </mat-icon>
+
+        <span>
+          Delete
+        </span>
+
+      </button>
+
+    }
+
+  </ng-template>
+
+</mat-menu>
+
+<!-- ============================================================= -->
+<!-- Create language modal -->
+<!-- ============================================================= -->
+
+<ng-template
+  #createLanguageModal
+  let-modal
+>
+
+  <div
+    class="modal-header
+           border-bottom-0 pb-0"
+  >
+
+    <h5 class="modal-title">
+      Create Language
+    </h5>
+
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+      [disabled]="createSubmitting"
+    >
+    </button>
+
+  </div>
+
+  <form
+    [formGroup]="createForm"
+    (ngSubmit)="submitCreate(modal)"
+  >
+
+    <div class="modal-body">
+
+      @if (createFormError) {
+
+        <div
+          class="alert alert-danger
+                 py-2 small mb-3"
+        >
+          {{ createFormError }}
+        </div>
+
+      }
+
+      <!-- Name -->
+
+      <div class="mb-3">
+
+        <label
+          class="form-label"
+          for="languageName"
+        >
+          Name
+          <span class="text-danger">
+            *
+          </span>
+        </label>
+
+        <input
+          id="languageName"
+          type="text"
+          class="form-control"
+          formControlName="name"
+          placeholder="English"
+          autocomplete="off"
+          [class.is-invalid]="
+            createFormSubmitted &&
+            !!cf['name'].errors
+          "
+        />
+
+        @if (
+          createFormSubmitted &&
+          cf['name'].errors?.['required']
+        ) {
+
+          <div
+            class="invalid-feedback
+                   d-block"
+          >
+            Name is required.
+          </div>
+
+        }
+
+      </div>
+
+      <!-- Code -->
+
+      <div class="mb-0">
+
+        <label
+          class="form-label"
+          for="languageCode"
+        >
+          Code
+          <span class="text-danger">
+            *
+          </span>
+        </label>
+
+        <input
+          id="languageCode"
+          type="text"
+          class="form-control"
+          formControlName="code"
+          placeholder="en"
+          autocomplete="off"
+          [class.is-invalid]="
+            createFormSubmitted &&
+            !!cf['code'].errors
+          "
+        />
+
+        @if (
+          createFormSubmitted &&
+          cf['code'].errors?.['required']
+        ) {
+
+          <div
+            class="invalid-feedback
+                   d-block"
+          >
+            Code is required.
+          </div>
+
+        }
+
+        <div class="form-text">
+          Examples:
+          en, fr, es, de.
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="modal.dismiss()"
+        [disabled]="createSubmitting"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="createSubmitting"
+      >
+
+        @if (createSubmitting) {
+
+          <span
+            class="spinner-border
+                   spinner-border-sm
+                   me-1"
+          >
+          </span>
+
+        }
+
+        Create
+
+      </button>
+
+    </div>
+
+  </form>
+
+</ng-template>
+
+<!-- ============================================================= -->
+<!-- Detail / edit modal -->
+<!-- ============================================================= -->
+
+<ng-template
+  #languageDetailModal
+  let-modal
+>
+
+  <div
+    class="modal-header
+           align-items-center
+           flex-wrap gap-2
+           border-bottom"
+  >
+
+    <h5
+      class="modal-title
+             text-truncate
+             mb-0 flex-grow-1"
+    >
+      {{
+        detailReadOnly
+          ? 'Language details'
+          : 'Edit language'
+      }}
+    </h5>
+
+    <div
+      class="d-flex
+             align-items-center
+             gap-1 flex-shrink-0"
+    >
+
+      <button
+        mat-icon-button
+        type="button"
+        (click)="printLanguageDetail()"
+        matTooltip="Print"
+        [disabled]="
+          detailSaving ||
+          !detailSnapshot
+        "
+      >
+        <mat-icon>
+          print
+        </mat-icon>
+      </button>
+
+      @if (canUpdateLanguage) {
+
+        <button
+          mat-icon-button
+          type="button"
+          (click)="toggleDetailEditMode()"
+          [matTooltip]="
+            detailReadOnly
+              ? 'Edit'
+              : 'View'
+          "
+          [disabled]="
+            detailSaving ||
+            !detailSnapshot
+          "
+        >
+          <mat-icon>
+            {{
+              detailReadOnly
+                ? 'edit'
+                : 'visibility'
+            }}
+          </mat-icon>
+        </button>
+
+      }
+
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss()"
+        [disabled]="detailSaving"
+      >
+      </button>
+
+    </div>
+
+  </div>
+
+  @if (
+    detailError &&
+    !detailSnapshot
+  ) {
+
+    <div class="modal-body">
+
+      <div
+        class="alert
+               alert-danger mb-0"
+      >
+        {{ detailError }}
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="modal.dismiss()"
+      >
+        Close
+      </button>
+
+    </div>
+
+  } @else if (detailSnapshot) {
+
+    <form
+      [formGroup]="detailForm"
+      (ngSubmit)="
+        submitDetailUpdate(modal)
+      "
+    >
+
+      <div class="modal-body">
+
+        @if (detailError) {
+
+          <div
+            class="alert alert-danger
+                   py-2 small mb-3"
+          >
+            {{ detailError }}
+          </div>
+
+        }
+
+        <!-- UUID -->
+
+        <div class="mb-3">
+
+          <label
+            class="form-label
+                   text-muted
+                   small mb-1"
+          >
+            UUID
+          </label>
+
+          <div
+            class="font-monospace small"
+          >
+            {{ detailSnapshot.uuid }}
+          </div>
+
+        </div>
+
+        <!-- Name -->
+
+        <div class="mb-3">
+
+          <label
+            class="form-label"
+            for="detailLanguageName"
+          >
+            Name
+            <span class="text-danger">
+              *
+            </span>
+          </label>
+
+          <input
+            id="detailLanguageName"
+            type="text"
+            class="form-control"
+            formControlName="name"
+            [class.is-invalid]="
+              detailFormSubmitted &&
+              !!df['name'].errors
+            "
+          />
+
+          @if (
+            detailFormSubmitted &&
+            df['name'].errors?.['required']
+          ) {
+
+            <div
+              class="invalid-feedback
+                     d-block"
+            >
+              Name is required.
+            </div>
+
+          }
+
+        </div>
+
+        <!-- Code -->
+
+        <div class="mb-0">
+
+          <label
+            class="form-label"
+            for="detailLanguageCode"
+          >
+            Code
+            <span class="text-danger">
+              *
+            </span>
+          </label>
+
+          <input
+            id="detailLanguageCode"
+            type="text"
+            class="form-control"
+            formControlName="code"
+            [class.is-invalid]="
+              detailFormSubmitted &&
+              !!df['code'].errors
+            "
+          />
+
+          @if (
+            detailFormSubmitted &&
+            df['code'].errors?.['required']
+          ) {
+
+            <div
+              class="invalid-feedback
+                     d-block"
+            >
+              Code is required.
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="modal.dismiss()"
+          [disabled]="detailSaving"
+        >
+          {{
+            detailReadOnly
+              ? 'Close'
+              : 'Cancel'
+          }}
+        </button>
+
+        @if (!detailReadOnly) {
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="detailSaving"
+          >
+
+            @if (detailSaving) {
+
+              <span
+                class="spinner-border
+                       spinner-border-sm
+                       me-1"
+              >
+              </span>
+
+            }
+
+            Save changes
+
+          </button>
+
+        }
+
+      </div>
+
+    </form>
+
+  }
+
+</ng-template>

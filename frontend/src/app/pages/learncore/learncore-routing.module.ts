@@ -13,6 +13,7 @@ import { QuestionComponent } from './question/question.component';
 import { ImportQuestionComponent } from './import-question/import-question.component';
 import { QuestionReportComponent } from './question-report/question-report.component';
 import { CategoryComponent } from './category/category.component';
+import { LanguagesComponent } from './language/language.component';
 const routes: Routes = [
   {
     path: '',
@@ -29,6 +30,15 @@ const routes: Routes = [
         data: {
           title: 'Dashboard',
           breadcrumb: 'Dashboard',
+        },
+      },
+      {
+        path: 'languages',
+        component: LanguagesComponent,
+        data: {
+          title: 'Languages',
+          permissions: [PermissionCodes.TENANT_LANGUAGE_READ],
+          scope: 'tenant',
         },
       },
       {

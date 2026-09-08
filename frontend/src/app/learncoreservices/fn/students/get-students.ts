@@ -7,17 +7,38 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { FindStudentsQuery } from '../../models/find-students-query';
 import { PageStudentResponse } from '../../models/page-student-response';
 
 export interface GetStudents$Params {
-  query: FindStudentsQuery;
+  email?: string;
+  firstname?: string;
+  lastname?: string;
+  xp?: number;
+  level?: number;
+  streakDays?: number;
+  username?: string;
+  tenantUuid?: string;
+  page?: number;
+  size?: number;
+  sortBy?: string;
+  sortDirection?: 'ASC' | 'DESC';
 }
 
-export function getStudents(http: HttpClient, rootUrl: string, params: GetStudents$Params, context?: HttpContext): Observable<StrictHttpResponse<PageStudentResponse>> {
+export function getStudents(http: HttpClient, rootUrl: string, params?: GetStudents$Params, context?: HttpContext): Observable<StrictHttpResponse<PageStudentResponse>> {
   const rb = new RequestBuilder(rootUrl, getStudents.PATH, 'get');
   if (params) {
-    rb.query('query', params.query, {});
+    rb.query('email', params.email, {});
+    rb.query('firstname', params.firstname, {});
+    rb.query('lastname', params.lastname, {});
+    rb.query('xp', params.xp, {});
+    rb.query('level', params.level, {});
+    rb.query('streakDays', params.streakDays, {});
+    rb.query('username', params.username, {});
+    rb.query('tenantUuid', params.tenantUuid, {});
+    rb.query('page', params.page, {});
+    rb.query('size', params.size, {});
+    rb.query('sortBy', params.sortBy, {});
+    rb.query('sortDirection', params.sortDirection, {});
   }
 
   return http.request(
