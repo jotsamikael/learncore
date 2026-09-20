@@ -18,6 +18,14 @@ public interface LessonQuestionRepository extends JpaRepository<LessonQuestion, 
 
     long countByLesson_Id(Long lessonId);
 
+    @Query("""
+            SELECT lq.question.uuid
+            FROM LessonQuestion lq
+            WHERE lq.lesson.id = :lessonId
+            ORDER BY lq.displayOrder ASC
+            """)
+    java.util.List<String> findQuestionUuidsByLessonId(@Param("lessonId") Long lessonId);
+
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("""
             UPDATE LessonQuestion l

@@ -1,5 +1,4 @@
-2026-09-08 09:05:25,313 INFO o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
-2026-09-08 09:05:25,365 INFO o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
-2026-09-08 09:05:25,413 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-09-08 09:05:25,483 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
-2026-09-08 09:05:25,492 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-09-21 00:31:21,455 WARN o.s.d.w.c.SpringDataJackson3Configuration$PageModule$WarningLoggingModifier [http-nio-8088-exec-7] Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+

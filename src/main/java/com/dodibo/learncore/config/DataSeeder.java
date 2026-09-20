@@ -126,6 +126,8 @@ public class DataSeeder implements ApplicationRunner {
                 Map.entry(PermissionCodes.TENANT_LESSON_CREATE, new PermissionSeed("Create lessons", RoleLevel.TENANT)),
                 Map.entry(PermissionCodes.TENANT_LESSON_UPDATE, new PermissionSeed("Update lessons", RoleLevel.TENANT)),
                 Map.entry(PermissionCodes.TENANT_LESSON_DELETE, new PermissionSeed("Delete lessons", RoleLevel.TENANT)),
+                Map.entry(PermissionCodes.TENANT_LESSON_PATH_READ, new PermissionSeed("View sequential lesson path", RoleLevel.TENANT)),
+                Map.entry(PermissionCodes.TENANT_LESSON_PROGRESS_UPDATE, new PermissionSeed("Complete lessons on path", RoleLevel.TENANT)),
                 Map.entry(PermissionCodes.TENANT_DAILY_QUIZ_READ, new PermissionSeed("List daily quizzes", RoleLevel.TENANT)),
                 Map.entry(PermissionCodes.TENANT_DAILY_QUIZ_CREATE, new PermissionSeed("Create daily quizzes", RoleLevel.TENANT)),
                 Map.entry(PermissionCodes.TENANT_DAILY_QUIZ_UPDATE, new PermissionSeed("Update daily quizzes", RoleLevel.TENANT)),
@@ -275,7 +277,9 @@ public class DataSeeder implements ApplicationRunner {
                 PermissionCodes.TENANT_SESSION_READ,
                 PermissionCodes.TENANT_SESSION_CREATE,
                 PermissionCodes.TENANT_QUESTION_STATISTICS_READ,
-                PermissionCodes.TENANT_LEADERBOARD_READ
+                PermissionCodes.TENANT_LEADERBOARD_READ,
+                PermissionCodes.TENANT_LESSON_PATH_READ,
+                PermissionCodes.TENANT_LESSON_PROGRESS_UPDATE
         ));
     }
 

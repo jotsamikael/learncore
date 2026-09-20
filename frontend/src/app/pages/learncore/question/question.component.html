@@ -1,1 +1,1935 @@
-<p>question works!</p>
+<app-breadcrumbs
+  [title]="pageTitle"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-12">
+
+    <div class="card">
+
+      <!-- ===================================================== -->
+      <!-- HEADER -->
+      <!-- ===================================================== -->
+
+      <div class="card-header border-bottom-dashed">
+
+        <div
+          class="d-flex flex-wrap
+                 justify-content-between
+                 align-items-center gap-3"
+        >
+
+          <div>
+
+            <h5 class="card-title mb-1">
+              Question Bank
+            </h5>
+
+            <p class="text-muted small mb-0">
+              Manage multiple choice, true/false,
+              structural and essay questions.
+            </p>
+
+          </div>
+
+          @if (canCreateQuestion) {
+
+            <button
+              type="button"
+              class="btn btn-primary
+                     d-inline-flex
+                     align-items-center gap-2"
+              (click)="
+                openCreateModal(
+                  createQuestionModal
+                )
+              "
+            >
+              <mat-icon>
+                add
+              </mat-icon>
+
+              Create Question
+            </button>
+
+          }
+
+        </div>
+
+      </div>
+
+      <!-- ===================================================== -->
+      <!-- BODY -->
+      <!-- ===================================================== -->
+
+      <div class="card-body">
+
+        <!-- Toolbar -->
+
+        <div
+          class="d-flex flex-wrap
+                 justify-content-between
+                 align-items-center
+                 gap-3 mb-4"
+        >
+
+          <div class="d-flex gap-2 flex-wrap">
+
+            @if (meta; as listMeta) {
+
+              <span
+                class="badge
+                       bg-primary-subtle
+                       text-primary
+                       px-3 py-2"
+              >
+                {{ listMeta.totalItems }}
+                questions
+              </span>
+
+              <span
+                class="badge
+                       bg-light
+                       text-secondary
+                       px-3 py-2"
+              >
+                Page
+                {{ listMeta.currentPage }}
+                /
+                {{ listMeta.totalPages || 1 }}
+              </span>
+
+            }
+
+          </div>
+
+          <div class="btn-group">
+
+            <div
+              class="btn-group"
+              ngbDropdown
+            >
+
+              <button
+                class="btn btn-light border"
+                ngbDropdownToggle
+              >
+                Export
+              </button>
+
+              <div
+                ngbDropdownMenu
+                class="dropdown-menu-end"
+              >
+
+                <button
+                  ngbDropdownItem
+                  (click)="exportExcel()"
+                >
+                  Excel
+                </button>
+
+                <button
+                  ngbDropdownItem
+                  (click)="exportCsv()"
+                >
+                  CSV
+                </button>
+
+                <button
+                  ngbDropdownItem
+                  (click)="printTable()"
+                >
+                  Print / PDF
+                </button>
+
+              </div>
+
+            </div>
+
+            <button
+              class="btn btn-light border"
+              (click)="exportSelectedCsv()"
+              [disabled]="selection.isEmpty()"
+            >
+              Export selected
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-light border
+                     d-inline-flex
+                     align-items-center"
+              (click)="refresh()"
+            >
+              <mat-icon>
+                refresh
+              </mat-icon>
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- =================================================== -->
+        <!-- FILTERS -->
+        <!-- =================================================== -->
+
+        <div class="row g-3 mb-3">
+
+          <div class="col-lg-4">
+
+            <mat-form-field
+              appearance="outline"
+              class="w-100"
+            >
+
+              <mat-label>
+                Search question
+              </mat-label>
+
+              <mat-icon matPrefix>
+                search
+              </mat-icon>
+
+              <input
+                matInput
+                [formControl]="questionTextFilter"
+                placeholder="Search question text..."
+              />
+
+            </mat-form-field>
+
+          </div>
+
+          <div class="col-lg-2">
+
+            <mat-form-field
+              appearance="outline"
+              class="w-100"
+            >
+
+              <mat-label>
+                Type
+              </mat-label>
+
+              <mat-select
+                [formControl]="typeFilter"
+              >
+
+                <mat-option value="">
+                  All types
+                </mat-option>
+
+                @for (
+                  type of questionTypes;
+                  track type.value
+                ) {
+
+                  <mat-option
+                    [value]="type.value"
+                  >
+                    {{ type.shortLabel }}
+                  </mat-option>
+
+                }
+
+              </mat-select>
+
+            </mat-form-field>
+
+          </div>
+
+          <div class="col-lg-2">
+
+            <mat-form-field
+              appearance="outline"
+              class="w-100"
+            >
+
+              <mat-label>
+                Difficulty
+              </mat-label>
+
+              <mat-select
+                [formControl]="difficultyFilter"
+              >
+
+                <mat-option value="">
+                  All levels
+                </mat-option>
+
+                @for (
+                  level of difficulties;
+                  track level.value
+                ) {
+
+                  <mat-option
+                    [value]="level.value"
+                  >
+                    {{ level.label }}
+                  </mat-option>
+
+                }
+
+              </mat-select>
+
+            </mat-form-field>
+
+          </div>
+
+          <div class="col-lg-3">
+
+            <mat-form-field
+              appearance="outline"
+              class="w-100"
+            >
+
+              <mat-label>
+                Category
+              </mat-label>
+
+              <mat-select
+                [formControl]="categoryFilter"
+              >
+
+                <mat-option value="">
+                  All categories
+                </mat-option>
+
+                @for (
+                  category of categories;
+                  track category.uuid
+                ) {
+
+                  <mat-option
+                    [value]="category.uuid"
+                  >
+                    {{ category.name }}
+                  </mat-option>
+
+                }
+
+              </mat-select>
+
+            </mat-form-field>
+
+          </div>
+
+          <div class="col-lg-1">
+
+            <button
+              type="button"
+              class="btn btn-light
+                     border w-100"
+              style="height: 56px"
+              (click)="clearFilters()"
+              matTooltip="Clear filters"
+            >
+              <mat-icon>
+                filter_alt_off
+              </mat-icon>
+            </button>
+
+          </div>
+
+        </div>
+
+        @if (loadError) {
+
+          <div class="alert alert-danger">
+            {{ loadError }}
+          </div>
+
+        }
+
+        <!-- =================================================== -->
+        <!-- TABLE -->
+        <!-- =================================================== -->
+
+        <div class="position-relative">
+
+          @if (isLoading) {
+
+            <div
+              class="position-absolute
+                     w-100 h-100
+                     d-flex
+                     justify-content-center
+                     align-items-center
+                     bg-white bg-opacity-75"
+              style="z-index: 10; min-height: 250px"
+            >
+              <mat-progress-spinner
+                diameter="42"
+                mode="indeterminate"
+              >
+              </mat-progress-spinner>
+            </div>
+
+          }
+
+          <div class="table-responsive">
+
+            <mat-table
+              [dataSource]="data"
+              matSort
+              matSortActive="questionText"
+              matSortDirection="asc"
+              matSortDisableClear
+              class="w-100"
+            >
+
+              <!-- SELECT -->
+
+              <ng-container matColumnDef="select">
+
+                <mat-header-cell *matHeaderCellDef>
+
+                  <mat-checkbox
+                    (change)="masterToggle()"
+                    [checked]="
+                      selection.hasValue() &&
+                      isAllSelected()
+                    "
+                    [indeterminate]="
+                      selection.hasValue() &&
+                      !isAllSelected()
+                    "
+                  >
+                  </mat-checkbox>
+
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let row">
+
+                  <mat-checkbox
+                    (click)="$event.stopPropagation()"
+                    (change)="toggleRow(row)"
+                    [checked]="
+                      selection.isSelected(row)
+                    "
+                  >
+                  </mat-checkbox>
+
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- QUESTION -->
+
+              <ng-container matColumnDef="question">
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header="questionText"
+                >
+                  Question
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let row">
+
+                  <div
+                    class="d-flex
+                           align-items-center
+                           gap-3 py-2"
+                  >
+
+                    @if (row.imageUrl) {
+
+                      <img
+                        [src]="row.imageUrl"
+                        width="52"
+                        height="52"
+                        class="rounded border
+                               object-fit-cover"
+                        alt=""
+                      />
+
+                    }
+
+                    <div>
+
+                      <div class="fw-medium">
+                        {{
+                          shortQuestion(
+                            row.questionText
+                          )
+                        }}
+                      </div>
+
+                      @if (row.uuid) {
+
+                        <small
+                          class="text-muted
+                                 font-monospace"
+                        >
+                          {{
+                            row.uuid.substring(
+                              0,
+                              10
+                            )
+                          }}…
+                        </small>
+
+                      }
+
+                    </div>
+
+                  </div>
+
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- TYPE -->
+
+              <ng-container matColumnDef="type">
+
+                <mat-header-cell *matHeaderCellDef>
+                  Type
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let row">
+
+                  <span
+                    class="badge"
+                    [ngClass]="
+                      typeClass(
+                        row.questionType
+                      )
+                    "
+                  >
+                    {{
+                      typeLabel(
+                        row.questionType
+                      )
+                    }}
+                  </span>
+
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- CATEGORY -->
+
+              <ng-container matColumnDef="category">
+
+                <mat-header-cell *matHeaderCellDef>
+                  Category
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let row">
+                  {{ row.categoryName || '—' }}
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- DIFFICULTY -->
+
+              <ng-container matColumnDef="difficulty">
+
+                <mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header="difficultyLevel"
+                >
+                  Difficulty
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let row">
+
+                  <span
+                    class="badge"
+                    [ngClass]="
+                      difficultyClass(
+                        row.difficultyLevel
+                      )
+                    "
+                  >
+                    {{ row.difficultyLevel }}
+                  </span>
+
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- GRADING -->
+
+              <ng-container matColumnDef="grading">
+
+                <mat-header-cell *matHeaderCellDef>
+                  Answer model
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let row">
+
+                  @if (
+                    isChoiceType(
+                      row.questionType
+                    )
+                  ) {
+
+                    <span
+                      class="d-inline-flex
+                             align-items-center
+                             gap-1 text-muted"
+                    >
+                      <mat-icon
+                        style="
+                          font-size:18px;
+                          width:18px;
+                          height:18px;
+                        "
+                      >
+                        checklist
+                      </mat-icon>
+
+                      Options
+                    </span>
+
+                  } @else {
+
+                    <span
+                      class="d-inline-flex
+                             align-items-center
+                             gap-1"
+                    >
+
+                      <mat-icon
+                        style="
+                          font-size:18px;
+                          width:18px;
+                          height:18px;
+                        "
+                      >
+                        psychology
+                      </mat-icon>
+
+                      {{
+                        gradingLabel(
+                          row
+                            .writtenAnswerConfig
+                            ?.gradingStrategy
+                        )
+                      }}
+
+                    </span>
+
+                  }
+
+                </mat-cell>
+
+              </ng-container>
+
+              <!-- ACTIONS -->
+
+              <ng-container matColumnDef="actions">
+
+                <mat-header-cell *matHeaderCellDef>
+                  Actions
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let row">
+
+                  <button
+                    mat-icon-button
+                    [matMenuTriggerFor]="actionsMenu"
+                    [matMenuTriggerData]="{
+                      row: row
+                    }"
+                  >
+                    <mat-icon>
+                      more_vert
+                    </mat-icon>
+                  </button>
+
+                </mat-cell>
+
+              </ng-container>
+
+              <mat-header-row
+                *matHeaderRowDef="displayedColumns"
+              >
+              </mat-header-row>
+
+              <mat-row
+                *matRowDef="
+                  let row;
+                  columns: displayedColumns
+                "
+              >
+              </mat-row>
+
+            </mat-table>
+
+          </div>
+
+        </div>
+
+        @if (
+          !isLoading &&
+          !loadError &&
+          data.length === 0
+        ) {
+
+          <div class="text-center py-5">
+
+            <mat-icon
+              class="text-muted"
+              style="
+                width:50px;
+                height:50px;
+                font-size:50px;
+              "
+            >
+              quiz
+            </mat-icon>
+
+            <h6 class="mt-2">
+              No questions found
+            </h6>
+
+            <p class="text-muted small">
+              Create a question or change
+              the current filters.
+            </p>
+
+          </div>
+
+        }
+
+        <!-- PAGINATOR -->
+
+        <div
+          class="d-flex flex-wrap
+                 justify-content-between
+                 align-items-center
+                 gap-3 mt-3"
+        >
+
+          <div
+            class="d-flex
+                   align-items-center
+                   gap-2"
+          >
+
+            <span class="text-muted small">
+              Rows per page
+            </span>
+
+            <mat-form-field
+              appearance="outline"
+              subscriptSizing="dynamic"
+              style="width: 90px"
+            >
+
+              <mat-select
+                [value]="pageSize"
+                (selectionChange)="
+                  onPageSizeChange(
+                    $event.value
+                  )
+                "
+              >
+
+                @for (
+                  size of pageSizeOptions;
+                  track size
+                ) {
+
+                  <mat-option [value]="size">
+                    {{ size }}
+                  </mat-option>
+
+                }
+
+              </mat-select>
+
+            </mat-form-field>
+
+          </div>
+
+          <mat-paginator
+            [length]="meta?.totalItems ?? 0"
+            [pageSize]="pageSize"
+            [hidePageSize]="true"
+            [showFirstLastButtons]="true"
+            (page)="onPaginatorPage($event)"
+          >
+          </mat-paginator>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ============================================================= -->
+<!-- ACTION MENU -->
+<!-- ============================================================= -->
+
+<mat-menu #actionsMenu="matMenu">
+
+  <ng-template
+    matMenuContent
+    let-row="row"
+  >
+
+    <button
+      mat-menu-item
+      (click)="onView(row)"
+    >
+      <mat-icon>
+        visibility
+      </mat-icon>
+
+      <span>
+        View
+      </span>
+    </button>
+
+    @if (canUpdateQuestion) {
+
+      <button
+        mat-menu-item
+        (click)="onEdit(row)"
+      >
+        <mat-icon>
+          edit
+        </mat-icon>
+
+        <span>
+          Edit
+        </span>
+      </button>
+
+    }
+
+    @if (canDeleteQuestion) {
+
+      <button
+        mat-menu-item
+        class="text-danger"
+        (click)="
+          onDeleteQuestion(row)
+        "
+      >
+        <mat-icon class="text-danger">
+          delete_outline
+        </mat-icon>
+
+        <span>
+          Delete
+        </span>
+      </button>
+
+    }
+
+  </ng-template>
+
+</mat-menu>
+
+
+<!-- ============================================================= -->
+<!-- CREATE QUESTION MODAL -->
+<!-- ============================================================= -->
+
+<ng-template
+  #createQuestionModal
+  let-modal
+>
+
+  <div class="modal-header">
+
+    <div>
+
+      <h5 class="modal-title mb-1">
+        Create Question
+      </h5>
+
+      <div class="text-muted small">
+        Build the question and configure
+        how its answer is evaluated.
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.dismiss()"
+      [disabled]="createSubmitting"
+    >
+    </button>
+
+  </div>
+
+  <form
+    class="question-modal-form"
+    [formGroup]="createForm"
+    (ngSubmit)="submitCreate(modal)"
+  >
+
+    <div class="modal-body question-modal-body">
+
+      @if (createFormError) {
+
+        <div class="alert alert-danger">
+          {{ createFormError }}
+        </div>
+
+      }
+
+
+      <!-- ======================================================= -->
+      <!-- 1. TYPE -->
+      <!-- ======================================================= -->
+
+      <div class="mb-4">
+
+        <div class="mb-3">
+
+          <div class="fw-semibold">
+            1. Question type
+          </div>
+
+          <small class="text-muted">
+            Choose how the learner will
+            answer this question.
+          </small>
+
+        </div>
+
+        <div class="row g-3">
+
+          @for (
+            type of questionTypes;
+            track type.value
+          ) {
+
+            <div class="col-lg-3 col-md-6">
+
+              <button
+                type="button"
+                class="card
+                       h-100 w-100
+                       text-start
+                       border
+                       shadow-none"
+                [class.border-primary]="
+                  createType === type.value
+                "
+                [class.bg-primary-subtle]="
+                  createType === type.value
+                "
+                (click)="
+                  selectCreateType(
+                    type.value
+                  )
+                "
+              >
+
+                <div class="card-body">
+
+                  <mat-icon
+                    class="mb-2"
+                    [class.text-primary]="
+                      createType === type.value
+                    "
+                  >
+                    {{ type.icon }}
+                  </mat-icon>
+
+                  <div class="fw-semibold">
+                    {{ type.label }}
+                  </div>
+
+                  <p
+                    class="small
+                           text-muted
+                           mb-0 mt-1"
+                  >
+                    {{ type.description }}
+                  </p>
+
+                </div>
+
+              </button>
+
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <hr class="my-4">
+
+
+      <!-- ======================================================= -->
+      <!-- 2. QUESTION -->
+      <!-- ======================================================= -->
+
+      <div class="mb-4">
+
+        <div class="mb-3">
+
+          <div class="fw-semibold">
+            2. Question
+          </div>
+
+          <small class="text-muted">
+            Enter the question shown to
+            the learner.
+          </small>
+
+        </div>
+
+        <div class="row g-3">
+
+          <div class="col-md-8">
+
+            <mat-form-field
+              appearance="outline"
+              class="w-100"
+            >
+
+              <mat-label>
+                Category
+              </mat-label>
+
+              <mat-select
+                formControlName="categoryUuid"
+              >
+
+                @for (
+                  category of categories;
+                  track category.uuid
+                ) {
+
+                  <mat-option
+                    [value]="category.uuid"
+                  >
+                    {{ category.name }}
+                  </mat-option>
+
+                }
+
+              </mat-select>
+
+            </mat-form-field>
+
+          </div>
+
+          <div class="col-md-4">
+
+            <mat-form-field
+              appearance="outline"
+              class="w-100"
+            >
+
+              <mat-label>
+                Difficulty
+              </mat-label>
+
+              <mat-select
+                formControlName="difficultyLevel"
+              >
+
+                @for (
+                  level of difficulties;
+                  track level.value
+                ) {
+
+                  <mat-option
+                    [value]="level.value"
+                  >
+                    {{ level.label }}
+                  </mat-option>
+
+                }
+
+              </mat-select>
+
+            </mat-form-field>
+
+          </div>
+
+        </div>
+
+        <div class="mb-3">
+
+          <label class="form-label fw-medium">
+            Question text
+            <span class="text-danger">*</span>
+          </label>
+
+          <textarea
+            class="form-control"
+            rows="5"
+            formControlName="questionText"
+            placeholder="Enter your question..."
+          >
+          </textarea>
+
+        </div>
+
+        <div>
+
+          <label class="form-label">
+            Question image
+            <span class="text-muted">
+              (optional)
+            </span>
+          </label>
+
+          <input
+            type="file"
+            class="form-control"
+            accept="image/*"
+            (change)="
+              onCreateQuestionImage(
+                $event
+              )
+            "
+          />
+
+          @if (
+            createQuestionImagePreview
+          ) {
+
+            <div class="mt-3">
+
+              <img
+                [src]="
+                  createQuestionImagePreview
+                "
+                class="rounded border p-1"
+                style="
+                  max-width:350px;
+                  max-height:220px;
+                  object-fit:contain;
+                "
+                alt="Question preview"
+              />
+
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <hr class="my-4">
+
+
+      <!-- ======================================================= -->
+      <!-- 3A. MCQ -->
+      <!-- ======================================================= -->
+
+      @if (createType === 'MCQ') {
+
+        <div class="mb-4">
+
+          <div
+            class="d-flex
+                   justify-content-between
+                   align-items-start
+                   gap-3 mb-3"
+          >
+
+            <div>
+
+              <div class="fw-semibold">
+                3. Answer choices
+              </div>
+
+              <small class="text-muted">
+                Add at least two choices and
+                select the correct answer(s).
+              </small>
+
+            </div>
+
+            <button
+              type="button"
+              class="btn
+                     btn-outline-primary
+                     btn-sm
+                     d-inline-flex
+                     align-items-center gap-1"
+              (click)="addCreateOption()"
+            >
+              <mat-icon>
+                add
+              </mat-icon>
+
+              Add option
+            </button>
+
+          </div>
+
+          <div formArrayName="options">
+
+            @for (
+              option of createOptions.controls;
+              track $index
+            ) {
+
+              <div
+                class="card mb-3"
+                [formGroupName]="$index"
+              >
+
+                <div class="card-body">
+
+                  <div
+                    class="d-flex
+                           gap-3
+                           align-items-start"
+                  >
+
+                    <!-- Correct selector -->
+
+                    <button
+                      type="button"
+                      class="btn
+                             rounded-circle
+                             flex-shrink-0
+                             d-inline-flex
+                             align-items-center
+                             justify-content-center"
+                      style="
+                        width:42px;
+                        height:42px;
+                      "
+                      [class.btn-success]="
+                        option.get('correct')?.value
+                      "
+                      [class.btn-outline-secondary]="
+                        !option.get('correct')?.value
+                      "
+                      (click)="
+                        toggleOptionCorrect(
+                          createForm,
+                          $index
+                        )
+                      "
+                      [matTooltip]="
+                        option.get('correct')?.value
+                          ? 'Correct answer'
+                          : 'Mark as correct'
+                      "
+                    >
+
+                      <mat-icon>
+                        {{
+                          option.get('correct')?.value
+                            ? 'check'
+                            : 'radio_button_unchecked'
+                        }}
+                      </mat-icon>
+
+                    </button>
+
+                    <!-- Option content -->
+
+                    <div class="flex-grow-1">
+
+                      <div
+                        class="d-flex
+                               justify-content-between
+                               align-items-center
+                               mb-2"
+                      >
+
+                        <label
+                          class="form-label
+                                 fw-medium mb-0"
+                        >
+                          Option
+                          {{ $index + 1 }}
+                        </label>
+
+                        @if (
+                          createOptions.length > 2
+                        ) {
+
+                          <button
+                            type="button"
+                            mat-icon-button
+                            class="text-danger"
+                            (click)="
+                              removeCreateOption(
+                                $index
+                              )
+                            "
+                          >
+                            <mat-icon>
+                              delete_outline
+                            </mat-icon>
+                          </button>
+
+                        }
+
+                      </div>
+
+                      <textarea
+                        class="form-control"
+                        rows="2"
+                        formControlName="optionText"
+                        placeholder="Enter answer option..."
+                      >
+                      </textarea>
+
+                      <div class="mt-2">
+
+                        <label
+                          class="form-label
+                                 small text-muted"
+                        >
+                          Option image
+                          (optional)
+                        </label>
+
+                        <input
+                          type="file"
+                          class="form-control
+                                 form-control-sm"
+                          accept="image/*"
+                          (change)="
+                            onCreateOptionImage(
+                              $event,
+                              $index
+                            )
+                          "
+                        />
+
+                      </div>
+
+                      @if (
+                        getCreateOptionPreview(
+                          $index
+                        );
+                        as preview
+                      ) {
+
+                        <img
+                          [src]="preview"
+                          class="rounded border
+                                 mt-2 p-1"
+                          style="
+                            max-width:180px;
+                            max-height:120px;
+                            object-fit:contain;
+                          "
+                          alt=""
+                        />
+
+                      }
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            }
+
+          </div>
+
+          <div
+            class="alert
+                   alert-light
+                   border
+                   small mb-0"
+          >
+
+            <strong>
+              {{
+                correctOptionCount(
+                  createForm
+                )
+              }}
+            </strong>
+            correct option(s) selected.
+
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- ======================================================= -->
+      <!-- 3B. TRUE / FALSE -->
+      <!-- ======================================================= -->
+
+      @if (
+        createType ===
+        'TRUE_OR_FALSE'
+      ) {
+
+        <div class="mb-4">
+
+          <div class="mb-3">
+
+            <div class="fw-semibold">
+              3. Correct answer
+            </div>
+
+            <small class="text-muted">
+              Is the statement true or false?
+            </small>
+
+          </div>
+
+          <div
+            formArrayName="options"
+            class="row g-3"
+          >
+
+            @for (
+              option of createOptions.controls;
+              track $index
+            ) {
+
+              <div
+                class="col-md-6"
+                [formGroupName]="$index"
+              >
+
+                <button
+                  type="button"
+                  class="card w-100
+                         h-100
+                         text-start border"
+                  [class.border-success]="
+                    option.get('correct')?.value
+                  "
+                  [class.bg-success-subtle]="
+                    option.get('correct')?.value
+                  "
+                  (click)="
+                    toggleOptionCorrect(
+                      createForm,
+                      $index
+                    )
+                  "
+                >
+
+                  <div
+                    class="card-body
+                           d-flex
+                           align-items-center
+                           gap-3"
+                  >
+
+                    <div
+                      class="rounded-circle
+                             d-flex
+                             align-items-center
+                             justify-content-center
+                             border"
+                      style="
+                        width:48px;
+                        height:48px;
+                      "
+                    >
+
+                      <mat-icon>
+                        {{
+                          option.get('correct')?.value
+                            ? 'check_circle'
+                            : 'radio_button_unchecked'
+                        }}
+                      </mat-icon>
+
+                    </div>
+
+                    <div>
+
+                      <div
+                        class="fw-semibold
+                               fs-5"
+                      >
+                        {{
+                          option.get(
+                            'optionText'
+                          )?.value
+                        }}
+                      </div>
+
+                      @if (
+                        option.get('correct')?.value
+                      ) {
+
+                        <small
+                          class="text-success"
+                        >
+                          Correct answer
+                        </small>
+
+                      }
+
+                    </div>
+
+                  </div>
+
+                </button>
+
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- ======================================================= -->
+      <!-- 3C. WRITTEN ANSWER -->
+      <!-- ======================================================= -->
+
+      @if (
+        isWrittenType(
+          createType
+        )
+      ) {
+
+        <div class="mb-4">
+
+          <div class="mb-3">
+
+            <div class="fw-semibold">
+              3. Written answer grading
+            </div>
+
+            <small class="text-muted">
+              Define the expected response
+              and how it will be scored.
+            </small>
+
+          </div>
+
+          <div class="mb-3">
+
+            <label class="form-label">
+              Reference answer
+              <span class="text-danger">*</span>
+            </label>
+
+            <textarea
+              rows="6"
+              class="form-control"
+              formControlName="referenceAnswer"
+              placeholder="Enter an ideal answer..."
+            >
+            </textarea>
+
+          </div>
+
+          <div class="row g-3">
+
+            <div class="col-lg-5">
+
+              <mat-form-field
+                appearance="outline"
+                class="w-100"
+              >
+
+                <mat-label>
+                  Grading strategy
+                </mat-label>
+
+                <mat-select
+                  formControlName="gradingStrategy"
+                >
+
+                  @for (
+                    strategy of gradingStrategies;
+                    track strategy.value
+                  ) {
+
+                    <mat-option
+                      [value]="strategy.value"
+                    >
+                      {{ strategy.label }}
+                    </mat-option>
+
+                  }
+
+                </mat-select>
+
+              </mat-form-field>
+
+            </div>
+
+            <div class="col-lg-3">
+
+              <mat-form-field
+                appearance="outline"
+                class="w-100"
+              >
+
+                <mat-label>
+                  Maximum score
+                </mat-label>
+
+                <input
+                  matInput
+                  type="number"
+                  min="0"
+                  step="0.5"
+                  formControlName="maxScore"
+                />
+
+              </mat-form-field>
+
+            </div>
+
+            <div class="col-lg-4">
+
+              <mat-form-field
+                appearance="outline"
+                class="w-100"
+              >
+
+                <mat-label>
+                  Pass threshold
+                </mat-label>
+
+                <input
+                  matInput
+                  type="number"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  formControlName="minimumScoreThreshold"
+                />
+
+                <mat-hint>
+                  0 to 1
+                </mat-hint>
+
+              </mat-form-field>
+
+            </div>
+
+          </div>
+
+          <!-- Strategy explanation -->
+
+          <div
+            class="alert
+                   alert-info
+                   d-flex gap-2
+                   align-items-start"
+          >
+
+            <mat-icon>
+              info
+            </mat-icon>
+
+            <div class="small">
+
+              @switch (
+                createGradingStrategy
+              ) {
+
+                @case ('EXACT_MATCH') {
+                  The learner's response is
+                  compared directly with the
+                  reference answer.
+                }
+
+                @case ('KEYWORD_MATCH') {
+                  The grading engine evaluates
+                  whether expected concepts occur
+                  in the learner's response.
+                }
+
+                @case ('RUBRIC') {
+                  The response is evaluated
+                  against the grading criteria
+                  configured below.
+                }
+
+                @case ('SEMANTIC_SIMILARITY') {
+                  The semantic meaning of the
+                  response is compared with the
+                  reference answer.
+                }
+
+                @case ('AI') {
+                  The configured AI grader
+                  evaluates the response using
+                  the reference answer and rubric.
+                }
+
+              }
+
+            </div>
+
+          </div>
+
+          <!-- RUBRIC -->
+
+          @if (
+            createGradingStrategy ===
+            'RUBRIC'
+          ) {
+
+            <div
+              class="border rounded
+                     p-3 mt-3"
+            >
+
+              <div
+                class="d-flex
+                       justify-content-between
+                       align-items-center
+                       mb-3"
+              >
+
+                <div>
+
+                  <div class="fw-semibold">
+                    Grading rubric
+                  </div>
+
+                  <small class="text-muted">
+                    Break the expected answer
+                    into measurable criteria.
+                  </small>
+
+                </div>
+
+                <button
+                  type="button"
+                  class="btn
+                         btn-sm
+                         btn-outline-primary"
+                  (click)="
+                    addCreateCriterion()
+                  "
+                >
+                  + Add criterion
+                </button>
+
+              </div>
+
+              <div
+                formArrayName="gradingCriteria"
+              >
+
+                @for (
+                  criterion of
+                    createCriteria.controls;
+                  track $index
+                ) {
+
+                  <div
+                    class="card mb-3"
+                    [formGroupName]="$index"
+                  >
+
+                    <div class="card-body">
+
+                      <div class="row g-3">
+
+                        <div class="col-md-7">
+
+                          <label class="form-label">
+                            Criterion
+                          </label>
+
+                          <input
+                            type="text"
+                            class="form-control"
+                            formControlName="title"
+                            placeholder="e.g. Defines authorization"
+                          />
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                          <label class="form-label">
+                            Points
+                          </label>
+
+                          <input
+                            type="number"
+                            class="form-control"
+                            min="0"
+                            step="0.5"
+                            formControlName="score"
+                          />
+
+                        </div>
+
+                        <div
+                          class="col-md-2
+                                 d-flex
+                                 align-items-end"
+                        >
+
+                          <button
+                            type="button"
+                            class="btn
+                                   btn-outline-danger
+                                   w-100"
+                            (click)="
+                              removeCreateCriterion(
+                                $index
+                              )
+                            "
+                          >
+                            <mat-icon>
+                              delete_outline
+                            </mat-icon>
+                          </button>
+
+                        </div>
+
+                        <div class="col-12">
+
+                          <label class="form-label">
+                            Description
+                          </label>
+
+                          <textarea
+                            rows="2"
+                            class="form-control"
+                            formControlName="description"
+                            placeholder="Describe what the learner must demonstrate..."
+                          >
+                          </textarea>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                }
+
+              </div>
+
+              @if (
+                createCriteria.length === 0
+              ) {
+
+                <div
+                  class="text-center
+                         text-muted
+                         py-4"
+                >
+                  No grading criteria yet.
+                </div>
+
+              }
+
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+
+      <hr class="my-4">
+
+
+      <!-- ======================================================= -->
+      <!-- EXPLANATION -->
+      <!-- ======================================================= -->
+
+      <div>
+
+        <div class="fw-semibold mb-1">
+          Explanation
+        </div>
+
+        <small
+          class="text-muted
+                 d-block mb-2"
+        >
+          Optional feedback shown to the
+          learner after answering.
+        </small>
+
+        <textarea
+          rows="4"
+          class="form-control"
+          formControlName="explanation"
+          placeholder="Explain the answer..."
+        >
+        </textarea>
+
+      </div>
+
+    </div>
+
+
+    <div class="modal-footer">
+
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="modal.dismiss()"
+        [disabled]="createSubmitting"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary
+               d-inline-flex
+               align-items-center gap-2"
+        [disabled]="createSubmitting"
+      >
+
+        @if (createSubmitting) {
+
+          <span
+            class="spinner-border
+                   spinner-border-sm"
+          >
+          </span>
+
+        } @else {
+
+          <mat-icon>
+            save
+          </mat-icon>
+
+        }
+
+        Create Question
+
+      </button>
+
+    </div>
+
+  </form>
+
+</ng-template>

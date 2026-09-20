@@ -1,0 +1,36 @@
+::ng-deep .question-modal-dialog {
+  height: calc(100vh - 2rem);
+  max-height: calc(100vh - 2rem);
+  margin: 1rem auto;
+
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  .modal-header {
+    flex-shrink: 0;
+  }
+
+  .question-modal-form {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .question-modal-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .modal-footer {
+    flex-shrink: 0;
+  }
+}

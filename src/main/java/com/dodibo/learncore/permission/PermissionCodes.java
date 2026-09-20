@@ -67,6 +67,8 @@ public final class PermissionCodes {
     public static final String TENANT_LESSON_CREATE = "tenant.lesson.create";
     public static final String TENANT_LESSON_UPDATE = "tenant.lesson.update";
     public static final String TENANT_LESSON_DELETE = "tenant.lesson.delete";
+    public static final String TENANT_LESSON_PATH_READ = "tenant.lesson-path.read";
+    public static final String TENANT_LESSON_PROGRESS_UPDATE = "tenant.lesson-progress.update";
 
     //daily quiz permissions
     public static final String TENANT_DAILY_QUIZ_READ = "tenant.daily-quiz.read";
@@ -134,6 +136,8 @@ public final class PermissionCodes {
             TENANT_LESSON_CREATE,
             TENANT_LESSON_UPDATE,
             TENANT_LESSON_DELETE,
+            TENANT_LESSON_PATH_READ,
+            TENANT_LESSON_PROGRESS_UPDATE,
             TENANT_DAILY_QUIZ_READ,
             TENANT_DAILY_QUIZ_CREATE,
             TENANT_DAILY_QUIZ_UPDATE,
@@ -191,6 +195,8 @@ public final class PermissionCodes {
             TENANT_LESSON_CREATE,
             TENANT_LESSON_UPDATE,
             TENANT_LESSON_DELETE,
+            TENANT_LESSON_PATH_READ,
+            TENANT_LESSON_PROGRESS_UPDATE,
             TENANT_DAILY_QUIZ_READ,
             TENANT_DAILY_QUIZ_CREATE,
             TENANT_DAILY_QUIZ_UPDATE,

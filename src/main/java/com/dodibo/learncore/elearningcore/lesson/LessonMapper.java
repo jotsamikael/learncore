@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LessonMapper {
 
-    public LessonResponse toResponse(Lesson lesson) {
+    public LessonResponse toResponse(Lesson lesson, int exerciseCount) {
         if (lesson == null) {
             return null;
         }
@@ -19,13 +19,16 @@ public class LessonMapper {
                 lesson.getUuid(),
                 lesson.getTitle(),
                 lesson.getContent(),
+                lesson.getPosition(),
+                lesson.getCompletionTime(),
                 Boolean.TRUE.equals(lesson.getIsPremium()),
                 category != null ? category.getUuid() : null,
-                category != null ? category.getName() : null
+                category != null ? category.getName() : null,
+                exerciseCount
         );
     }
 
-    public Lesson toEntity(CreateLessonRequest request, Tenant tenant, Category category) {
+    public Lesson toEntity(CreateLessonRequest request, Tenant tenant, Category category, int position) {
         if (request == null) {
             return null;
         }
@@ -34,14 +37,18 @@ public class LessonMapper {
                 .category(category)
                 .title(request.title())
                 .content(request.content())
+                .position(position)
+                .completionTime(request.estimatedReadMinutes())
                 .isPremium(request.isPremium())
                 .build();
     }
 
-    public void applyUpdate(Lesson lesson, UpdateLessonRequest request, Category category) {
+    public void applyUpdate(Lesson lesson, UpdateLessonRequest request, Category category, int position) {
         lesson.setCategory(category);
         lesson.setTitle(request.title());
         lesson.setContent(request.content());
+        lesson.setCompletionTime(request.estimatedReadMinutes());
+        lesson.setPosition(position);
         lesson.setIsPremium(request.isPremium());
     }
 }

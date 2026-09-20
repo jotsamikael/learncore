@@ -1,14 +1,12 @@
 package com.dodibo.learncore.elearningcore.lesson.dto;
 
-public record LessonResponse(
+public record LessonPathItemResponse(
         String uuid,
         String title,
-        String content,
         int position,
         int estimatedReadMinutes,
         boolean isPremium,
-        String categoryUuid,
-        String categoryName,
-        int exerciseCount
+        int exerciseCount,
+        LessonPathStatus status
 ) {
 }
