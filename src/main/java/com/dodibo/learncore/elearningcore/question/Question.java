@@ -46,10 +46,10 @@ public class Question extends BaseEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+    /** Optional; lesson links use {@code lesson_question}. Question bank items leave this null. */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lesson_id", nullable = false)
+    @JoinColumn(name = "lesson_id")
     private Lesson lesson;
-
 
     @OneToOne(
             mappedBy = "question",

@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GlobalFormBuilderService {
   constructor(private fb: FormBuilder) {}
-  public Editor = ClassicEditor;
 
   loginForm(): FormGroup {
     return this.fb.group({
@@ -121,7 +119,7 @@ export class GlobalFormBuilderService {
       explanation: [''],
       options: this.fb.array([]),
       referenceAnswer: [''],
-      maxScore: [1, [Validators.min(0)]],
+      maxScore: [1, [Validators.required, Validators.min(0.01)]],
       gradingStrategy: ['KEYWORD_MATCH'],
       minimumScoreThreshold: [0.7, [Validators.min(0), Validators.max(1)]],
       gradingCriteria: this.fb.array([]),

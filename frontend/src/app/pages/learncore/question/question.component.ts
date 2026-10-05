@@ -2,12 +2,22 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+
+import {
+  QuestionEditor,
+  questionExplanationEditorConfig,
+  questionOptionEditorConfig,
+  questionRichTextEditorConfig,
+} from '../../../core/editors/question-rich-text.editor';
 
 import {
   FormArray,
@@ -90,6 +100,8 @@ import { UpdateQuestionOptionForm } from '../../../learncoreservices/models/upda
 import { SharedModule } from '../../../shared/shared.module';
 import { PermissionCodes } from 'src/app/core/constants/permission-codes';
 
+import katex from 'katex';
+
 
 type QuestionType =
   | 'MCQ'
@@ -158,12 +170,20 @@ interface WrittenAnswerPayload {
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    CKEditorModule,
   ],
   templateUrl: './question.component.html',
   styleUrl: './question.component.scss',
 })
 export class QuestionComponent
   implements OnInit, AfterViewInit, OnDestroy {
+
+  readonly QuestionEditor = QuestionEditor;
+  readonly maxMcqOptions = 5;
+  readonly richTextEditorConfig = questionRichTextEditorConfig;
+  readonly optionEditorConfig = questionOptionEditorConfig;
+  readonly explanationEditorConfig =
+    questionExplanationEditorConfig;
 
   pageTitle = 'Questions';
 
@@ -438,7 +458,13 @@ export class QuestionComponent
       PermissionService,
 
     private readonly common:
-      CommonService
+      CommonService,
+
+    private readonly sanitizer:
+      DomSanitizer,
+
+    private readonly cdr:
+      ChangeDetectorRef
   ) {}
 
   /*
@@ -462,6 +488,14 @@ export class QuestionComponent
     this.configureQuestionTypeChanges(
       this.detailForm,
       true
+    );
+
+    this.configureGradingStrategyChanges(
+      this.createForm
+    );
+
+    this.configureGradingStrategyChanges(
+      this.detailForm
     );
 
     this.loadCategories();
@@ -591,6 +625,126 @@ export class QuestionComponent
     )?.value as GradingStrategy;
   }
 
+  allowedGradingStrategies(
+    type?: QuestionType | null
+  ): typeof this.gradingStrategies {
+    return this.isWrittenType(type)
+      ? this.gradingStrategies
+      : [];
+  }
+
+  showsGradingCriteria(
+    strategy?: GradingStrategy | null
+  ): boolean {
+    return (
+      strategy === 'RUBRIC' ||
+      strategy === 'KEYWORD_MATCH'
+    );
+  }
+
+  gradingCriteriaHeading(
+    strategy?: GradingStrategy | null
+  ): string {
+    return strategy === 'KEYWORD_MATCH'
+      ? 'Keyword & scoring criteria'
+      : 'Grading rubric';
+  }
+
+  gradingCriteriaHint(
+    strategy?: GradingStrategy | null
+  ): string {
+    if (strategy === 'KEYWORD_MATCH') {
+      return 'Define concepts to detect in the answer. Criterion scores must sum to the maximum score.';
+    }
+
+    return 'Break the expected answer into measurable criteria. Criterion scores must sum to the maximum score.';
+  }
+
+  getGradingCriteria(
+    form: FormGroup
+  ): FormArray {
+    return form.get(
+      'gradingCriteria'
+    ) as FormArray;
+  }
+
+  getCriterionKeywords(
+    form: FormGroup,
+    criterionIndex: number
+  ): FormArray {
+    return this.getGradingCriteria(form)
+      .at(criterionIndex)
+      .get('keywords') as FormArray;
+  }
+
+  criteriaScoreTotal(
+    form: FormGroup
+  ): number {
+    return this.getGradingCriteria(
+      form
+    ).controls.reduce(
+      (sum, control) =>
+        sum +
+        Number(
+          control.get('score')?.value ??
+            0
+        ),
+      0
+    );
+  }
+
+  addGradingCriterion(
+    form: FormGroup
+  ): void {
+    const criteria =
+      this.getGradingCriteria(form);
+
+    criteria.push(
+      this.formService.createGradingCriterionForm()
+    );
+
+    const strategy = form.get(
+      'gradingStrategy'
+    )?.value as GradingStrategy;
+
+    if (strategy === 'KEYWORD_MATCH') {
+      this.addCriterionKeyword(
+        form,
+        criteria.length - 1
+      );
+    }
+  }
+
+  removeGradingCriterion(
+    form: FormGroup,
+    index: number
+  ): void {
+    this.getGradingCriteria(
+      form
+    ).removeAt(index);
+  }
+
+  addCriterionKeyword(
+    form: FormGroup,
+    criterionIndex: number
+  ): void {
+    this.getCriterionKeywords(
+      form,
+      criterionIndex
+    ).push(new FormControl(''));
+  }
+
+  removeCriterionKeyword(
+    form: FormGroup,
+    criterionIndex: number,
+    keywordIndex: number
+  ): void {
+    this.getCriterionKeywords(
+      form,
+      criterionIndex
+    ).removeAt(keywordIndex);
+  }
+
   /*
    * ==========================================================
    * TYPE HELPERS
@@ -641,7 +795,19 @@ export class QuestionComponent
    * ==========================================================
    */
 
+  canAddCreateOption(): boolean {
+    return this.createOptions.length < this.maxMcqOptions;
+  }
+
+  canAddDetailOption(): boolean {
+    return this.detailOptions.length < this.maxMcqOptions;
+  }
+
   addCreateOption(): void {
+    if (!this.canAddCreateOption()) {
+      return;
+    }
+
     this.createOptions.push(
       this.formService
         .createQuestionOptionForm()
@@ -671,6 +837,10 @@ export class QuestionComponent
 
   addDetailOption(): void {
     if (this.detailReadOnly) {
+      return;
+    }
+
+    if (!this.canAddDetailOption()) {
       return;
     }
 
@@ -892,16 +1062,14 @@ export class QuestionComponent
    */
 
   addCreateCriterion(): void {
-    this.createCriteria.push(
-      this.formService
-        .createGradingCriterionForm()
-    );
+    this.addGradingCriterion(this.createForm);
   }
 
   removeCreateCriterion(
     index: number
   ): void {
-    this.createCriteria.removeAt(
+    this.removeGradingCriterion(
+      this.createForm,
       index
     );
   }
@@ -911,10 +1079,7 @@ export class QuestionComponent
       return;
     }
 
-    this.detailCriteria.push(
-      this.formService
-        .createGradingCriterionForm()
-    );
+    this.addGradingCriterion(this.detailForm);
   }
 
   removeDetailCriterion(
@@ -924,7 +1089,8 @@ export class QuestionComponent
       return;
     }
 
-    this.detailCriteria.removeAt(
+    this.removeGradingCriterion(
+      this.detailForm,
       index
     );
   }
@@ -1190,6 +1356,10 @@ export class QuestionComponent
 
     this.resetDetailOptionState();
 
+    if (!this.questionDetailModalTpl) {
+      return;
+    }
+
     const modal =
       this.modalService.open(
         this.questionDetailModalTpl,
@@ -1200,6 +1370,8 @@ export class QuestionComponent
           modalDialogClass: 'question-modal-dialog',
         }
       );
+
+    this.cdr.detectChanges();
 
     /*
      * Load question first.
@@ -1270,6 +1442,7 @@ export class QuestionComponent
           );
 
           this.setDetailFormMode();
+          this.cdr.detectChanges();
         },
 
         error: err => {
@@ -1278,6 +1451,7 @@ export class QuestionComponent
               err,
               'Failed to load question details.'
             );
+          this.cdr.detectChanges();
         },
       });
 
@@ -1323,7 +1497,17 @@ export class QuestionComponent
       }
     }
 
+    if (
+      !this.detailReadOnly &&
+      this.detailQuestionUuid &&
+      this.isChoiceType(this.detailType) &&
+      this.detailOptions.length === 0
+    ) {
+      this.loadDetailOptions(this.detailQuestionUuid);
+    }
+
     this.setDetailFormMode();
+    this.cdr.detectChanges();
   }
 
   submitDetailUpdate(
@@ -1405,6 +1589,7 @@ export class QuestionComponent
       )
       .subscribe({
         next: () => {
+          this.deletedOptionUuids = [];
           modal.close();
           this.refresh();
         },
@@ -1606,19 +1791,79 @@ export class QuestionComponent
     );
   }
 
-  shortQuestion(
-    text?: string
-  ): string {
-    if (!text) {
-      return '—';
+  questionHtmlPreview(
+    text?: string | null
+  ): SafeHtml {
+    if (!this.hasRichTextContent(text)) {
+      return this.sanitizer.bypassSecurityTrustHtml(
+        '<span class="text-muted">—</span>'
+      );
     }
 
-    return text.length > 100
-      ? `${text.substring(
-          0,
-          100
-        )}…`
-      : text;
+    return this.sanitizer.bypassSecurityTrustHtml(
+      this.typesetMathInQuestionHtml(String(text))
+    );
+  }
+
+  private typesetMathInQuestionHtml(html: string): string {
+    if (
+      !html.includes('math-tex') &&
+      !html.includes('mathtex')
+    ) {
+      return html;
+    }
+
+    const doc = new DOMParser().parseFromString(
+      html,
+      'text/html'
+    );
+
+    doc
+      .querySelectorAll('span.math-tex')
+      .forEach(span => {
+        const raw = span.textContent?.trim() ?? '';
+        if (!raw) {
+          return;
+        }
+
+        const display =
+          raw.startsWith('\\[') && raw.endsWith('\\]');
+        let equation = raw;
+
+        if (
+          (raw.startsWith('\\(') && raw.endsWith('\\)')) ||
+          display
+        ) {
+          equation = raw.slice(2, -2).trim();
+        }
+
+        try {
+          span.innerHTML = katex.renderToString(
+            equation,
+            {
+              displayMode: display,
+              throwOnError: false,
+            }
+          );
+        } catch {
+          /* keep original text */
+        }
+      });
+
+    return doc.body.innerHTML;
+  }
+
+  hasRichTextContent(
+    value: unknown
+  ): boolean {
+    const html = String(value ?? '');
+    const plain = html
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    return plain.length > 0;
   }
 
   /*
@@ -1853,12 +2098,11 @@ export class QuestionComponent
           raw.questionText
         ).trim(),
 
-      explanation:
-        String(
-          raw.explanation ??
-          ''
-        ).trim() ||
-        undefined,
+      explanation: this.hasRichTextContent(
+        raw.explanation
+      )
+        ? String(raw.explanation).trim()
+        : undefined,
 
       writtenAnswerConfig,
     };
@@ -1902,9 +2146,13 @@ export class QuestionComponent
                 criterion.score
               ),
 
-            keywords:
-              criterion.keywords ??
-              [],
+            keywords: (
+              criterion.keywords ?? []
+            )
+              .map(keyword =>
+                String(keyword ?? '').trim()
+              )
+              .filter(Boolean),
           })
         );
 
@@ -2190,6 +2438,22 @@ export class QuestionComponent
           1,
       });
 
+      const keywordsArray = group.get(
+        'keywords'
+      ) as FormArray;
+
+      keywordsArray.clear();
+
+      for (const keyword of criterion.keywords ?? []) {
+        const trimmed = String(keyword ?? '').trim();
+
+        if (trimmed) {
+          keywordsArray.push(
+            new FormControl(trimmed)
+          );
+        }
+      }
+
       this.detailCriteria.push(
         group
       );
@@ -2358,6 +2622,41 @@ export class QuestionComponent
             return;
           }
 
+          if (type === 'ESSAY') {
+            const strategy = form.get(
+              'gradingStrategy'
+            )?.value as GradingStrategy;
+
+            if (
+              strategy !== 'RUBRIC' &&
+              strategy !== 'AI'
+            ) {
+              form
+                .get('gradingStrategy')
+                ?.setValue('RUBRIC', {
+                  emitEvent: false,
+                });
+            }
+          }
+
+          if (type === 'STRUCTURAL') {
+            const strategy = form.get(
+              'gradingStrategy'
+            )?.value as GradingStrategy;
+
+            if (
+              strategy !== 'EXACT_MATCH' &&
+              strategy !== 'KEYWORD_MATCH' &&
+              strategy !== 'SEMANTIC_SIMILARITY'
+            ) {
+              form
+                .get('gradingStrategy')
+                ?.setValue('KEYWORD_MATCH', {
+                  emitEvent: false,
+                });
+            }
+          }
+
           /*
            * Written question:
            * no choice options.
@@ -2411,6 +2710,141 @@ export class QuestionComponent
       );
   }
 
+  private configureGradingStrategyChanges(
+    form: FormGroup
+  ): void {
+    form
+      .get('gradingStrategy')
+      ?.valueChanges.pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(
+        (strategy: GradingStrategy) => {
+          if (
+            !this.showsGradingCriteria(
+              strategy
+            )
+          ) {
+            this.clearCriteria(form);
+          }
+        }
+      );
+  }
+
+  private validateGradingCriteria(
+    form: FormGroup,
+    strategy: GradingStrategy
+  ): boolean {
+    if (
+      !this.showsGradingCriteria(
+        strategy
+      )
+    ) {
+      return true;
+    }
+
+    const criteria =
+      this.getGradingCriteria(form);
+
+    if (
+      strategy === 'RUBRIC' &&
+      criteria.length === 0
+    ) {
+      this.setFormError(
+        form,
+        'Add at least one grading criterion for rubric grading.'
+      );
+
+      return false;
+    }
+
+    if (criteria.length === 0) {
+      return true;
+    }
+
+    for (
+      let index = 0;
+      index < criteria.length;
+      index++
+    ) {
+      const criterion =
+        criteria.at(index) as FormGroup;
+
+      const title = String(
+        criterion.get('title')?.value ??
+          ''
+      ).trim();
+
+      const description = String(
+        criterion.get('description')
+          ?.value ?? ''
+      ).trim();
+
+      if (!title || !description) {
+        this.setFormError(
+          form,
+          `Grading criterion ${index + 1} requires a title and description.`
+        );
+
+        return false;
+      }
+
+      const score = Number(
+        criterion.get('score')?.value
+      );
+
+      if (!Number.isFinite(score) || score <= 0) {
+        this.setFormError(
+          form,
+          `Grading criterion ${index + 1} must have a score greater than 0.`
+        );
+
+        return false;
+      }
+
+      if (strategy === 'KEYWORD_MATCH') {
+        const keywords = (
+          criterion.get('keywords') as FormArray
+        )
+          .getRawValue()
+          .map((keyword: string) =>
+            String(keyword ?? '').trim()
+          )
+          .filter(Boolean);
+
+        if (keywords.length === 0) {
+          this.setFormError(
+            form,
+            `Grading criterion ${index + 1} needs at least one keyword for keyword matching.`
+          );
+
+          return false;
+        }
+      }
+    }
+
+    const maxScore = Number(
+      form.get('maxScore')?.value
+    );
+
+    const total =
+      this.criteriaScoreTotal(form);
+
+    if (
+      Math.abs(total - maxScore) >
+      0.01
+    ) {
+      this.setFormError(
+        form,
+        `Grading criteria scores must add up to the maximum score (${maxScore}). Current total: ${total}.`
+      );
+
+      return false;
+    }
+
+    return true;
+  }
+
   /*
    * ==========================================================
    * VALIDATION
@@ -2427,6 +2861,19 @@ export class QuestionComponent
       this.setFormError(
         form,
         'Please complete all required fields.'
+      );
+
+      return false;
+    }
+
+    if (
+      !this.hasRichTextContent(
+        form.get('questionText')?.value
+      )
+    ) {
+      this.setFormError(
+        form,
+        'Question text is required.'
       );
 
       return false;
@@ -2459,15 +2906,23 @@ export class QuestionComponent
         return false;
       }
 
+      if (options.length > this.maxMcqOptions) {
+        this.setFormError(
+          form,
+          `A choice question cannot have more than ${this.maxMcqOptions} options.`
+        );
+
+        return false;
+      }
+
       const invalidText =
         options.controls.some(
           option =>
-            !String(
+            !this.hasRichTextContent(
               option.get(
                 'optionText'
-              )?.value ??
-              ''
-            ).trim()
+              )?.value
+            )
         );
 
       if (invalidText) {
@@ -2530,27 +2985,80 @@ export class QuestionComponent
         return false;
       }
 
-      const strategy =
-        form.get(
-          'gradingStrategy'
-        )?.value;
+      const maxScore = Number(
+        form.get('maxScore')?.value
+      );
 
       if (
-        strategy ===
-          'RUBRIC' &&
-        (
-          form.get(
-            'gradingCriteria'
-          ) as FormArray
-        ).length === 0
+        !Number.isFinite(maxScore) ||
+        maxScore <= 0
       ) {
         this.setFormError(
           form,
-          'Add at least one grading criterion for rubric grading.'
+          'Maximum score must be greater than 0.'
         );
 
         return false;
       }
+
+      const strategy =
+        form.get(
+          'gradingStrategy'
+        )?.value as GradingStrategy;
+
+      if (
+        !this.validateWrittenGradingStrategy(
+          form,
+          type,
+          strategy
+        )
+      ) {
+        return false;
+      }
+
+      if (
+        !this.validateGradingCriteria(
+          form,
+          strategy
+        )
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private validateWrittenGradingStrategy(
+    form: FormGroup,
+    type: QuestionType,
+    strategy: GradingStrategy
+  ): boolean {
+    if (
+      type === 'ESSAY' &&
+      strategy !== 'RUBRIC' &&
+      strategy !== 'AI'
+    ) {
+      this.setFormError(
+        form,
+        'Essay questions require the Rubric or AI grading strategy.'
+      );
+
+      return false;
+    }
+
+    if (
+      type === 'STRUCTURAL' &&
+      strategy !== 'EXACT_MATCH' &&
+      strategy !== 'KEYWORD_MATCH' &&
+      strategy !== 'SEMANTIC_SIMILARITY'
+    ) {
+      this.setFormError(
+        form,
+        'Structural questions require Exact Match, Keyword Match, or Semantic Similarity.'
+      );
+
+      return false;
     }
 
     return true;

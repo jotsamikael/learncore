@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-// Ck Editer
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {
+  SimpleClassicEditor,
+  simpleClassicEditorConfig,
+} from '../../../core/editors/simple-classic.editor';
 
 @Component({
     selector: 'app-editors',
@@ -17,7 +19,8 @@ export class EditorsComponent implements OnInit {
 
   // bread crumb items
   breadCrumbItems!: Array<{}>;
-  public Editor = ClassicEditor;
+  public Editor = SimpleClassicEditor;
+  public editorConfig = simpleClassicEditorConfig;
 
   constructor() { }
 

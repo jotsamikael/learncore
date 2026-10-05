@@ -451,12 +451,14 @@
 
                     <div>
 
-                      <div class="fw-medium">
-                        {{
-                          shortQuestion(
+                      <div
+                        class="question-table-html fw-medium"
+                        [innerHTML]="
+                          questionHtmlPreview(
                             row.questionText
                           )
-                        }}
+                        "
+                      >
                       </div>
 
                       @if (row.uuid) {
@@ -1071,13 +1073,14 @@
             <span class="text-danger">*</span>
           </label>
 
-          <textarea
-            class="form-control"
-            rows="5"
-            formControlName="questionText"
-            placeholder="Enter your question..."
-          >
-          </textarea>
+          <div class="ck-editor-reverse question-stem-editor">
+            <ckeditor
+              [editor]="QuestionEditor"
+              [config]="richTextEditorConfig"
+              formControlName="questionText"
+            >
+            </ckeditor>
+          </div>
 
         </div>
 
@@ -1154,8 +1157,9 @@
               </div>
 
               <small class="text-muted">
-                Add at least two choices and
-                select the correct answer(s).
+                Add at least two choices (max
+                {{ maxMcqOptions }}) and select
+                the correct answer(s).
               </small>
 
             </div>
@@ -1168,6 +1172,7 @@
                      d-inline-flex
                      align-items-center gap-1"
               (click)="addCreateOption()"
+              [disabled]="!canAddCreateOption()"
             >
               <mat-icon>
                 add
@@ -1283,13 +1288,14 @@
 
                       </div>
 
-                      <textarea
-                        class="form-control"
-                        rows="2"
-                        formControlName="optionText"
-                        placeholder="Enter answer option..."
-                      >
-                      </textarea>
+                      <div class="ck-editor-reverse question-option-editor">
+                        <ckeditor
+                          [editor]="QuestionEditor"
+                          [config]="optionEditorConfig"
+                          formControlName="optionText"
+                        >
+                        </ckeditor>
+                      </div>
 
                       <div class="mt-2">
 
@@ -1462,13 +1468,16 @@
 
                       <div
                         class="fw-semibold
-                               fs-5"
+                               fs-5
+                               question-table-html"
+                        [innerHTML]="
+                          questionHtmlPreview(
+                            option.get(
+                              'optionText'
+                            )?.value
+                          )
+                        "
                       >
-                        {{
-                          option.get(
-                            'optionText'
-                          )?.value
-                        }}
                       </div>
 
                       @if (
@@ -1560,7 +1569,7 @@
                 >
 
                   @for (
-                    strategy of gradingStrategies;
+                    strategy of allowedGradingStrategies(createType);
                     track strategy.value
                   ) {
 
@@ -1573,6 +1582,14 @@
                   }
 
                 </mat-select>
+
+                <mat-hint>
+                  @if (createType === 'ESSAY') {
+                    Essay: Rubric or AI recommended.
+                  } @else if (createType === 'STRUCTURAL') {
+                    Structural: Exact / Keyword / Semantic similarity.
+                  }
+                </mat-hint>
 
               </mat-form-field>
 
@@ -1686,169 +1703,15 @@
 
           </div>
 
-          <!-- RUBRIC -->
-
-          @if (
-            createGradingStrategy ===
-            'RUBRIC'
-          ) {
-
-            <div
-              class="border rounded
-                     p-3 mt-3"
-            >
-
-              <div
-                class="d-flex
-                       justify-content-between
-                       align-items-center
-                       mb-3"
-              >
-
-                <div>
-
-                  <div class="fw-semibold">
-                    Grading rubric
-                  </div>
-
-                  <small class="text-muted">
-                    Break the expected answer
-                    into measurable criteria.
-                  </small>
-
-                </div>
-
-                <button
-                  type="button"
-                  class="btn
-                         btn-sm
-                         btn-outline-primary"
-                  (click)="
-                    addCreateCriterion()
-                  "
-                >
-                  + Add criterion
-                </button>
-
-              </div>
-
-              <div
-                formArrayName="gradingCriteria"
-              >
-
-                @for (
-                  criterion of
-                    createCriteria.controls;
-                  track $index
-                ) {
-
-                  <div
-                    class="card mb-3"
-                    [formGroupName]="$index"
-                  >
-
-                    <div class="card-body">
-
-                      <div class="row g-3">
-
-                        <div class="col-md-7">
-
-                          <label class="form-label">
-                            Criterion
-                          </label>
-
-                          <input
-                            type="text"
-                            class="form-control"
-                            formControlName="title"
-                            placeholder="e.g. Defines authorization"
-                          />
-
-                        </div>
-
-                        <div class="col-md-3">
-
-                          <label class="form-label">
-                            Points
-                          </label>
-
-                          <input
-                            type="number"
-                            class="form-control"
-                            min="0"
-                            step="0.5"
-                            formControlName="score"
-                          />
-
-                        </div>
-
-                        <div
-                          class="col-md-2
-                                 d-flex
-                                 align-items-end"
-                        >
-
-                          <button
-                            type="button"
-                            class="btn
-                                   btn-outline-danger
-                                   w-100"
-                            (click)="
-                              removeCreateCriterion(
-                                $index
-                              )
-                            "
-                          >
-                            <mat-icon>
-                              delete_outline
-                            </mat-icon>
-                          </button>
-
-                        </div>
-
-                        <div class="col-12">
-
-                          <label class="form-label">
-                            Description
-                          </label>
-
-                          <textarea
-                            rows="2"
-                            class="form-control"
-                            formControlName="description"
-                            placeholder="Describe what the learner must demonstrate..."
-                          >
-                          </textarea>
-
-                        </div>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                }
-
-              </div>
-
-              @if (
-                createCriteria.length === 0
-              ) {
-
-                <div
-                  class="text-center
-                         text-muted
-                         py-4"
-                >
-                  No grading criteria yet.
-                </div>
-
-              }
-
-            </div>
-
-          }
+          <ng-container
+            [ngTemplateOutlet]="gradingCriteriaPanel"
+            [ngTemplateOutletContext]="{
+              form: createForm,
+              readOnly: false,
+              strategy: createGradingStrategy
+            }"
+          >
+          </ng-container>
 
         </div>
 
@@ -1876,13 +1739,14 @@
           learner after answering.
         </small>
 
-        <textarea
-          rows="4"
-          class="form-control"
-          formControlName="explanation"
-          placeholder="Explain the answer..."
-        >
-        </textarea>
+        <div class="ck-editor-reverse question-explanation-editor">
+          <ckeditor
+            [editor]="QuestionEditor"
+            [config]="explanationEditorConfig"
+            formControlName="explanation"
+          >
+          </ckeditor>
+        </div>
 
       </div>
 
@@ -1931,5 +1795,815 @@
     </div>
 
   </form>
+
+</ng-template>
+
+
+<!-- ============================================================= -->
+<!-- VIEW / EDIT QUESTION MODAL -->
+<!-- ============================================================= -->
+
+<ng-template
+  #questionDetailModal
+  let-modal
+>
+
+  <div class="modal-header">
+
+    <div>
+
+      <h5 class="modal-title mb-1">
+        @if (detailReadOnly) {
+          View Question
+        } @else {
+          Edit Question
+        }
+      </h5>
+
+      <div class="text-muted small">
+        @if (detailReadOnly) {
+          Review question content and grading setup.
+        } @else {
+          Update the question and save your changes.
+        }
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.dismiss()"
+      [disabled]="detailSaving"
+    >
+    </button>
+
+  </div>
+
+  <form
+    class="question-modal-form"
+    [formGroup]="detailForm"
+    (ngSubmit)="submitDetailUpdate(modal)"
+  >
+
+    <div class="modal-body question-modal-body">
+
+      @if (detailLoading) {
+
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="text-muted mt-3 mb-0">Loading question…</p>
+        </div>
+
+      } @else {
+
+        @if (detailError) {
+
+          <div class="alert alert-danger">
+            {{ detailError }}
+          </div>
+
+        }
+
+        <!-- 1. Type -->
+        <div class="mb-4">
+
+          <div class="mb-3">
+            <div class="fw-semibold">1. Question type</div>
+            <small class="text-muted">
+              @if (detailReadOnly) {
+                Current question format.
+              } @else {
+                Choose how the learner will answer this question.
+              }
+            </small>
+          </div>
+
+          @if (detailReadOnly) {
+
+            @for (type of questionTypes; track type.value) {
+              @if (detailType === type.value) {
+                <div class="d-inline-flex align-items-center gap-2 border rounded px-3 py-2">
+                  <mat-icon class="text-primary">{{ type.icon }}</mat-icon>
+                  <span class="fw-semibold">{{ type.label }}</span>
+                </div>
+              }
+            }
+
+          } @else {
+
+            <div class="row g-3">
+              @for (type of questionTypes; track type.value) {
+                <div class="col-lg-3 col-md-6">
+                  <button
+                    type="button"
+                    class="card h-100 w-100 text-start border shadow-none"
+                    [class.border-primary]="detailType === type.value"
+                    [class.bg-primary-subtle]="detailType === type.value"
+                    (click)="selectDetailType(type.value)"
+                  >
+                    <div class="card-body">
+                      <mat-icon
+                        class="mb-2"
+                        [class.text-primary]="detailType === type.value"
+                      >
+                        {{ type.icon }}
+                      </mat-icon>
+                      <div class="fw-semibold">{{ type.label }}</div>
+                      <p class="small text-muted mb-0 mt-1">{{ type.description }}</p>
+                    </div>
+                  </button>
+                </div>
+              }
+            </div>
+
+          }
+
+        </div>
+
+        <hr class="my-4">
+
+        <!-- 2. Question -->
+        <div class="mb-4">
+
+          <div class="mb-3">
+            <div class="fw-semibold">2. Question</div>
+          </div>
+
+          <div class="row g-3">
+
+            <div class="col-md-8">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="categoryUuid">
+                  @for (category of categories; track category.uuid) {
+                    <mat-option [value]="category.uuid">
+                      {{ category.name }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Difficulty</mat-label>
+                <mat-select formControlName="difficultyLevel">
+                  @for (level of difficulties; track level.value) {
+                    <mat-option [value]="level.value">
+                      {{ level.label }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-medium">
+              Question text
+              <span class="text-danger">*</span>
+            </label>
+
+            @if (detailReadOnly) {
+              <div
+                class="border rounded p-3 bg-light question-table-html"
+                [innerHTML]="questionHtmlPreview(detailForm.get('questionText')?.value)"
+              >
+              </div>
+            } @else {
+              <div class="ck-editor-reverse question-stem-editor">
+                <ckeditor
+                  [editor]="QuestionEditor"
+                  [config]="richTextEditorConfig"
+                  formControlName="questionText"
+                >
+                </ckeditor>
+              </div>
+            }
+          </div>
+
+          <div>
+            <label class="form-label">
+              Question image
+              <span class="text-muted">(optional)</span>
+            </label>
+
+            @if (!detailReadOnly) {
+              <input
+                type="file"
+                class="form-control"
+                accept="image/*"
+                (change)="onDetailQuestionImage($event)"
+              />
+            }
+
+            @if (detailQuestionImagePreview) {
+              <div class="mt-3">
+                <img
+                  [src]="detailQuestionImagePreview"
+                  class="rounded border p-1"
+                  style="max-width:350px;max-height:220px;object-fit:contain;"
+                  alt="Question preview"
+                />
+              </div>
+            }
+          </div>
+
+        </div>
+
+        <hr class="my-4">
+
+        <!-- 3A. MCQ -->
+        @if (detailType === 'MCQ') {
+
+          <div class="mb-4">
+
+            <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+              <div>
+                <div class="fw-semibold">3. Answer choices</div>
+                <small class="text-muted">
+                  @if (detailReadOnly) {
+                    Configured answer choices.
+                  } @else {
+                    Add choices and mark the correct answer(s).
+                  }
+                </small>
+              </div>
+
+              @if (!detailReadOnly) {
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1"
+                  (click)="addDetailOption()"
+                  [disabled]="!canAddDetailOption()"
+                >
+                  <mat-icon>add</mat-icon>
+                  Add option
+                </button>
+              }
+            </div>
+
+            <div formArrayName="options">
+              @for (option of detailOptions.controls; track $index) {
+                <div class="card mb-3" [formGroupName]="$index">
+                  <div class="card-body">
+                    <div class="d-flex gap-3 align-items-start">
+
+                      <button
+                        type="button"
+                        class="btn rounded-circle flex-shrink-0 d-inline-flex align-items-center justify-content-center"
+                        style="width:42px;height:42px;"
+                        [class.btn-success]="option.get('correct')?.value"
+                        [class.btn-outline-secondary]="!option.get('correct')?.value"
+                        [disabled]="detailReadOnly"
+                        (click)="toggleOptionCorrect(detailForm, $index)"
+                        [matTooltip]="
+                          option.get('correct')?.value
+                            ? 'Correct answer'
+                            : 'Mark as correct'
+                        "
+                      >
+                        <mat-icon>
+                          {{
+                            option.get('correct')?.value
+                              ? 'check'
+                              : 'radio_button_unchecked'
+                          }}
+                        </mat-icon>
+                      </button>
+
+                      <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                          <label class="form-label fw-medium mb-0">
+                            Option {{ $index + 1 }}
+                          </label>
+
+                          @if (!detailReadOnly && detailOptions.length > 2) {
+                            <button
+                              type="button"
+                              mat-icon-button
+                              class="text-danger"
+                              (click)="removeDetailOption($index)"
+                            >
+                              <mat-icon>delete_outline</mat-icon>
+                            </button>
+                          }
+                        </div>
+
+                        @if (detailReadOnly) {
+                          <div
+                            class="border rounded p-2 question-table-html"
+                            [innerHTML]="questionHtmlPreview(option.get('optionText')?.value)"
+                          >
+                          </div>
+                        } @else {
+                          <div class="ck-editor-reverse question-option-editor">
+                            <ckeditor
+                              [editor]="QuestionEditor"
+                              [config]="optionEditorConfig"
+                              formControlName="optionText"
+                            >
+                            </ckeditor>
+                          </div>
+                        }
+
+                        @if (!detailReadOnly) {
+                          <div class="mt-2">
+                            <label class="form-label small text-muted">
+                              Option image (optional)
+                            </label>
+                            <input
+                              type="file"
+                              class="form-control form-control-sm"
+                              accept="image/*"
+                              (change)="onDetailOptionImage($event, $index)"
+                            />
+                          </div>
+                        }
+
+                        @if (getDetailOptionPreview($index); as preview) {
+                          <img
+                            [src]="preview"
+                            class="rounded border mt-2 p-1"
+                            style="max-width:180px;max-height:120px;object-fit:contain;"
+                            alt=""
+                          />
+                        }
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div
+              class="alert alert-light border small mb-0"
+            >
+              <strong>
+                {{ correctOptionCount(detailForm) }}
+              </strong>
+              correct option(s) selected.
+            </div>
+
+          </div>
+
+        }
+
+        <!-- 3B. True / False -->
+        @if (detailType === 'TRUE_OR_FALSE') {
+
+          <div class="mb-4">
+            <div class="mb-3">
+              <div class="fw-semibold">3. Correct answer</div>
+              <small class="text-muted">
+                @if (detailReadOnly) {
+                  The configured true / false answer.
+                } @else {
+                  Select whether the statement is true or false.
+                }
+              </small>
+            </div>
+
+            <div formArrayName="options" class="row g-3">
+              @for (option of detailOptions.controls; track $index) {
+                <div class="col-md-6" [formGroupName]="$index">
+                  <button
+                    type="button"
+                    class="card w-100 h-100 text-start border"
+                    [class.border-success]="option.get('correct')?.value"
+                    [class.bg-success-subtle]="option.get('correct')?.value"
+                    [disabled]="detailReadOnly"
+                    (click)="toggleOptionCorrect(detailForm, $index)"
+                  >
+                    <div class="card-body d-flex align-items-center gap-3">
+                      <mat-icon>
+                        {{
+                          option.get('correct')?.value
+                            ? 'check_circle'
+                            : 'radio_button_unchecked'
+                        }}
+                      </mat-icon>
+                      <div
+                        class="fw-semibold fs-5 question-table-html"
+                        [innerHTML]="questionHtmlPreview(option.get('optionText')?.value)"
+                      >
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+
+        }
+
+        <!-- 3C. Written -->
+        @if (isWrittenType(detailType)) {
+
+          <div class="mb-4">
+
+            <div class="mb-3">
+              <div class="fw-semibold">3. Written answer grading</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">
+                Reference answer
+                <span class="text-danger">*</span>
+              </label>
+              <textarea
+                rows="6"
+                class="form-control"
+                formControlName="referenceAnswer"
+              >
+              </textarea>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-lg-5">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Grading strategy</mat-label>
+                  <mat-select formControlName="gradingStrategy">
+                    @for (strategy of allowedGradingStrategies(detailType); track strategy.value) {
+                      <mat-option [value]="strategy.value">
+                        {{ strategy.label }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                  <mat-hint>
+                    @if (detailType === 'ESSAY') {
+                      Essay: Rubric or AI recommended.
+                    } @else if (detailType === 'STRUCTURAL') {
+                      Structural: Exact / Keyword / Semantic similarity.
+                    }
+                  </mat-hint>
+                </mat-form-field>
+              </div>
+
+              <div class="col-lg-3">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Maximum score</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    min="0"
+                    step="0.5"
+                    formControlName="maxScore"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-lg-4">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Pass threshold</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    formControlName="minimumScoreThreshold"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div
+              class="alert alert-info d-flex gap-2 align-items-start mt-3"
+            >
+              <mat-icon>info</mat-icon>
+              <div class="small">
+                @switch (detailGradingStrategy) {
+                  @case ('EXACT_MATCH') {
+                    The learner's response is compared directly with the reference answer.
+                  }
+                  @case ('KEYWORD_MATCH') {
+                    Configure criteria and keywords below; scores must sum to the maximum score.
+                  }
+                  @case ('RUBRIC') {
+                    The response is evaluated against the grading criteria configured below.
+                  }
+                  @case ('SEMANTIC_SIMILARITY') {
+                    The semantic meaning of the response is compared with the reference answer.
+                  }
+                  @case ('AI') {
+                    The configured AI grader evaluates the response using the reference answer and rubric.
+                  }
+                }
+              </div>
+            </div>
+
+            <ng-container
+              [ngTemplateOutlet]="gradingCriteriaPanel"
+              [ngTemplateOutletContext]="{
+                form: detailForm,
+                readOnly: detailReadOnly,
+                strategy: detailGradingStrategy
+              }"
+            >
+            </ng-container>
+
+          </div>
+
+        }
+
+        <hr class="my-4">
+
+        <div>
+          <div class="fw-semibold mb-1">Explanation</div>
+          <small class="text-muted d-block mb-2">
+            Optional feedback shown to the learner after answering.
+          </small>
+
+          @if (detailReadOnly) {
+            @if (hasRichTextContent(detailForm.get('explanation')?.value)) {
+              <div
+                class="border rounded p-3 bg-light question-table-html"
+                [innerHTML]="questionHtmlPreview(detailForm.get('explanation')?.value)"
+              >
+              </div>
+            } @else {
+              <p class="text-muted mb-0">No explanation provided.</p>
+            }
+          } @else {
+            <div class="ck-editor-reverse question-explanation-editor">
+              <ckeditor
+                [editor]="QuestionEditor"
+                [config]="explanationEditorConfig"
+                formControlName="explanation"
+              >
+              </ckeditor>
+            </div>
+          }
+        </div>
+
+      }
+
+    </div>
+
+    @if (!detailLoading) {
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn btn-light"
+          (click)="modal.dismiss()"
+          [disabled]="detailSaving"
+        >
+          Close
+        </button>
+
+        @if (detailReadOnly && canUpdateQuestion) {
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="toggleDetailEditMode()"
+          >
+            Edit
+          </button>
+        }
+
+        @if (!detailReadOnly && canUpdateQuestion) {
+          <button
+            type="button"
+            class="btn btn-light"
+            (click)="toggleDetailEditMode()"
+            [disabled]="detailSaving"
+          >
+            Cancel editing
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary d-inline-flex align-items-center gap-2"
+            [disabled]="detailSaving"
+          >
+            @if (detailSaving) {
+              <span class="spinner-border spinner-border-sm"></span>
+            } @else {
+              <mat-icon>save</mat-icon>
+            }
+            Save changes
+          </button>
+        }
+
+      </div>
+
+    }
+
+  </form>
+
+</ng-template>
+
+
+<!-- Shared: writtenAnswerConfig.gradingCriteria (RUBRIC + KEYWORD_MATCH) -->
+<ng-template
+  #gradingCriteriaPanel
+  let-form="form"
+  let-readOnly="readOnly"
+  let-strategy="strategy"
+>
+
+  @if (showsGradingCriteria(strategy)) {
+
+    <div
+      class="border rounded p-3 mt-3"
+      [formGroup]="form"
+    >
+
+      <div
+        class="d-flex
+               justify-content-between
+               align-items-start
+               gap-3 mb-3"
+      >
+
+        <div>
+          <div class="fw-semibold">
+            {{ gradingCriteriaHeading(strategy) }}
+          </div>
+          <small class="text-muted">
+            {{ gradingCriteriaHint(strategy) }}
+          </small>
+        </div>
+
+        @if (!readOnly) {
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-primary"
+            (click)="addGradingCriterion(form)"
+          >
+            + Add criterion
+          </button>
+        }
+
+      </div>
+
+      <div formArrayName="gradingCriteria">
+
+        @for (
+          criterion of getGradingCriteria(form).controls;
+          track $index
+        ) {
+
+          <div
+            class="card mb-3"
+            [formGroupName]="$index"
+          >
+
+            <div class="card-body">
+
+              <div class="row g-3">
+
+                <div class="col-md-7">
+                  <label class="form-label">
+                    Title
+                    <span class="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="title"
+                    placeholder="e.g. Mentions correlation vs causality"
+                  />
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label">
+                    Score
+                    <span class="text-danger">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    min="0.01"
+                    step="0.5"
+                    formControlName="score"
+                  />
+                </div>
+
+                @if (!readOnly) {
+                  <div class="col-md-2 d-flex align-items-end">
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger w-100"
+                      (click)="removeGradingCriterion(form, $index)"
+                    >
+                      <mat-icon>delete_outline</mat-icon>
+                    </button>
+                  </div>
+                }
+
+                <div class="col-12">
+                  <label class="form-label">
+                    Description
+                    <span class="text-danger">*</span>
+                  </label>
+                  <textarea
+                    rows="2"
+                    class="form-control"
+                    formControlName="description"
+                    placeholder="What must the learner demonstrate for this criterion?"
+                  >
+                  </textarea>
+                </div>
+
+                @if (strategy === 'KEYWORD_MATCH') {
+
+                  <div class="col-12">
+
+                    <label class="form-label">
+                      Keywords
+                      <span class="text-danger">*</span>
+                    </label>
+
+                    <small class="text-muted d-block mb-2">
+                      Terms or phrases that should appear in the learner's answer.
+                    </small>
+
+                    <div formArrayName="keywords">
+
+                      @for (
+                        keyword of getCriterionKeywords(form, $index).controls;
+                        track $index;
+                        let keywordIndex = $index
+                      ) {
+
+                        <div class="input-group mb-2">
+
+                          <input
+                            type="text"
+                            class="form-control"
+                            [formControlName]="keywordIndex"
+                            placeholder="e.g. causalité"
+                          />
+
+                          @if (!readOnly) {
+                            <button
+                              type="button"
+                              class="btn btn-outline-danger"
+                              (click)="removeCriterionKeyword(form, $index, keywordIndex)"
+                            >
+                              <mat-icon>close</mat-icon>
+                            </button>
+                          }
+
+                        </div>
+
+                      }
+
+                    </div>
+
+                    @if (!readOnly) {
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        (click)="addCriterionKeyword(form, $index)"
+                      >
+                        + Add keyword
+                      </button>
+                    }
+
+                  </div>
+
+                }
+
+              </div>
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+      @if (getGradingCriteria(form).length === 0) {
+
+        <div class="text-center text-muted py-4">
+          No grading criteria yet.
+        </div>
+
+      } @else {
+
+        <div class="alert alert-light border small mb-0">
+          Criteria score total:
+          <strong>{{ criteriaScoreTotal(form) }}</strong>
+          /
+          <strong>{{ form.get('maxScore')?.value }}</strong>
+          (must match maximum score)
+        </div>
+
+      }
+
+    </div>
+
+  }
 
 </ng-template>

@@ -27,7 +27,7 @@ export class StudentsApiService {
     return this.http.patch<void>(`${this.apiConfig.rootUrl}/admin/students/${uuid}/status`, null);
   }
 
-  private toParams(query: FindStudentsQuery): HttpParams {
+  private toParams(query: FindStudentsQuery): HttpParams { 
     let params = new HttpParams();
     const entries: [keyof FindStudentsQuery, string | number | undefined][] = [
       ['page', query.page],
