@@ -780,7 +780,7 @@ export class CategoryComponent
     this.categoriesApi
       .deleteCategory(row.uuid)
       .subscribe({
-        next: () => {
+      next: () => {
           this.selection.deselect(row);
 
           this.loadParentCategories();
@@ -788,7 +788,7 @@ export class CategoryComponent
           this.refresh();
         },
 
-        error: (err) => {
+      error: (err) => {
           this.common.showErrorAlert(
             'Error',
             getApiErrorMessage(

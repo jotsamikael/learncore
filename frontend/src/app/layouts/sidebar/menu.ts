@@ -1,3 +1,4 @@
+import { PermissionCodes } from 'src/app/core/constants/permission-codes';
 import { MenuItem } from './menu.model';
 
 export const MENU: MenuItem[] = [
@@ -53,6 +54,14 @@ export const MENU: MenuItem[] = [
       }
     
     ]
+  },
+  {
+    id: 108,
+    label: 'Lessons',
+    icon: 'ri-book-open-line',
+    link: '/learncore/lessons',
+    permissions: [PermissionCodes.TENANT_LESSON_READ],
+    scope: 'tenant',
   },
   { id: 20, label: 'Learning', isTitle: true, scope: 'tenant' },
   {

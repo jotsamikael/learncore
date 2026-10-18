@@ -75,6 +75,9 @@ public class WeeklyQuizQuestionServiceImpl implements WeeklyQuizQuestionService 
                 weeklyQuizQuestionRepository.incrementOrdersFrom(weeklyQuizId, newOrder);
             }
         } else if (!oldOrder.equals(newOrder)) {
+            assignment.setDisplayOrder(-Math.toIntExact(id));
+            weeklyQuizQuestionRepository.saveAndFlush(assignment);
+
             if (newOrder < oldOrder) {
                 weeklyQuizQuestionRepository.shiftOrdersUp(weeklyQuizId, newOrder, oldOrder, id);
             } else {

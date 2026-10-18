@@ -2,7 +2,6 @@ package com.dodibo.learncore.elearningcore.question;
 
 import com.dodibo.learncore.common.BaseEntity;
 import com.dodibo.learncore.elearningcore.category.Category;
-import com.dodibo.learncore.elearningcore.lesson.Lesson;
 import com.dodibo.learncore.elearningcore.question.enums.DifficultyLevel;
 import com.dodibo.learncore.elearningcore.question.enums.QuestionType;
 import jakarta.persistence.*;
@@ -45,11 +44,6 @@ public class Question extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-
-    /** Optional; lesson links use {@code lesson_question}. Question bank items leave this null. */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lesson_id")
-    private Lesson lesson;
 
     @OneToOne(
             mappedBy = "question",

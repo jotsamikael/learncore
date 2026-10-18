@@ -110,6 +110,34 @@ export class GlobalFormBuilderService {
     return this.createLanguageForm();
   }
 
+  createLessonForm(): FormGroup {
+    return this.fb.group({
+      categoryUuid: [null, Validators.required],
+      title: ['', [Validators.required, Validators.minLength(1)]],
+      content: ['', [Validators.required, Validators.minLength(1)]],
+      estimatedReadMinutes: [
+        5,
+        [Validators.required, Validators.min(1), Validators.max(180)],
+      ],
+      position: [null, [Validators.min(1)]],
+      isPremium: [false],
+    });
+  }
+
+  updateLessonForm(): FormGroup {
+    return this.fb.group({
+      categoryUuid: [null, Validators.required],
+      title: ['', [Validators.required, Validators.minLength(1)]],
+      content: ['', [Validators.required, Validators.minLength(1)]],
+      estimatedReadMinutes: [
+        5,
+        [Validators.required, Validators.min(1), Validators.max(180)],
+      ],
+      position: [1, [Validators.required, Validators.min(1)]],
+      isPremium: [false],
+    });
+  }
+
   createQuestionForm(): FormGroup {
     return this.fb.group({
       questionType: ['MCQ', Validators.required],

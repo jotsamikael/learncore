@@ -75,6 +75,9 @@ public class DailyQuizQuestionServiceImpl implements DailyQuizQuestionService {
                 dailyQuizQuestionRepository.incrementOrdersFrom(dailyQuizId, newOrder);
             }
         } else if (!oldOrder.equals(newOrder)) {
+            assignment.setDisplayOrder(-Math.toIntExact(id));
+            dailyQuizQuestionRepository.saveAndFlush(assignment);
+
             if (newOrder < oldOrder) {
                 dailyQuizQuestionRepository.shiftOrdersUp(dailyQuizId, newOrder, oldOrder, id);
             } else {

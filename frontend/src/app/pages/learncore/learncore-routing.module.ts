@@ -14,6 +14,7 @@ import { ImportQuestionComponent } from './import-question/import-question.compo
 import { QuestionReportComponent } from './question-report/question-report.component';
 import { CategoryComponent } from './category/category.component';
 import { LanguagesComponent } from './language/language.component';
+import { LessonComponent } from './lesson/lesson.component';
 const routes: Routes = [
   {
     path: '',
@@ -65,6 +66,15 @@ const routes: Routes = [
         data: {
           title: 'Import Questions',
           permissions: [PermissionCodes.TENANT_QUESTION_CREATE],
+          scope: 'tenant',
+        },
+      },
+      {
+        path: 'lessons',
+        component: LessonComponent,
+        data: {
+          title: 'Lessons',
+          permissions: [PermissionCodes.TENANT_LESSON_READ],
           scope: 'tenant',
         },
       },

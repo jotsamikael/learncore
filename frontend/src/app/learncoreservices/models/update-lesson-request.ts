@@ -4,6 +4,8 @@
 export interface UpdateLessonRequest {
   categoryUuid: string;
   content: string;
+  estimatedReadMinutes: number;
   isPremium?: boolean;
+  position: number;
   title: string;
 }

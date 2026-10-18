@@ -1,10 +1,448 @@
-2026-10-05 05:56:28,818 WARN c.z.h.p.HikariPool$HouseKeeper [HikariPool-1:housekeeper] HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=4h32m6s244ms474µs600ns).
-2026-10-05 06:40:09,683 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-6] A cookie header was received [product_view[is_grid]=2;] that contained an invalid cookie. That cookie will be ignored.
+2026-10-18 16:13:17,073 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 9.1.0.Final
+2026-10-18 16:13:17,746 INFO o.s.b.StartupInfoLogger [main] Starting LearncoreApplication using Java 21.0.6 with PID 16432 (C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore\target\classes started by USER in C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore)
+2026-10-18 16:13:17,760 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-10-18 16:13:17,764 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-10-18 16:13:27,299 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-18 16:13:29,115 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 1706 ms. Found 24 JPA repository interfaces.
+2026-10-18 16:13:34,513 INFO o.s.b.t.TomcatWebServer [main] Tomcat initialized with port 8088 (http)
+2026-10-18 16:13:34,619 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8088"]
+2026-10-18 16:13:34,659 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-10-18 16:13:34,660 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-10-18 16:13:35,151 INFO o.s.b.w.c.s.WebApplicationContextInitializer [main] Root WebApplicationContext: initialization completed in 17022 ms
+2026-10-18 16:13:36,897 INFO o.h.j.i.u.LogHelper [main] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-10-18 16:13:37,465 INFO o.h.Version [main] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-10-18 16:13:40,595 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-10-18 16:13:40,798 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-10-18 16:13:43,671 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3d213a2b
+2026-10-18 16:13:43,683 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-10-18 16:13:44,187 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-10-18 16:13:44,291 INFO o.h.e.j.e.i.JdbcEnvironmentInitiator [main] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/learncore]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.1
+	Default catalog/schema: learncore/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-10-18 16:13:53,852 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-10-18 16:13:57,822 WARN o.h.t.s.i.ExceptionHandlerLoggedImpl [main] GenerationTarget encountered exception accepting command : Error executing DDL "
+    alter table question 
+       add constraint FK1sbknhfhhug49n0elkvgk38vs 
+       foreign key (lesson_id) 
+       references lesson (id)" via JDBC [Cannot add or update a child row: a foreign key constraint fails (`learncore`.`#sql-c2c_8`, CONSTRAINT `FK1sbknhfhhug49n0elkvgk38vs` FOREIGN KEY (`lesson_id`) REFERENCES `lesson` (`id`))]
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
+    alter table question 
+       add constraint FK1sbknhfhhug49n0elkvgk38vs 
+       foreign key (lesson_id) 
+       references lesson (id)" via JDBC [Cannot add or update a child row: a foreign key constraint fails (`learncore`.`#sql-c2c_8`, CONSTRAINT `FK1sbknhfhhug49n0elkvgk38vs` FOREIGN KEY (`lesson_id`) REFERENCES `lesson` (`id`))]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:91)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:566)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:506)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applyForeignKeys(AbstractSchemaMigrator.java:438)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:256)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:96)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:269)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$1(SchemaManagementToolCoordinator.java:101)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1429)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:100)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:35)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:33)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:327)
+	at org.hibernate.internal.SessionFactoryRegistry.instantiateSessionFactory(SessionFactoryRegistry.java:64)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:458)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1452)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:93)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:443)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:436)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:411)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:419)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1862)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1811)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:603)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:196)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:365)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:135)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveConstructorArguments(ConstructorResolver.java:691)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:513)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1360)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1192)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:356)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:135)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1710)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1459)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:602)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:229)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1769)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1658)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:912)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1380)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1219)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:229)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1769)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1658)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:912)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1380)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1219)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:201)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.getOrderedBeansOfType(ServletContextInitializerBeans.java:231)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:185)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:180)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAdaptableBeans(ServletContextInitializerBeans.java:165)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.<init>(ServletContextInitializerBeans.java:97)
+	at org.springframework.boot.web.context.servlet.WebApplicationContextInitializer.initialize(WebApplicationContextInitializer.java:53)
+	at org.springframework.boot.tomcat.servlet.DeferredServletContainerInitializers.onStartup(DeferredServletContainerInitializers.java:55)
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:4420)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1162)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1158)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:81)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:714)
+	at org.apache.catalina.core.StandardHost.startInternal(StandardHost.java:780)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1162)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1158)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:81)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:714)
+	at org.apache.catalina.core.StandardEngine.startInternal(StandardEngine.java:201)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.core.StandardService.startInternal(StandardService.java:410)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.core.StandardServer.startInternal(StandardServer.java:864)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:164)
+	at org.apache.catalina.startup.Tomcat.start(Tomcat.java:435)
+	at org.springframework.boot.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:131)
+	at org.springframework.boot.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:110)
+	at org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:429)
+	at org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:167)
+	at org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:190)
+	at org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:164)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:615)
+	at org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:143)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:756)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:445)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:321)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at com.dodibo.learncore.LearncoreApplication.main(LearncoreApplication.java:14)
+Caused by: java.sql.SQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`learncore`.`#sql-c2c_8`, CONSTRAINT `FK1sbknhfhhug49n0elkvgk38vs` FOREIGN KEY (`lesson_id`) REFERENCES `lesson` (`id`))
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.StatementImpl.executeInternal(StatementImpl.java:839)
+	at com.mysql.cj.jdbc.StatementImpl.execute(StatementImpl.java:687)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:95)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:86)
+	... 122 common frames omitted
+2026-10-18 16:13:57,835 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-18 16:13:58,059 INFO o.s.d.j.r.q.QueryEnhancerFactories [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-10-18 16:14:02,721 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'spaWebFilter' configured for use
+2026-10-18 16:14:02,729 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'jwtFilter' configured for use
+2026-10-18 16:14:04,562 INFO o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer [main] Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-10-18 16:14:04,563 WARN o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-10-18 16:14:10,531 WARN o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-10-18 16:14:12,712 INFO o.s.b.w.a.WelcomePageHandlerMapping [main] Adding welcome page: class path resource [static/index.html]
+2026-10-18 16:14:15,239 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8088"]
+2026-10-18 16:14:15,327 INFO o.s.b.t.TomcatWebServer [main] Tomcat started on port 8088 (http) with context path '/'
+2026-10-18 16:14:15,375 INFO o.s.b.StartupInfoLogger [main] Started LearncoreApplication in 63.186 seconds (process running for 65.638)
+2026-10-18 16:14:16,800 INFO c.d.l.c.DataSeeder [main] Assigned 56 permissions to role SUPER_ADMIN
+2026-10-18 16:14:17,137 INFO c.d.l.c.DataSeeder [main] Assigned 9 permissions to role PLATFORM_MANAGER
+2026-10-18 16:14:17,250 INFO c.d.l.c.DataSeeder [main] Assigned 36 permissions to role TENANT_ADMIN
+2026-10-18 16:14:17,405 INFO c.d.l.c.DataSeeder [main] Assigned 20 permissions to role COURSE_EDITOR
+2026-10-18 16:14:17,468 INFO c.d.l.c.DataSeeder [main] Assigned 6 permissions to role QUESTION_EDITOR
+2026-10-18 16:14:17,514 INFO c.d.l.c.DataSeeder [main] Assigned 9 permissions to role STUDENT
+2026-10-18 16:14:17,817 INFO c.d.l.c.DataSeeder [main] Data seeding complete. Tenant 'objectif600' uuid=tn_f04a09c972de49a989362c3e0972a6e4
+2026-10-18 16:21:29,719 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-4] A cookie header was received [product_view[is_grid]=2;] that contained an invalid cookie. That cookie will be ignored.
  Note: further occurrences of this error will be logged at DEBUG level.
-2026-10-05 06:40:12,893 INFO o.s.a.AbstractOpenApiResource [http-nio-8088-exec-7] Init duration for springdoc-openapi is: 2752 ms
-2026-10-05 07:15:14,215 WARN o.h.v.i.m.a.CascadingMetaDataBuilder [http-nio-8088-exec-2] HV000271: Using `@Valid` on a container (java.util.List) is deprecated. You should apply the annotation on the type argument(s). Affected element: gradingCriteria
-2026-10-05 07:17:18,911 INFO o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
-2026-10-05 07:17:18,944 INFO o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
-2026-10-05 07:17:18,978 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-10-05 07:17:19,007 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
-2026-10-05 07:17:19,017 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-10-18 16:21:29,740 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-4] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-18 16:21:29,742 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-4] Initializing Servlet 'dispatcherServlet'
+2026-10-18 16:21:29,746 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-4] Completed initialization in 4 ms
+2026-10-18 16:21:40,101 INFO o.s.a.AbstractOpenApiResource [http-nio-8088-exec-9] Init duration for springdoc-openapi is: 8902 ms
+2026-10-18 16:28:40,678 INFO o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-18 16:28:41,017 INFO o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-10-18 16:28:41,046 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-18 16:28:41,071 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2026-10-18 16:28:41,104 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-10-18 16:29:54,897 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 9.1.0.Final
+2026-10-18 16:29:55,014 INFO o.s.b.StartupInfoLogger [main] Starting LearncoreApplication using Java 21.0.6 with PID 18424 (C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore\target\classes started by USER in C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore)
+2026-10-18 16:29:55,015 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-10-18 16:29:55,017 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-10-18 16:29:58,662 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-18 16:29:59,227 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 543 ms. Found 24 JPA repository interfaces.
+2026-10-18 16:30:01,910 INFO o.s.b.t.TomcatWebServer [main] Tomcat initialized with port 8088 (http)
+2026-10-18 16:30:01,956 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8088"]
+2026-10-18 16:30:01,973 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-10-18 16:30:01,973 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-10-18 16:30:02,280 INFO o.s.b.w.c.s.WebApplicationContextInitializer [main] Root WebApplicationContext: initialization completed in 7096 ms
+2026-10-18 16:30:03,077 INFO o.h.j.i.u.LogHelper [main] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-10-18 16:30:03,320 INFO o.h.Version [main] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-10-18 16:30:04,840 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-10-18 16:30:04,940 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-10-18 16:30:06,086 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5400db7e
+2026-10-18 16:30:06,102 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-10-18 16:30:06,237 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-10-18 16:30:06,308 INFO o.h.e.j.e.i.JdbcEnvironmentInitiator [main] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/learncore]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.1
+	Default catalog/schema: learncore/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-10-18 16:30:12,944 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-10-18 16:30:17,154 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-18 16:30:17,361 INFO o.s.d.j.r.q.QueryEnhancerFactories [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-10-18 16:30:20,717 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'spaWebFilter' configured for use
+2026-10-18 16:30:20,722 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'jwtFilter' configured for use
+2026-10-18 16:30:21,482 INFO o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer [main] Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-10-18 16:30:21,484 WARN o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-10-18 16:30:25,433 WARN o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-10-18 16:30:26,644 INFO o.s.b.w.a.WelcomePageHandlerMapping [main] Adding welcome page: class path resource [static/index.html]
+2026-10-18 16:30:27,933 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8088"]
+2026-10-18 16:30:27,993 INFO o.s.b.t.TomcatWebServer [main] Tomcat started on port 8088 (http) with context path '/'
+2026-10-18 16:30:28,071 INFO o.s.b.StartupInfoLogger [main] Started LearncoreApplication in 35.499 seconds (process running for 37.553)
+2026-10-18 16:30:28,901 INFO c.d.l.c.DataSeeder [main] Assigned 56 permissions to role SUPER_ADMIN
+2026-10-18 16:30:29,081 INFO c.d.l.c.DataSeeder [main] Assigned 9 permissions to role PLATFORM_MANAGER
+2026-10-18 16:30:29,115 INFO c.d.l.c.DataSeeder [main] Assigned 36 permissions to role TENANT_ADMIN
+2026-10-18 16:30:29,180 INFO c.d.l.c.DataSeeder [main] Assigned 20 permissions to role COURSE_EDITOR
+2026-10-18 16:30:29,223 INFO c.d.l.c.DataSeeder [main] Assigned 6 permissions to role QUESTION_EDITOR
+2026-10-18 16:30:29,270 INFO c.d.l.c.DataSeeder [main] Assigned 9 permissions to role STUDENT
+2026-10-18 16:30:29,353 INFO c.d.l.c.DataSeeder [main] Data seeding complete. Tenant 'objectif600' uuid=tn_f04a09c972de49a989362c3e0972a6e4
+2026-10-18 16:31:56,620 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-4] A cookie header was received [product_view[is_grid]=2;] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+2026-10-18 16:31:56,660 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-4] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-18 16:31:56,662 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-4] Initializing Servlet 'dispatcherServlet'
+2026-10-18 16:31:56,668 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-4] Completed initialization in 6 ms
+2026-10-18 16:32:04,897 INFO o.s.a.AbstractOpenApiResource [http-nio-8088-exec-8] Init duration for springdoc-openapi is: 7021 ms
+2026-10-18 16:36:59,840 WARN o.s.d.w.c.SpringDataJackson3Configuration$PageModule$WarningLoggingModifier [http-nio-8088-exec-7] Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-10-18 16:57:59,134 WARN o.h.e.j.s.SqlExceptionHelper [http-nio-8088-exec-3] HHH000247: ErrorCode: 1062, SQLState: 23000
+2026-10-18 16:57:59,136 WARN o.h.e.j.s.SqlExceptionHelper [http-nio-8088-exec-3] Duplicate entry '7-2' for key 'lesson.UK93gdsr32ij4syebe3o5rnbfh3'
+2026-10-18 17:04:16,869 INFO o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-18 17:04:16,887 INFO o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-10-18 17:04:16,892 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-18 17:04:16,892 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2026-10-18 17:04:16,903 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-10-18 17:04:25,277 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 9.1.0.Final
+2026-10-18 17:04:25,343 INFO o.s.b.StartupInfoLogger [main] Starting LearncoreApplication using Java 21.0.6 with PID 21556 (C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore\target\classes started by USER in C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore)
+2026-10-18 17:04:25,343 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-10-18 17:04:25,344 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-10-18 17:04:27,943 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-18 17:04:28,054 WARN o.s.c.s.AbstractApplicationContext [main] Exception encountered during context initialization - cancelling refresh attempt: java.lang.ClassFormatError: Invalid method Code length 0 in class file com/dodibo/learncore/elearningcore/ai/UserQuestionStatistics
+2026-10-18 17:04:28,068 INFO o.s.b.a.l.ConditionEvaluationReportLogger [main] 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-10-18 17:04:28,112 ERROR o.s.b.SpringApplication [main] Application run failed
+java.lang.ClassFormatError: Invalid method Code length 0 in class file com/dodibo/learncore/elearningcore/ai/UserQuestionStatistics
+	at java.base/java.lang.ClassLoader.defineClass1(Native Method)
+	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1027)
+	at java.base/java.security.SecureClassLoader.defineClass(SecureClassLoader.java:150)
+	at java.base/jdk.internal.loader.BuiltinClassLoader.defineClass(BuiltinClassLoader.java:862)
+	at java.base/jdk.internal.loader.BuiltinClassLoader.findClassOnClassPathOrNull(BuiltinClassLoader.java:760)
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClassOrNull(BuiltinClassLoader.java:681)
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:639)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:534)
+	at java.base/java.lang.Class.forName(Class.java:513)
+	at java.base/sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68)
+	at java.base/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138)
+	at java.base/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base/sun.reflect.generics.repository.ClassRepository.computeSuperInterfaces(ClassRepository.java:117)
+	at java.base/sun.reflect.generics.repository.ClassRepository.getSuperInterfaces(ClassRepository.java:95)
+	at java.base/java.lang.Class.getGenericInterfaces(Class.java:1296)
+	at org.springframework.core.ResolvableType.getInterfaces(ResolvableType.java:544)
+	at org.springframework.core.ResolvableType.as(ResolvableType.java:492)
+	at org.springframework.data.core.TypeDiscoverer.getSuperTypeInformation(TypeDiscoverer.java:266)
+	at org.springframework.data.core.TypeInformation.getRequiredSuperTypeInformation(TypeInformation.java:328)
+	at org.springframework.data.repository.core.support.DefaultRepositoryMetadata.<init>(DefaultRepositoryMetadata.java:55)
+	at org.springframework.data.repository.core.support.AbstractRepositoryMetadata.getMetadata(AbstractRepositoryMetadata.java:79)
+	at org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport.getRepositoryConfigurations(RepositoryConfigurationExtensionSupport.java:93)
+	at org.springframework.data.repository.config.RepositoryConfigurationDelegate.registerRepositoriesIn(RepositoryConfigurationDelegate.java:170)
+	at org.springframework.boot.autoconfigure.data.AbstractRepositoryConfigurationSourceSupport.registerBeanDefinitions(AbstractRepositoryConfigurationSourceSupport.java:67)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.lambda$loadBeanDefinitionsFromImportBeanDefinitionRegistrars$0(ConfigurationClassBeanDefinitionReader.java:422)
+	at java.base/java.util.LinkedHashMap.forEach(LinkedHashMap.java:986)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsFromImportBeanDefinitionRegistrars(ConfigurationClassBeanDefinitionReader.java:421)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForConfigurationClass(ConfigurationClassBeanDefinitionReader.java:152)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitions(ConfigurationClassBeanDefinitionReader.java:124)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:464)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:316)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118)
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:795)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:603)
+	at org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:143)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:756)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:445)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:321)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
+	at com.dodibo.learncore.LearncoreApplication.main(LearncoreApplication.java:14)
+2026-10-18 17:09:06,936 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 9.1.0.Final
+2026-10-18 17:09:07,033 INFO o.s.b.StartupInfoLogger [main] Starting LearncoreApplication using Java 21.0.6 with PID 6840 (C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore\target\classes started by USER in C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore)
+2026-10-18 17:09:07,069 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-10-18 17:09:07,071 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-10-18 17:09:10,204 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-18 17:09:10,762 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 543 ms. Found 24 JPA repository interfaces.
+2026-10-18 17:09:12,595 INFO o.s.b.t.TomcatWebServer [main] Tomcat initialized with port 8088 (http)
+2026-10-18 17:09:12,632 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8088"]
+2026-10-18 17:09:12,639 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-10-18 17:09:12,641 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-10-18 17:09:12,804 INFO o.s.b.w.c.s.WebApplicationContextInitializer [main] Root WebApplicationContext: initialization completed in 5392 ms
+2026-10-18 17:09:13,324 INFO o.h.j.i.u.LogHelper [main] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-10-18 17:09:13,440 INFO o.h.Version [main] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-10-18 17:09:14,378 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-10-18 17:09:14,438 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-10-18 17:09:15,186 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@23cfdfa2
+2026-10-18 17:09:15,189 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-10-18 17:09:15,291 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-10-18 17:09:15,350 INFO o.h.e.j.e.i.JdbcEnvironmentInitiator [main] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/learncore]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.1
+	Default catalog/schema: learncore/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-10-18 17:09:18,660 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-10-18 17:09:19,081 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-18 17:09:19,260 INFO o.s.d.j.r.q.QueryEnhancerFactories [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-10-18 17:09:20,940 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'spaWebFilter' configured for use
+2026-10-18 17:09:20,945 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'jwtFilter' configured for use
+2026-10-18 17:09:21,264 INFO o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer [main] Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-10-18 17:09:21,265 WARN o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-10-18 17:09:24,257 WARN o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-10-18 17:09:26,541 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8088"]
+2026-10-18 17:09:26,612 INFO o.s.b.t.TomcatWebServer [main] Tomcat started on port 8088 (http) with context path '/'
+2026-10-18 17:09:26,627 INFO o.s.b.StartupInfoLogger [main] Started LearncoreApplication in 21.131 seconds (process running for 22.488)
+2026-10-18 17:09:27,379 INFO c.d.l.c.DataSeeder [main] Assigned 56 permissions to role SUPER_ADMIN
+2026-10-18 17:09:27,570 INFO c.d.l.c.DataSeeder [main] Assigned 9 permissions to role PLATFORM_MANAGER
+2026-10-18 17:09:27,602 INFO c.d.l.c.DataSeeder [main] Assigned 36 permissions to role TENANT_ADMIN
+2026-10-18 17:09:27,670 INFO c.d.l.c.DataSeeder [main] Assigned 20 permissions to role COURSE_EDITOR
+2026-10-18 17:09:27,735 INFO c.d.l.c.DataSeeder [main] Assigned 6 permissions to role QUESTION_EDITOR
+2026-10-18 17:09:27,757 INFO c.d.l.c.DataSeeder [main] Assigned 9 permissions to role STUDENT
+2026-10-18 17:09:27,827 INFO c.d.l.c.DataSeeder [main] Data seeding complete. Tenant 'objectif600' uuid=tn_f04a09c972de49a989362c3e0972a6e4
+2026-10-18 17:10:19,742 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-2] A cookie header was received [product_view[is_grid]=2;] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+2026-10-18 17:10:19,751 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-2] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-18 17:10:19,751 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-2] Initializing Servlet 'dispatcherServlet'
+2026-10-18 17:10:19,754 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-2] Completed initialization in 2 ms
+2026-10-18 17:10:51,440 WARN o.h.e.j.s.SqlExceptionHelper [http-nio-8088-exec-6] HHH000247: ErrorCode: 1062, SQLState: 23000
+2026-10-18 17:10:51,441 WARN o.h.e.j.s.SqlExceptionHelper [http-nio-8088-exec-6] Duplicate entry '7-1' for key 'lesson.UK93gdsr32ij4syebe3o5rnbfh3'
+2026-10-18 17:11:14,323 WARN o.h.e.j.s.SqlExceptionHelper [http-nio-8088-exec-7] HHH000247: ErrorCode: 1062, SQLState: 23000
+2026-10-18 17:11:14,323 WARN o.h.e.j.s.SqlExceptionHelper [http-nio-8088-exec-7] Duplicate entry '7-1' for key 'lesson.UK93gdsr32ij4syebe3o5rnbfh3'
+2026-10-18 17:17:39,095 INFO o.s.b.t.GracefulShutdown [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-18 17:17:39,114 INFO o.s.b.t.GracefulShutdown [tomcat-shutdown] Graceful shutdown complete
+2026-10-18 17:17:39,124 INFO o.s.o.j.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-10-18 17:17:39,128 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2026-10-18 17:17:39,134 INFO c.z.h.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2026-10-18 17:17:49,339 INFO o.h.v.i.u.Version [background-preinit] HV000001: Hibernate Validator 9.1.0.Final
+2026-10-18 17:17:49,447 INFO o.s.b.StartupInfoLogger [main] Starting LearncoreApplication using Java 21.0.6 with PID 16980 (C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore\target\classes started by USER in C:\Users\USER\Desktop\PROJECTS\Tage Mage\LearnCore\learncore)
+2026-10-18 17:17:49,449 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-10-18 17:17:49,451 INFO o.s.b.SpringApplication [main] The following 1 profile is active: "dev"
+2026-10-18 17:17:52,079 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-18 17:17:52,390 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 300 ms. Found 24 JPA repository interfaces.
+2026-10-18 17:17:53,840 INFO o.s.b.t.TomcatWebServer [main] Tomcat initialized with port 8088 (http)
+2026-10-18 17:17:53,870 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8088"]
+2026-10-18 17:17:53,876 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-10-18 17:17:53,876 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-10-18 17:17:54,024 INFO o.s.b.w.c.s.WebApplicationContextInitializer [main] Root WebApplicationContext: initialization completed in 4413 ms
+2026-10-18 17:17:54,467 INFO o.h.j.i.u.LogHelper [main] HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-10-18 17:17:54,571 INFO o.h.Version [main] HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-10-18 17:17:55,255 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-10-18 17:17:55,300 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-10-18 17:17:55,764 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3d213a2b
+2026-10-18 17:17:55,764 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-10-18 17:17:55,849 WARN o.h.e.j.d.i.DialectFactoryImpl [main] HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-10-18 17:17:55,888 INFO o.h.e.j.e.i.JdbcEnvironmentInitiator [main] HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/learncore]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.1
+	Default catalog/schema: learncore/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-10-18 17:17:58,733 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-10-18 17:17:59,034 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-18 17:17:59,147 INFO o.s.d.j.r.q.QueryEnhancerFactories [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-10-18 17:18:00,889 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'spaWebFilter' configured for use
+2026-10-18 17:18:00,895 DEBUG o.s.w.f.GenericFilterBean [main] Filter 'jwtFilter' configured for use
+2026-10-18 17:18:01,402 INFO o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer [main] Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-10-18 17:18:01,409 WARN o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer [main] Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-10-18 17:18:03,664 WARN o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-10-18 17:18:04,358 INFO o.s.b.w.a.WelcomePageHandlerMapping [main] Adding welcome page: class path resource [static/index.html]
+2026-10-18 17:18:05,492 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8088"]
+2026-10-18 17:18:05,522 INFO o.s.b.t.TomcatWebServer [main] Tomcat started on port 8088 (http) with context path '/'
+2026-10-18 17:18:05,535 INFO o.s.b.StartupInfoLogger [main] Started LearncoreApplication in 17.609 seconds (process running for 18.624)
+2026-10-18 17:18:06,210 INFO c.d.l.c.DataSeeder [main] Assigned 56 permissions to role SUPER_ADMIN
+2026-10-18 17:18:06,334 INFO c.d.l.c.DataSeeder [main] Assigned 9 permissions to role PLATFORM_MANAGER
+2026-10-18 17:18:06,359 INFO c.d.l.c.DataSeeder [main] Assigned 36 permissions to role TENANT_ADMIN
+2026-10-18 17:18:06,397 INFO c.d.l.c.DataSeeder [main] Assigned 20 permissions to role COURSE_EDITOR
+2026-10-18 17:18:06,433 INFO c.d.l.c.DataSeeder [main] Assigned 6 permissions to role QUESTION_EDITOR
+2026-10-18 17:18:06,459 INFO c.d.l.c.DataSeeder [main] Assigned 9 permissions to role STUDENT
+2026-10-18 17:18:06,508 INFO c.d.l.c.DataSeeder [main] Data seeding complete. Tenant 'objectif600' uuid=tn_f04a09c972de49a989362c3e0972a6e4
+2026-10-18 17:18:44,278 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-1] A cookie header was received [product_view[is_grid]=2;] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+2026-10-18 17:18:44,289 INFO o.a.j.l.DirectJDKLog [http-nio-8088-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-18 17:18:44,289 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-1] Initializing Servlet 'dispatcherServlet'
+2026-10-18 17:18:44,291 INFO o.s.w.s.FrameworkServlet [http-nio-8088-exec-1] Completed initialization in 2 ms
+2026-10-18 17:40:55,582 WARN o.s.d.w.c.SpringDataJackson3Configuration$PageModule$WarningLoggingModifier [http-nio-8088-exec-6] Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2026-10-18 18:21:38,859 INFO o.s.a.AbstractOpenApiResource [http-nio-8088-exec-4] Init duration for springdoc-openapi is: 3315 ms

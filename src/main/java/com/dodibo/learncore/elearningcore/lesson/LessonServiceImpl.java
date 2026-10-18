@@ -70,6 +70,8 @@ public class LessonServiceImpl implements LessonService {
         int requestedPosition = request.position();
 
         if (!oldCategoryId.equals(newCategoryId)) {
+            lesson.setPosition(-Math.toIntExact(lesson.getId()));
+            lessonRepository.saveAndFlush(lesson);
             lessonRepository.decrementPositionsAbove(oldCategoryId, oldPosition);
             long newCount = lessonRepository.countByCategory_IdAndIsDeletedFalse(newCategoryId);
             int position = DisplayOrderHelper.resolveOrderForCreate(requestedPosition, newCount);
@@ -81,6 +83,10 @@ public class LessonServiceImpl implements LessonService {
             long currentCount = lessonRepository.countByCategory_IdAndIsDeletedFalse(oldCategoryId);
             int newPosition = DisplayOrderHelper.requireOrderForUpdate(requestedPosition, currentCount);
             if (oldPosition != newPosition) {
+                // Free the current slot before shifting others (unique on category_id + position).
+                lesson.setPosition(-Math.toIntExact(lesson.getId()));
+                lessonRepository.saveAndFlush(lesson);
+
                 if (newPosition < oldPosition) {
                     lessonRepository.shiftPositionsUp(oldCategoryId, newPosition, oldPosition, lesson.getId());
                 } else {
@@ -100,9 +106,10 @@ public class LessonServiceImpl implements LessonService {
         Long categoryId = lesson.getCategory().getId();
         int deletedPosition = lesson.getPosition();
 
-        lesson.setDeleted(true);
-        lessonRepository.decrementPositionsAbove(categoryId, deletedPosition);
         lesson.setPosition(-Math.toIntExact(lesson.getId()));
+        lessonRepository.saveAndFlush(lesson);
+        lessonRepository.decrementPositionsAbove(categoryId, deletedPosition);
+        lesson.setDeleted(true);
         lessonRepository.save(lesson);
     }
 

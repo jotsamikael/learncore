@@ -5,7 +5,10 @@ export interface LessonResponse {
   categoryName?: string;
   categoryUuid?: string;
   content?: string;
+  estimatedReadMinutes?: number;
+  exerciseCount?: number;
   isPremium?: boolean;
+  position?: number;
   title?: string;
   uuid?: string;
 }

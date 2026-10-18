@@ -8,6 +8,11 @@ import {
   Link,
   List,
   Paragraph,
+  Plugin,
+  SpecialCharacters,
+  SpecialCharactersEssentials,
+  Subscript,
+  Superscript,
   Table,
   TableCaption,
   TableCellProperties,
@@ -52,13 +57,65 @@ const mathConfig = {
   },
 };
 
+/** Extra superscript / subscript digits in the Mathematical special-characters group. */
+class QuestionMathCharacterExtras extends Plugin {
+  static get pluginName() {
+    return 'QuestionMathCharacterExtras';
+  }
+
+  static get requires() {
+    return [SpecialCharacters];
+  }
+
+  init() {
+    const specialCharacters = this.editor.plugins.get('SpecialCharacters');
+    specialCharacters.addItems('Mathematical', [
+      { character: '⁰', title: 'Superscript zero' },
+      { character: '¹', title: 'Superscript one' },
+      { character: '²', title: 'Superscript two' },
+      { character: '³', title: 'Superscript three' },
+      { character: '⁴', title: 'Superscript four' },
+      { character: '⁵', title: 'Superscript five' },
+      { character: '⁶', title: 'Superscript six' },
+      { character: '⁷', title: 'Superscript seven' },
+      { character: '⁸', title: 'Superscript eight' },
+      { character: '⁹', title: 'Superscript nine' },
+      { character: '₀', title: 'Subscript zero' },
+      { character: '₁', title: 'Subscript one' },
+      { character: '₂', title: 'Subscript two' },
+      { character: '₃', title: 'Subscript three' },
+      { character: '₄', title: 'Subscript four' },
+      { character: '₅', title: 'Subscript five' },
+      { character: '₆', title: 'Subscript six' },
+      { character: '₇', title: 'Subscript seven' },
+      { character: '₈', title: 'Subscript eight' },
+      { character: '₉', title: 'Subscript nine' },
+    ]);
+  }
+}
+
+const sharedStyleToolbar = [
+  'bold',
+  'italic',
+  'superscript',
+  'subscript',
+  'link',
+] as const;
+
+const sharedSymbolToolbar = ['specialCharacters', 'math'] as const;
+
 const sharedPlugins: PluginConstructor[] = [
   Essentials,
   Autoformat,
   Bold,
   Italic,
+  Superscript,
+  Subscript,
   Link,
   Paragraph,
+  SpecialCharacters,
+  SpecialCharactersEssentials,
+  QuestionMathCharacterExtras,
   Table,
   TableToolbar,
   TableProperties,
@@ -80,14 +137,12 @@ export const questionRichTextEditorConfig: EditorConfig = {
   toolbar: [
     'heading',
     '|',
-    'bold',
-    'italic',
-    'link',
+    ...sharedStyleToolbar,
     'bulletedList',
     'numberedList',
     '|',
     'insertTable',
-    'math',
+    ...sharedSymbolToolbar,
     '|',
     'undo',
     'redo',
@@ -102,12 +157,10 @@ export const questionOptionEditorConfig: EditorConfig = {
   licenseKey: 'GPL',
   plugins: sharedPlugins,
   toolbar: [
-    'bold',
-    'italic',
-    'link',
+    ...sharedStyleToolbar,
     '|',
     'insertTable',
-    'math',
+    ...sharedSymbolToolbar,
     '|',
     'undo',
     'redo',
@@ -125,14 +178,12 @@ export const questionExplanationEditorConfig: EditorConfig = {
     List,
   ],
   toolbar: [
-    'bold',
-    'italic',
-    'link',
+    ...sharedStyleToolbar,
     'bulletedList',
     'numberedList',
     '|',
     'insertTable',
-    'math',
+    ...sharedSymbolToolbar,
     '|',
     'undo',
     'redo',

@@ -1077,8 +1077,8 @@
             <ckeditor
               [editor]="QuestionEditor"
               [config]="richTextEditorConfig"
-              formControlName="questionText"
-            >
+            formControlName="questionText"
+          >
             </ckeditor>
           </div>
 
@@ -1292,8 +1292,8 @@
                         <ckeditor
                           [editor]="QuestionEditor"
                           [config]="optionEditorConfig"
-                          formControlName="optionText"
-                        >
+                        formControlName="optionText"
+                      >
                         </ckeditor>
                       </div>
 
@@ -1472,9 +1472,9 @@
                                question-table-html"
                         [innerHTML]="
                           questionHtmlPreview(
-                            option.get(
-                              'optionText'
-                            )?.value
+                          option.get(
+                            'optionText'
+                          )?.value
                           )
                         "
                       >
@@ -1725,11 +1725,11 @@
       <!-- EXPLANATION -->
       <!-- ======================================================= -->
 
-      <div>
+                <div>
 
         <div class="fw-semibold mb-1">
           Explanation
-        </div>
+                  </div>
 
         <small
           class="text-muted
@@ -1737,7 +1737,7 @@
         >
           Optional feedback shown to the
           learner after answering.
-        </small>
+                  </small>
 
         <div class="ck-editor-reverse question-explanation-editor">
           <ckeditor
@@ -1746,7 +1746,7 @@
             formControlName="explanation"
           >
           </ckeditor>
-        </div>
+                </div>
 
       </div>
 
@@ -1755,8 +1755,8 @@
 
     <div class="modal-footer">
 
-      <button
-        type="button"
+                <button
+                  type="button"
         class="btn btn-light"
         (click)="modal.dismiss()"
         [disabled]="createSubmitting"
@@ -1790,9 +1790,9 @@
 
         Create Question
 
-      </button>
+                </button>
 
-    </div>
+              </div>
 
   </form>
 
@@ -1932,7 +1932,7 @@
             <div class="fw-semibold">2. Question</div>
           </div>
 
-          <div class="row g-3">
+                      <div class="row g-3">
 
             <div class="col-md-8">
               <mat-form-field appearance="outline" class="w-100">
@@ -1987,15 +1987,15 @@
           </div>
 
           <div>
-            <label class="form-label">
+                          <label class="form-label">
               Question image
               <span class="text-muted">(optional)</span>
-            </label>
+                          </label>
 
             @if (!detailReadOnly) {
-              <input
+                          <input
                 type="file"
-                class="form-control"
+                            class="form-control"
                 accept="image/*"
                 (change)="onDetailQuestionImage($event)"
               />
@@ -2011,7 +2011,7 @@
                 />
               </div>
             }
-          </div>
+                        </div>
 
         </div>
 
@@ -2116,7 +2116,7 @@
                             <label class="form-label small text-muted">
                               Option image (optional)
                             </label>
-                            <input
+                          <input
                               type="file"
                               class="form-control form-control-sm"
                               accept="image/*"
@@ -2139,9 +2139,9 @@
                   </div>
                 </div>
               }
-            </div>
+                        </div>
 
-            <div
+                        <div
               class="alert alert-light border small mb-0"
             >
               <strong>
@@ -2172,8 +2172,8 @@
             <div formArrayName="options" class="row g-3">
               @for (option of detailOptions.controls; track $index) {
                 <div class="col-md-6" [formGroupName]="$index">
-                  <button
-                    type="button"
+                          <button
+                            type="button"
                     class="card w-100 h-100 text-start border"
                     [class.border-success]="option.get('correct')?.value"
                     [class.bg-success-subtle]="option.get('correct')?.value"
@@ -2181,24 +2181,24 @@
                     (click)="toggleOptionCorrect(detailForm, $index)"
                   >
                     <div class="card-body d-flex align-items-center gap-3">
-                      <mat-icon>
+                            <mat-icon>
                         {{
                           option.get('correct')?.value
                             ? 'check_circle'
                             : 'radio_button_unchecked'
                         }}
-                      </mat-icon>
+                            </mat-icon>
                       <div
                         class="fw-semibold fs-5 question-table-html"
                         [innerHTML]="questionHtmlPreview(option.get('optionText')?.value)"
                       >
                       </div>
                     </div>
-                  </button>
+                          </button>
                 </div>
               }
             </div>
-          </div>
+                        </div>
 
         }
 
@@ -2212,17 +2212,17 @@
             </div>
 
             <div class="mb-3">
-              <label class="form-label">
+                          <label class="form-label">
                 Reference answer
                 <span class="text-danger">*</span>
-              </label>
-              <textarea
+                          </label>
+                          <textarea
                 rows="6"
-                class="form-control"
+                            class="form-control"
                 formControlName="referenceAnswer"
-              >
-              </textarea>
-            </div>
+                          >
+                          </textarea>
+                        </div>
 
             <div class="row g-3">
               <div class="col-lg-5">
@@ -2243,7 +2243,7 @@
                     }
                   </mat-hint>
                 </mat-form-field>
-              </div>
+                      </div>
 
               <div class="col-lg-3">
                 <mat-form-field appearance="outline" class="w-100">
@@ -2256,7 +2256,7 @@
                     formControlName="maxScore"
                   />
                 </mat-form-field>
-              </div>
+                    </div>
 
               <div class="col-lg-4">
                 <mat-form-field appearance="outline" class="w-100">
@@ -2271,7 +2271,7 @@
                   />
                 </mat-form-field>
               </div>
-            </div>
+                  </div>
 
             <div
               class="alert alert-info d-flex gap-2 align-items-start mt-3"
@@ -2308,7 +2308,7 @@
             >
             </ng-container>
 
-          </div>
+              </div>
 
         }
 
@@ -2340,11 +2340,11 @@
               </ckeditor>
             </div>
           }
-        </div>
+                </div>
 
-      }
+              }
 
-    </div>
+            </div>
 
     @if (!detailLoading) {
 
@@ -2391,11 +2391,11 @@
             }
             Save changes
           </button>
-        }
+          }
 
-      </div>
+        </div>
 
-    }
+      }
 
   </form>
 
@@ -2424,7 +2424,7 @@
                gap-3 mb-3"
       >
 
-        <div>
+      <div>
           <div class="fw-semibold">
             {{ gradingCriteriaHeading(strategy) }}
           </div>
@@ -2443,7 +2443,7 @@
           </button>
         }
 
-      </div>
+        </div>
 
       <div formArrayName="gradingCriteria">
 
@@ -2505,14 +2505,14 @@
                     Description
                     <span class="text-danger">*</span>
                   </label>
-                  <textarea
+        <textarea
                     rows="2"
-                    class="form-control"
+          class="form-control"
                     formControlName="description"
                     placeholder="What must the learner demonstrate for this criterion?"
-                  >
-                  </textarea>
-                </div>
+        >
+        </textarea>
+      </div>
 
                 @if (strategy === 'KEYWORD_MATCH') {
 
@@ -2545,13 +2545,13 @@
                           />
 
                           @if (!readOnly) {
-                            <button
-                              type="button"
+      <button
+        type="button"
                               class="btn btn-outline-danger"
                               (click)="removeCriterionKeyword(form, $index, keywordIndex)"
-                            >
+      >
                               <mat-icon>close</mat-icon>
-                            </button>
+      </button>
                           }
 
                         </div>
@@ -2561,7 +2561,7 @@
                     </div>
 
                     @if (!readOnly) {
-                      <button
+      <button
                         type="button"
                         class="btn btn-sm btn-outline-secondary"
                         (click)="addCriterionKeyword(form, $index)"
@@ -2588,7 +2588,7 @@
 
         <div class="text-center text-muted py-4">
           No grading criteria yet.
-        </div>
+    </div>
 
       } @else {
 

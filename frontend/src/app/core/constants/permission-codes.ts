@@ -31,6 +31,10 @@ export const PermissionCodes = {
   TENANT_QUESTION_CREATE: 'tenant.question.create',
   TENANT_QUESTION_UPDATE: 'tenant.question.update',
   TENANT_QUESTION_DELETE: 'tenant.question.delete',
+  TENANT_LESSON_READ: 'tenant.lesson.read',
+  TENANT_LESSON_CREATE: 'tenant.lesson.create',
+  TENANT_LESSON_UPDATE: 'tenant.lesson.update',
+  TENANT_LESSON_DELETE: 'tenant.lesson.delete',
 } as const;
 
 export type PermissionCode = typeof PermissionCodes[keyof typeof PermissionCodes];

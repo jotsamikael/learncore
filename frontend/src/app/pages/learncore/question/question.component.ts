@@ -511,8 +511,8 @@ export class QuestionComponent
       this.questionTextFilter
         .valueChanges
         .pipe(
-          debounceTime(300)
-        ),
+        debounceTime(300)
+      ),
 
       this.typeFilter.valueChanges,
       this.difficultyFilter.valueChanges,
@@ -1179,16 +1179,16 @@ export class QuestionComponent
     this.resetCreateState();
 
     this.createForm.reset({
-      questionType: 'MCQ',
-      categoryUuid: null,
-      difficultyLevel: 'MEDIUM',
-      questionText: '',
-      explanation: '',
+        questionType: 'MCQ',
+        categoryUuid: null,
+        difficultyLevel: 'MEDIUM',
+        questionText: '',
+        explanation: '',
 
-      referenceAnswer: '',
-      maxScore: 1,
-      gradingStrategy:
-        'KEYWORD_MATCH',
+        referenceAnswer: '',
+        maxScore: 1,
+        gradingStrategy:
+          'KEYWORD_MATCH',
       minimumScoreThreshold:
         0.7,
     });
@@ -1208,9 +1208,8 @@ export class QuestionComponent
       content,
       {
         size: 'xl',
-        scrollable: true,
         backdrop: 'static',
-        modalDialogClass: 'question-modal-dialog',
+        modalDialogClass: 'learncore-scrollable-modal question-modal-dialog',
       }
     );
   }
@@ -1362,14 +1361,13 @@ export class QuestionComponent
 
     const modal =
       this.modalService.open(
-        this.questionDetailModalTpl,
-        {
-          size: 'xl',
-          scrollable: true,
-          backdrop: 'static',
-          modalDialogClass: 'question-modal-dialog',
-        }
-      );
+      this.questionDetailModalTpl,
+      {
+        size: 'xl',
+        backdrop: 'static',
+        modalDialogClass: 'learncore-scrollable-modal question-modal-dialog',
+      }
+    );
 
     this.cdr.detectChanges();
 
@@ -1381,16 +1379,16 @@ export class QuestionComponent
       .pipe(
         switchMap(
           question => {
-            this.detailSnapshot =
-              question;
+          this.detailSnapshot =
+            question;
 
             this.detailQuestionImagePreview =
               question.imageUrl ??
               null;
 
             this.patchQuestionForm(
-              question
-            );
+            question
+          );
 
             /*
              * Only MCQ / TRUE_FALSE
@@ -1457,7 +1455,7 @@ export class QuestionComponent
 
     modal.result.finally(() => {
       this.resetDetailOptionState();
-    });
+      });
   }
 
   toggleDetailEditMode(): void {
@@ -2374,40 +2372,40 @@ export class QuestionComponent
           question.questionType ??
           'MCQ',
 
-        categoryUuid:
-          question.categoryUuid ??
-          null,
+      categoryUuid:
+        question.categoryUuid ??
+        null,
 
-        difficultyLevel:
-          question.difficultyLevel ??
-          'MEDIUM',
+      difficultyLevel:
+        question.difficultyLevel ??
+        'MEDIUM',
 
-        questionText:
-          question.questionText ??
-          '',
+      questionText:
+        question.questionText ??
+        '',
 
-        explanation:
-          question.explanation ??
-          '',
+      explanation:
+        question.explanation ??
+        '',
 
-        referenceAnswer:
+      referenceAnswer:
           config
             ?.referenceAnswer ??
-          '',
+        '',
 
-        maxScore:
+      maxScore:
           config?.maxScore ??
           1,
 
-        gradingStrategy:
+      gradingStrategy:
           config
             ?.gradingStrategy ??
-          'KEYWORD_MATCH',
+        'KEYWORD_MATCH',
 
-        minimumScoreThreshold:
-          config
-            ?.minimumScoreThreshold ??
-          0.7,
+      minimumScoreThreshold:
+        config
+          ?.minimumScoreThreshold ??
+        0.7,
       },
       {
         emitEvent: false,
@@ -2425,15 +2423,15 @@ export class QuestionComponent
           .createGradingCriterionForm();
 
       group.patchValue({
-        title:
+          title:
           criterion.title ??
           '',
 
-        description:
-          criterion.description ??
-          '',
+          description:
+            criterion.description ??
+            '',
 
-        score:
+          score:
           criterion.score ??
           1,
       });
@@ -2634,7 +2632,7 @@ export class QuestionComponent
               form
                 .get('gradingStrategy')
                 ?.setValue('RUBRIC', {
-                  emitEvent: false,
+              emitEvent: false,
                 });
             }
           }
@@ -2703,9 +2701,9 @@ export class QuestionComponent
             }
 
             this.clearOptions(
-              form
-            );
-          }
+            form
+          );
+        }
         }
       );
   }

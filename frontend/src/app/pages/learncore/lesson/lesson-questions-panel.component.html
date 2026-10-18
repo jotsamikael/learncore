@@ -1,0 +1,376 @@
+@if (!lesson?.uuid) {
+  <div class="text-muted text-center py-4 small">
+    Select a lesson to manage its questions.
+  </div>
+} @else {
+  <div class="lesson-questions-panel">
+    <div
+      class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3"
+    >
+      <div>
+        <h6 class="mb-0">Questions in this lesson</h6>
+        <p class="text-muted small mb-0">
+          {{ assignments.length }} exercise{{
+            assignments.length === 1 ? '' : 's'
+          }}
+          · order controls how students see them
+        </p>
+      </div>
+
+      <div class="d-flex flex-wrap gap-2">
+        @if (canAssign) {
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-primary"
+            (click)="openAddExistingModal()"
+            [disabled]="loading"
+          >
+            Add existing
+          </button>
+        }
+        @if (canCreateQuestion) {
+          <button
+            type="button"
+            class="btn btn-sm btn-primary"
+            (click)="openCreateQuestionModal()"
+            [disabled]="loading"
+          >
+            Create question
+          </button>
+        }
+      </div>
+    </div>
+
+    @if (loadError) {
+      <div class="alert alert-danger py-2 small">{{ loadError }}</div>
+    }
+
+    @if (loading) {
+      <div class="text-center py-4">
+        <mat-progress-spinner
+          mode="indeterminate"
+          diameter="36"
+        ></mat-progress-spinner>
+      </div>
+    } @else if (!assignments.length) {
+      <div
+        class="border rounded-3 bg-light-subtle text-center py-4 px-3"
+      >
+        <mat-icon class="text-muted mb-2">quiz</mat-icon>
+        <p class="text-muted mb-2 small">
+          No questions linked yet. Create a new one or add from the question
+          bank.
+        </p>
+        @if (canCreateQuestion) {
+          <button
+            type="button"
+            class="btn btn-sm btn-primary"
+            (click)="openCreateQuestionModal()"
+          >
+            Create first question
+          </button>
+        }
+      </div>
+    } @else {
+      <div class="list-group list-group-flush border rounded-3">
+        @for (row of assignments; track row.id) {
+          <div
+            class="list-group-item d-flex flex-wrap align-items-start gap-2 py-3"
+          >
+            <div class="lesson-q-order flex-shrink-0">
+              <label class="form-label small text-muted mb-0">#</label>
+              <input
+                type="number"
+                class="form-control form-control-sm"
+                min="1"
+                [value]="row.displayOrder ?? 1"
+                (change)="saveDisplayOrder(row, $any($event.target).value)"
+                [disabled]="!canUpdateQuestion"
+              />
+            </div>
+
+            <div class="flex-grow-1 min-w-0">
+              <div class="fw-medium text-truncate">
+                {{ stripHtml(row.questionText) }}
+              </div>
+              @if (row.questionUuid) {
+                <div class="small text-muted font-monospace">
+                  {{ row.questionUuid }}
+                </div>
+              }
+            </div>
+
+            <div class="d-flex gap-1 flex-shrink-0">
+              @if (canUpdateQuestion) {
+                <button
+                  mat-icon-button
+                  type="button"
+                  matTooltip="Edit question"
+                  (click)="openEditQuestionModal(row)"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+              }
+              <button
+                mat-icon-button
+                type="button"
+                matTooltip="Remove from lesson"
+                (click)="removeFromLesson(row)"
+              >
+                <mat-icon>link_off</mat-icon>
+              </button>
+              @if (canDeleteQuestion) {
+                <button
+                  mat-icon-button
+                  type="button"
+                  class="text-danger"
+                  matTooltip="Delete question permanently"
+                  (click)="deleteQuestionPermanently(row)"
+                >
+                  <mat-icon class="text-danger">delete_outline</mat-icon>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+}
+
+<!-- Add existing question -->
+<ng-template #addQuestionModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Add question from bank</h5>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.dismiss()"
+      [disabled]="addSubmitting"
+    ></button>
+  </div>
+  <div class="modal-body learncore-modal-scroll">
+    @if (addError) {
+      <div class="alert alert-danger py-2 small">{{ addError }}</div>
+    }
+    <p class="text-muted small">
+      Search within category
+      <strong>{{ lesson?.categoryName || lesson?.categoryUuid }}</strong>.
+    </p>
+    <div class="input-group mb-3">
+      <input
+        type="search"
+        class="form-control"
+        placeholder="Search question text…"
+        [(ngModel)]="addSearch"
+        [ngModelOptions]="{ standalone: true }"
+        (keyup.enter)="searchQuestionsForAdd()"
+      />
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="searchQuestionsForAdd()"
+        [disabled]="addSearchLoading"
+      >
+        Search
+      </button>
+    </div>
+    @if (addSearchLoading) {
+      <div class="text-center py-3">
+        <mat-progress-spinner
+          mode="indeterminate"
+          diameter="32"
+        ></mat-progress-spinner>
+      </div>
+    } @else if (addCandidates.length) {
+      <div class="list-group">
+        @for (q of addCandidates; track q.uuid) {
+          <label class="list-group-item list-group-item-action">
+            <input
+              type="radio"
+              class="form-check-input me-2"
+              name="pickQuestion"
+              [value]="q.uuid"
+              [(ngModel)]="selectedQuestionUuid"
+              [ngModelOptions]="{ standalone: true }"
+            />
+            {{ stripHtml(q.questionText) }}
+          </label>
+        }
+      </div>
+    } @else if (addSearch.trim()) {
+      <p class="text-muted small mb-0">No matching questions.</p>
+    }
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.dismiss()">
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="submitAddExisting(modal)"
+      [disabled]="addSubmitting || !selectedQuestionUuid"
+    >
+      @if (addSubmitting) {
+        <span class="spinner-border spinner-border-sm me-1"></span>
+      }
+      Add to lesson
+    </button>
+  </div>
+</ng-template>
+
+<!-- Create / edit question -->
+<ng-template #questionFormModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">
+      {{
+        questionDialogMode === 'create'
+          ? 'Create question for lesson'
+          : 'Edit question'
+      }}
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.dismiss()"
+      [disabled]="questionFormSubmitting"
+    ></button>
+  </div>
+  <form
+    class="learncore-modal-form question-modal-form"
+    [formGroup]="questionForm"
+    (ngSubmit)="submitQuestionForm(modal)"
+  >
+    <div class="modal-body learncore-modal-scroll question-modal-body">
+      @if (questionFormError) {
+        <div class="alert alert-danger py-2 small">
+          {{ questionFormError }}
+        </div>
+      }
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Type</mat-label>
+            <mat-select
+              formControlName="questionType"
+              (selectionChange)="onQuestionTypeChange()"
+              [disabled]="questionDialogMode === 'edit'"
+            >
+              <mat-option value="MCQ">Multiple choice</mat-option>
+              <mat-option value="TRUE_FALSE">True / false</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Difficulty</mat-label>
+            <mat-select formControlName="difficultyLevel">
+              <mat-option value="EASY">Easy</mat-option>
+              <mat-option value="MEDIUM">Medium</mat-option>
+              <mat-option value="HARD">Hard</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Question text</label>
+        <ckeditor
+          [editor]="QuestionEditor"
+          [config]="questionEditorConfig"
+          formControlName="questionText"
+        ></ckeditor>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Explanation (optional)</label>
+        <ckeditor
+          [editor]="QuestionEditor"
+          [config]="explanationEditorConfig"
+          formControlName="explanation"
+        ></ckeditor>
+      </div>
+
+      @if (isChoiceType(questionForm.get('questionType')?.value)) {
+        <div class="mb-0">
+          <div
+            class="d-flex align-items-center justify-content-between mb-2"
+          >
+            <label class="form-label mb-0">Options</label>
+            @if (questionForm.get('questionType')?.value === 'MCQ') {
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-secondary"
+                (click)="addOptionRow()"
+              >
+                Add option
+              </button>
+            }
+          </div>
+          @for (
+            opt of options.controls;
+            track $index;
+            let i = $index
+          ) {
+            <div
+              class="border rounded p-2 mb-2 d-flex flex-wrap gap-2 align-items-start"
+              [formGroup]="$any(opt)"
+            >
+              <div class="form-check mt-2">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  [name]="'correctOpt' + i"
+                  [checked]="opt.get('correct')?.value"
+                  (change)="setCorrectOption(i)"
+                />
+                <label class="form-check-label small">Correct</label>
+              </div>
+              <div class="flex-grow-1 min-w-0">
+                <ckeditor
+                  [editor]="QuestionEditor"
+                  [config]="optionEditorConfig"
+                  formControlName="optionText"
+                ></ckeditor>
+              </div>
+              @if (
+                questionForm.get('questionType')?.value === 'MCQ' &&
+                options.length > 2
+              ) {
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="removeOptionRow(i)"
+                >
+                  Remove
+                </button>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="modal.dismiss()"
+        [disabled]="questionFormSubmitting"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="questionFormSubmitting"
+      >
+        @if (questionFormSubmitting) {
+          <span class="spinner-border spinner-border-sm me-1"></span>
+        }
+        {{ questionDialogMode === 'create' ? 'Create & attach' : 'Save' }}
+      </button>
+    </div>
+  </form>
+</ng-template>

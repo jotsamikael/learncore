@@ -1,0 +1,558 @@
+<app-breadcrumbs
+  [title]="pageTitle"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="row lesson-layout g-3">
+  <div class="col-xl-8 col-lg-7">
+    <div class="card h-100">
+      <div class="card-header border-bottom-dashed">
+        <div
+          class="d-flex flex-wrap justify-content-between align-items-end gap-3"
+        >
+          <div>
+            <h5 class="card-title mb-1">{{ pageTitle }}</h5>
+            <p class="text-muted small mb-0">
+              Lessons belong to a category. Pick a row to manage its exercises
+              in the panel on the right.
+            </p>
+          </div>
+          @if (canCreateLesson) {
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="openCreateModal(createLessonModal)"
+              [disabled]="isLoading"
+            >
+              Create lesson
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="row g-3 roles-filters mb-3">
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Category</mat-label>
+              <mat-select
+                [formControl]="categoryFilter"
+                [disabled]="categoriesLoading"
+              >
+                <mat-option value="">All categories</mat-option>
+                @for (cat of categories; track cat.uuid) {
+                  <mat-option [value]="cat.uuid ?? ''">
+                    {{ cat.name }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Title</mat-label>
+              <input
+                matInput
+                [formControl]="titleFilter"
+                placeholder="Search title"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Premium</mat-label>
+              <mat-select [formControl]="premiumFilter">
+                <mat-option value="all">All</mat-option>
+                <mat-option value="yes">Premium only</mat-option>
+                <mat-option value="no">Free only</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end mb-2 gap-2">
+          <button
+            type="button"
+            class="btn btn-sm btn-light border"
+            (click)="clearFilters()"
+          >
+            Clear filters
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm btn-light border"
+            (click)="refresh()"
+            [disabled]="isLoading"
+          >
+            Refresh
+          </button>
+        </div>
+
+        @if (loadError) {
+          <div class="alert alert-danger py-2">{{ loadError }}</div>
+        }
+
+        <div class="position-relative roles-table-shell">
+          @if (isLoading) {
+            <div
+              class="roles-table-overlay d-flex align-items-center justify-content-center"
+            >
+              <mat-progress-spinner
+                mode="indeterminate"
+                diameter="42"
+              ></mat-progress-spinner>
+            </div>
+          }
+
+          <div class="table-responsive mat-elevation-z1 rounded">
+            <mat-table
+              [dataSource]="data"
+              matSort
+              matSortActive="position"
+              matSortDirection="asc"
+              matSortDisableClear
+              class="w-100"
+            >
+              <ng-container matColumnDef="position">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  #
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  {{ row.position ?? '—' }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="title">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Title
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  <div>
+                    <div class="fw-medium">{{ row.title || '—' }}</div>
+                    <div class="small text-muted">
+                      {{ stripHtml(row.content) }}
+                    </div>
+                  </div>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="category">
+                <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  {{ row.categoryName || '—' }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="readTime">
+                <mat-header-cell *matHeaderCellDef>Read</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  {{ row.estimatedReadMinutes ?? '—' }} min
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="premium">
+                <mat-header-cell *matHeaderCellDef>Premium</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  @if (row.isPremium) {
+                    <span class="badge bg-warning-subtle text-warning">Yes</span>
+                  } @else {
+                    <span class="badge bg-light text-muted">No</span>
+                  }
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="exercises">
+                <mat-header-cell *matHeaderCellDef>Questions</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  {{ row.exerciseCount ?? 0 }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef class="actions-col">
+                  Actions
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" class="actions-col">
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [matMenuTriggerFor]="lessonActionsMenu"
+                    [matMenuTriggerData]="{ row: row }"
+                  >
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row
+                *matRowDef="let row; columns: displayedColumns"
+                class="lesson-table-row"
+                [class.selected]="isSelected(row)"
+                (click)="selectLesson(row)"
+              ></mat-row>
+            </mat-table>
+          </div>
+        </div>
+
+        @if (!isLoading && !loadError && !data.length) {
+          <div class="text-center text-muted py-4">
+            No lessons found. Choose a category or create a lesson.
+          </div>
+        }
+
+        <div
+          class="roles-pagination-bar d-flex flex-wrap align-items-end justify-content-between gap-3 mt-3"
+        >
+          <mat-form-field
+            appearance="outline"
+            subscriptSizing="dynamic"
+            class="roles-page-size-field"
+          >
+            <mat-select
+              [value]="pageSize"
+              (selectionChange)="onPageSizeChange($event.value)"
+            >
+              @for (option of pageSizeOptions; track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-paginator
+            [hidePageSize]="true"
+            [length]="meta?.totalItems ?? 0"
+            [pageSize]="pageSize"
+            [showFirstLastButtons]="true"
+            (page)="onPaginatorPage($event)"
+          ></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-4 col-lg-5">
+    <div class="card lesson-side-panel h-100">
+      <div class="card-header border-bottom">
+        @if (selectedLesson; as lesson) {
+          <h6 class="mb-0">{{ lesson.title }}</h6>
+          <p class="text-muted small mb-0">
+            {{ lesson.categoryName }} · #{{ lesson.position }} ·
+            {{ lesson.exerciseCount ?? 0 }} questions
+          </p>
+        } @else {
+          <h6 class="mb-0">Lesson exercises</h6>
+          <p class="text-muted small mb-0">Select a lesson from the table</p>
+        }
+      </div>
+      <div class="card-body">
+        @if (selectedLesson) {
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-secondary"
+              (click)="onView(selectedLesson)"
+            >
+              View / edit lesson
+            </button>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-primary"
+              (click)="onManageQuestions(selectedLesson)"
+            >
+              Open full manager
+            </button>
+          </div>
+        }
+        <app-lesson-questions-panel
+          [lesson]="selectedLesson"
+          (assignmentsChanged)="onQuestionsChanged()"
+        ></app-lesson-questions-panel>
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-menu #lessonActionsMenu="matMenu">
+  <ng-template matMenuContent let-row="row">
+    <button mat-menu-item type="button" (click)="onView(row)">
+      <mat-icon>visibility</mat-icon>
+      <span>View</span>
+    </button>
+    <button mat-menu-item type="button" (click)="onManageQuestions(row)">
+      <mat-icon>quiz</mat-icon>
+      <span>Manage questions</span>
+    </button>
+    @if (canUpdateLesson) {
+      <button mat-menu-item type="button" (click)="onEdit(row)">
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+      </button>
+    }
+    @if (canDeleteLesson) {
+      <button
+        mat-menu-item
+        type="button"
+        class="text-danger"
+        (click)="onDeleteLesson(row)"
+      >
+        <mat-icon class="text-danger">delete_outline</mat-icon>
+        <span>Delete</span>
+      </button>
+    }
+  </ng-template>
+</mat-menu>
+
+<!-- Create lesson -->
+<ng-template #createLessonModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Create lesson</h5>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.dismiss()"
+      [disabled]="createSubmitting"
+    ></button>
+  </div>
+  <form
+    class="learncore-modal-form"
+    [formGroup]="createForm"
+    (ngSubmit)="submitCreate(modal)"
+  >
+    <div class="modal-body learncore-modal-scroll">
+      @if (createFormError) {
+        <div class="alert alert-danger py-2 small">{{ createFormError }}</div>
+      }
+
+      <div class="mb-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="categoryUuid">
+            @for (cat of categories; track cat.uuid) {
+              <mat-option [value]="cat.uuid">{{ cat.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Title <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" formControlName="title" />
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Read time (min)</label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="estimatedReadMinutes"
+            min="1"
+            max="180"
+          />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Position (optional)</label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="position"
+            min="1"
+            placeholder="Append if empty"
+          />
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <div class="form-check mb-2">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              formControlName="isPremium"
+              id="createPremium"
+            />
+            <label class="form-check-label" for="createPremium">Premium lesson</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-0">
+        <label class="form-label">Content <span class="text-danger">*</span></label>
+        <ckeditor
+          [editor]="QuestionEditor"
+          [config]="lessonContentEditorConfig"
+          formControlName="content"
+        ></ckeditor>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.dismiss()">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="createSubmitting">
+        @if (createSubmitting) {
+          <span class="spinner-border spinner-border-sm me-1"></span>
+        }
+        Create
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- Detail / edit + questions tab -->
+<ng-template #lessonDetailModal let-modal>
+  <div class="modal-header flex-wrap gap-2">
+    <h5 class="modal-title mb-0">
+      {{ detailReadOnly ? 'Lesson details' : 'Edit lesson' }}
+    </h5>
+    <div class="d-flex align-items-center gap-1 ms-auto">
+      @if (canUpdateLesson) {
+        <button
+          mat-icon-button
+          type="button"
+          (click)="toggleDetailEditMode()"
+          [disabled]="detailSaving || !detailSnapshot"
+        >
+          <mat-icon>{{ detailReadOnly ? 'edit' : 'visibility' }}</mat-icon>
+        </button>
+      }
+      <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+    </div>
+  </div>
+
+  @if (detailError && !detailSnapshot) {
+    <div class="modal-body">
+      <div class="alert alert-danger mb-0">{{ detailError }}</div>
+    </div>
+  } @else if (detailSnapshot) {
+    <ul
+      ngbNav
+      #nav="ngbNav"
+      [(activeId)]="detailActiveTab"
+      class="nav-tabs px-3 pt-2 border-bottom-0"
+    >
+      <li [ngbNavItem]="1">
+        <button ngbNavLink>Details</button>
+        <ng-template ngbNavContent>
+          <div class="learncore-modal-tab-pane">
+          <form
+            class="learncore-modal-form"
+            [formGroup]="detailForm"
+            (ngSubmit)="submitDetailUpdate(modal)"
+          >
+            <div class="modal-body learncore-modal-scroll">
+              @if (detailError) {
+                <div class="alert alert-danger py-2 small">{{ detailError }}</div>
+              }
+
+              <div class="mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Category</mat-label>
+                  <mat-select formControlName="categoryUuid">
+                    @for (cat of categories; track cat.uuid) {
+                      <mat-option [value]="cat.uuid">{{ cat.name }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input type="text" class="form-control" formControlName="title" />
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                  <label class="form-label">Read time (min)</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="estimatedReadMinutes"
+                    min="1"
+                    max="180"
+                  />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Position</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="position"
+                    min="1"
+                  />
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                  <div class="form-check mb-2">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      formControlName="isPremium"
+                      id="detailPremium"
+                    />
+                    <label class="form-check-label" for="detailPremium">
+                      Premium
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              @if (detailReadOnly) {
+                <label class="form-label text-muted small">Content preview</label>
+                <div
+                  class="border rounded p-3 lesson-content-preview bg-light-subtle"
+                  [innerHTML]="detailContentPreview()"
+                ></div>
+              } @else {
+                <label class="form-label">Content</label>
+                <ckeditor
+                  [editor]="QuestionEditor"
+                  [config]="lessonContentEditorConfig"
+                  formControlName="content"
+                ></ckeditor>
+              }
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light" (click)="modal.dismiss()">
+                {{ detailReadOnly ? 'Close' : 'Cancel' }}
+              </button>
+              @if (!detailReadOnly) {
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  [disabled]="detailSaving"
+                >
+                  @if (detailSaving) {
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                  }
+                  Save changes
+                </button>
+              }
+            </div>
+          </form>
+          </div>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="2">
+        <button ngbNavLink>
+          Questions ({{ detailSnapshot.exerciseCount ?? 0 }})
+        </button>
+        <ng-template ngbNavContent>
+          <div class="learncore-modal-tab-pane">
+          <div class="modal-body learncore-modal-scroll pt-2">
+            <app-lesson-questions-panel
+              [lesson]="detailSnapshot"
+              (assignmentsChanged)="onQuestionsChanged()"
+            ></app-lesson-questions-panel>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light" (click)="modal.dismiss()">
+              Close
+            </button>
+          </div>
+          </div>
+        </ng-template>
+      </li>
+    </ul>
+    <div
+      [ngbNavOutlet]="nav"
+      class="learncore-modal-tabs-body border-top"
+    ></div>
+  }
+</ng-template>

@@ -36,6 +36,7 @@ export class CommonService {
     centered: true,
     size: 'lg',
     backdrop: 'static',
+    modalDialogClass: 'learncore-scrollable-modal',
   };
 
   openModal(modalService: NgbModal, content: TemplateRef<unknown>, options?: NgbModalOptions): NgbModalRef {

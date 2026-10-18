@@ -1,0 +1,57 @@
+:host {
+  display: block;
+}
+
+:host ::ng-deep {
+  .roles-filters .mat-mdc-form-field,
+  .roles-page-size-field.mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .roles-page-size-field .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+
+.lesson-layout {
+  min-height: 320px;
+}
+
+.lesson-side-panel {
+  position: sticky;
+  top: 5rem;
+}
+
+.lesson-table-row {
+  cursor: pointer;
+
+  &.selected {
+    background: rgba(var(--vz-primary-rgb), 0.08);
+  }
+}
+
+.roles-table-shell {
+  position: relative;
+}
+
+.roles-table-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.65);
+  pointer-events: none;
+}
+
+.lesson-content-preview {
+  max-height: none;
+  overflow: visible;
+}
+
+// Ensure edit-lesson modal scrolls (ng-bootstrap renders outside component tree).
+::ng-deep .modal-dialog.learncore-scrollable-modal {
+  .modal-body.learncore-modal-scroll {
+    overflow-y: auto !important;
+    max-height: calc(100dvh - 12rem);
+  }
+}

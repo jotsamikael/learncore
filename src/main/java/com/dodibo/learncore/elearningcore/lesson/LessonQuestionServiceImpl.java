@@ -75,6 +75,9 @@ public class LessonQuestionServiceImpl implements LessonQuestionService {
                 lessonQuestionRepository.incrementOrdersFrom(lessonId, newOrder);
             }
         } else if (!oldOrder.equals(newOrder)) {
+            assignment.setDisplayOrder(-Math.toIntExact(id));
+            lessonQuestionRepository.saveAndFlush(assignment);
+
             if (newOrder < oldOrder) {
                 lessonQuestionRepository.shiftOrdersUp(lessonId, newOrder, oldOrder, id);
             } else {
